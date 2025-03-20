@@ -8,5 +8,6 @@ public class Main {
         System.out.println("Hello, World!");
         Menu menu = new Menu();
         menu.setVisible(true);
+        System.out.println("Helloooooooooo");
     }
 }
