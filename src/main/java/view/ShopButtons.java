@@ -10,9 +10,9 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -22,12 +22,12 @@ import javax.swing.JButton;
  *
  * @author nimro
  */
-public class RoundButton extends JButton{
+public class ShopButtons extends JButton{
     private Image image; 
     private String iconPath = ""; 
     private int borderThickness = 1; // Default border thickness
 
-    public RoundButton() {
+    public ShopButtons() {
         setPreferredSize(new Dimension(100, 100)); // Default size
         setContentAreaFilled(false); // Make the content area transparent
         setBorderPainted(false); // Remove default border
@@ -87,22 +87,13 @@ public class RoundButton extends JButton{
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // Create circular clipping area
-        g2.setClip(new Ellipse2D.Float(0, 0, panelWidth, panelHeight));
+        g2.setClip(new Rectangle2D.Float(0, 0, panelWidth, panelHeight));
         g2.drawImage(bufferedImage, 0, 0, this);
 
         // Draw border using the borderThickness property
         g2.setClip(null);
         g2.setStroke(new BasicStroke(borderThickness));
         g2.setColor(Color.BLACK);
-        g2.drawOval(borderThickness / 2, borderThickness / 2, panelWidth - borderThickness, panelHeight - borderThickness);
+        g2.drawRect(borderThickness / 2, borderThickness / 2, panelWidth - borderThickness, panelHeight - borderThickness);
     }
-
-    @Override
-    public boolean contains(Point p) {
-        // Override this to make sure the button behaves like a circular button
-        int x = p.x;
-        int y = p.y;
-        return new Ellipse2D.Float(0, 0, getWidth(), getHeight()).contains(x, y);
-    }
-    
 }
