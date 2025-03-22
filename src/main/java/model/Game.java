@@ -28,7 +28,7 @@ public class Game implements Runnable {
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 
 
-    public Game(DifficultyLevel level) {
+    public Game(DifficultyLevel level, String safariName) {
         this.difficulty = level;
         this.park = new SafariPark();
         this.finance = new Finance();
@@ -36,6 +36,7 @@ public class Game implements Runnable {
 
 
         playing = new Playing();
+        playing.setSafariName(safariName);
         playing.setVisible(true);
         gamePanel = playing.getJPanel();
         gamePanel.requestFocus();

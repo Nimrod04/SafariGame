@@ -1,5 +1,4 @@
 package org.example;
-import view.MainWindow;
 import model.Game;
 import view.Menu;
 

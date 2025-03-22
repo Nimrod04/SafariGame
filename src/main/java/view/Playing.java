@@ -145,6 +145,10 @@ public class Playing extends javax.swing.JFrame {
         });
     }
     
+    public void setSafariName(String name){
+        safariNameLabel.setText(name);
+    }
+    
     public JPanel getJPanel(){
         return jPanel1;
     }
@@ -236,7 +240,7 @@ public class Playing extends javax.swing.JFrame {
         roundButton3 = new view.RoundButton();
         roundButton4 = new view.RoundButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        safariNameLabel = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
         miniMap = new javax.swing.JPanel();
 
@@ -569,8 +573,8 @@ public class Playing extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setText("Safari Name");
-        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        safariNameLabel.setText("Safari Name");
+        safariNameLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -578,14 +582,14 @@ public class Playing extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                .addComponent(safariNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addComponent(safariNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -887,7 +891,6 @@ public class Playing extends javax.swing.JFrame {
     private javax.swing.JPanel gamePanel;
     private javax.swing.JLabel herbiCount;
     private view.RoundButton hireButton;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
@@ -902,6 +905,7 @@ public class Playing extends javax.swing.JFrame {
     private view.RoundIconPanel roundIconPanel3;
     private view.RoundIconPanel roundIconPanel4;
     private view.RoundIconPanel roundIconPanel5;
+    private javax.swing.JLabel safariNameLabel;
     private javax.swing.JPanel secondaryShopPanel;
     private view.RoundButton shopButton;
     private javax.swing.JLabel shopLabel1;
