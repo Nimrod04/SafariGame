@@ -9,5 +9,6 @@ public class Main {
         Menu menu = new Menu();
         menu.setVisible(true);
         System.out.println("Helloooooooooo");
+
     }
 }

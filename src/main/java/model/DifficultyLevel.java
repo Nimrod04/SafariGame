@@ -1,6 +1,7 @@
 package model;
 
 public enum DifficultyLevel {
-    EASY, MEDIUM, HARD;
+    EASY,
+    MEDIUM,
+    HARD
 }
-
