@@ -1,4 +1,4 @@
-package org.example;
+package start;
 import model.Game;
 import view.Menu;
 

@@ -69,7 +69,7 @@ public class SafariPark {
         mapGrid[0][0] = new Path(new Coordinate(0, 0), true);
         mapGrid[0][0].setImagePath("/resources/images/entrance.png");
 
-        mapGrid[MAP_SIZE - 1][MAP_SIZE - 1] = new Path(new Coordinate(MAP_SIZE - 1, MAP_SIZE - 1)/*, true*/);
+        mapGrid[MAP_SIZE - 1][MAP_SIZE - 1] = new Path(new Coordinate(MAP_SIZE - 1, MAP_SIZE - 1), true);
         mapGrid[MAP_SIZE - 1][MAP_SIZE - 1].setImagePath("/resources/images/exit.png");
 
         System.out.println("Térkép generálása kész.");

@@ -158,8 +158,10 @@ public class Playing extends javax.swing.JFrame {
     }
     
     public JPanel getJPanel(){
-        return jPanel1;
+        return gamePanel;
     }
+    
+    
     /**
      * Creates new form Playing
      */
@@ -204,6 +206,9 @@ public class Playing extends javax.swing.JFrame {
     }
     
 
+    public GamePanel getGamePanel(){
+        return (GamePanel) gamePanel;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
