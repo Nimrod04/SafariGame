@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class SafariPark {
+
     private List<Entity> entities;
     private List<Plant> plants;
     private List<WaterBody> waterSources;
@@ -40,33 +41,32 @@ public class SafariPark {
                 if (rand < WATER_PROBABILITY) {
                     WaterBody water = new WaterBody(new Coordinate(x, y));
                     waterSources.add(water);
-                    mapGrid[x][y] = new Path(new Coordinate(x, y)/*, false*/);
+                    mapGrid[x][y] = new Path(new Coordinate(x, y), false);
                     imagePath = "/resources/images/water.png";
                 } else if (rand < WATER_PROBABILITY + TREE_PROBABILITY) {
                     Tree tree = new Tree(new Coordinate(x, y));
                     plants.add(tree);
-                    mapGrid[x][y] = new Path(new Coordinate(x, y)/*, false*/);
+                    mapGrid[x][y] = new Path(new Coordinate(x, y), false);
                     imagePath = "/resources/images/tree.png";
                 } else if (rand < WATER_PROBABILITY + TREE_PROBABILITY + BUSH_PROBABILITY) {
                     Bush bush = new Bush(new Coordinate(x, y));
                     plants.add(bush);
-                    mapGrid[x][y] = new Path(new Coordinate(x, y)/*, false*/);
+                    mapGrid[x][y] = new Path(new Coordinate(x, y), false);
                     imagePath = "/resources/images/bush.png";
                 } else if (rand < WATER_PROBABILITY + TREE_PROBABILITY + BUSH_PROBABILITY + GRASS_PROBABILITY) {
                     Grass grass = new Grass(new Coordinate(x, y));
                     plants.add(grass);
-                    mapGrid[x][y] = new Path(new Coordinate(x, y)/*, false*/);
+                    mapGrid[x][y] = new Path(new Coordinate(x, y), false);
                     imagePath = "/resources/images/grass.png";
                 } else {
-                    mapGrid[x][y] = new Path(new Coordinate(x, y)/*, false*/);
+                    mapGrid[x][y] = new Path(new Coordinate(x, y), false);
                 }
 
                 mapGrid[x][y].setImagePath(imagePath);
             }
         }
 
-
-        mapGrid[0][0] = new Path(new Coordinate(0, 0)/*, true*/);
+        mapGrid[0][0] = new Path(new Coordinate(0, 0), true);
         mapGrid[0][0].setImagePath("/resources/images/entrance.png");
 
         mapGrid[MAP_SIZE - 1][MAP_SIZE - 1] = new Path(new Coordinate(MAP_SIZE - 1, MAP_SIZE - 1)/*, true*/);

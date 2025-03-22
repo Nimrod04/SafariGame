@@ -8,7 +8,7 @@ public class Path {
     private List<Coordinate> waypoints;
     String imagePath;
     Coordinate coordinate;
-    public Path(Coordinate coordinate) {
+    public Path(Coordinate coordinate,  boolean l) {
         this.coordinate = coordinate;
     }
 

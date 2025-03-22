@@ -12,6 +12,7 @@ import model.Game;
  * @author nimro
  */
 public class Menu extends javax.swing.JFrame {
+    private String safariName;
 
     /**
      * Creates new form Menu
@@ -34,7 +35,7 @@ public class Menu extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        safariNameField = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
@@ -56,9 +57,9 @@ public class Menu extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
 
-        jTextField1.setBackground(new java.awt.Color(153, 153, 153));
-        jTextField1.setText("Enter your name");
-        jTextField1.setToolTipText("Enter your name");
+        safariNameField.setBackground(new java.awt.Color(153, 153, 153));
+        safariNameField.setText("Enter your name");
+        safariNameField.setToolTipText("Enter your name");
 
         jButton1.setBackground(new java.awt.Color(153, 153, 153));
         jButton1.setForeground(new java.awt.Color(0, 255, 0));
@@ -112,7 +113,7 @@ public class Menu extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(202, 202, 202)
                         .addComponent(filler1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(safariNameField, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(37, 37, 37))
         );
@@ -121,7 +122,7 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(filler1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(30, 30, 30)
-                .addComponent(jTextField1)
+                .addComponent(safariNameField)
                 .addGap(31, 31, 31)
                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -163,19 +164,23 @@ public class Menu extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.out.println("Start /w easy");
-        Game game = new Game(DifficultyLevel.EASY);
+        safariName = safariNameField.getText();
+        System.out.println(safariName);
+        Game game = new Game(DifficultyLevel.EASY, safariName);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         System.out.println("Start /w normal");
-        Game game = new Game(DifficultyLevel.MEDIUM);
+        safariName = safariNameField.getText();
+        Game game = new Game(DifficultyLevel.MEDIUM,safariName);
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         System.out.println("Start /w hard");
-        Game game = new Game(DifficultyLevel.HARD);
+        safariName = safariNameField.getText();
+        Game game = new Game(DifficultyLevel.HARD,safariName);
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -228,6 +233,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField safariNameField;
     // End of variables declaration//GEN-END:variables
 }

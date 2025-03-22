@@ -8,7 +8,5 @@ public abstract class Entity {
 
     public abstract void moveTo(Coordinate target);
 
-    public void move(){
-
-    };
+    public abstract void move();
 }
