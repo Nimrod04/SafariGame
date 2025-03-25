@@ -12,6 +12,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -21,11 +24,11 @@ import javax.swing.*;
  * @author nimro
  */
 public class Playing extends javax.swing.JFrame {
+
     public boolean inSecurityShop = false;
     public boolean inAnimalShop = false;
     public boolean inPlantShop = false;
     public boolean inRoadShop = false;
-
 
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
@@ -33,28 +36,28 @@ public class Playing extends javax.swing.JFrame {
         buyButton_2.removeActionListener(buyButton_2.getActionListeners()[0]);
         buyButton_3.removeActionListener(buyButton_3.getActionListeners()[0]);
         buyButton_4.removeActionListener(buyButton_4.getActionListeners()[0]);
-        
+
         buyButton_1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Kamera");
             }
         });
-        
+
         buyButton_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Töltőállomás");
             }
         });
-        
+
         buyButton_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Drón");
             }
         });
-        
+
         buyButton_4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,7 +65,7 @@ public class Playing extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private void setAnimalButtonActions() {
         // Régi eseménykezelők eltávolítása, ha léteznek
         if (buyButton_1.getActionListeners().length > 0) {
@@ -77,7 +80,7 @@ public class Playing extends javax.swing.JFrame {
         if (buyButton_4.getActionListeners().length > 0) {
             buyButton_4.removeActionListener(buyButton_4.getActionListeners()[0]);
         }
-        
+
         // Új eseménykezelők hozzáadása
         buyButton_1.addActionListener(new ActionListener() {
             @Override
@@ -85,21 +88,21 @@ public class Playing extends javax.swing.JFrame {
                 System.out.println("Gazella");
             }
         });
-        
+
         buyButton_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Elefánt");
             }
         });
-        
+
         buyButton_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Oroszlán");
             }
         });
-        
+
         buyButton_4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,7 +110,7 @@ public class Playing extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private void setPlantButtonActions() {
         // Régi eseménykezelők eltávolítása, ha léteznek
         if (buyButton_1.getActionListeners().length > 0) {
@@ -122,7 +125,7 @@ public class Playing extends javax.swing.JFrame {
         if (buyButton_4.getActionListeners().length > 0) {
             buyButton_4.removeActionListener(buyButton_4.getActionListeners()[0]);
         }
-        
+
         // Új eseménykezelők hozzáadása
         buyButton_1.addActionListener(new ActionListener() {
             @Override
@@ -130,21 +133,21 @@ public class Playing extends javax.swing.JFrame {
                 System.out.println("Fű");
             }
         });
-        
+
         buyButton_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Fa");
             }
         });
-        
+
         buyButton_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Tó");
             }
         });
-        
+
         buyButton_4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -152,16 +155,15 @@ public class Playing extends javax.swing.JFrame {
             }
         });
     }
-    
-    public void setSafariName(String name){
+
+    public void setSafariName(String name) {
         safariNameLabel.setText(name);
     }
-    
-    public JPanel getJPanel(){
+
+    public JPanel getJPanel() {
         return gamePanel;
     }
-    
-    
+
     /**
      * Creates new form Playing
      */
@@ -171,6 +173,13 @@ public class Playing extends javax.swing.JFrame {
 
         gamePanel = new GamePanel(new GameMap(20, 15));
         shopPanel.setVisible(false);
+
+        gamePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
+            }
+        });
 
         roundIconPanel2.setIconPath("visitor.png");
         roundIconPanel3.setIconPath("carni.png");
@@ -196,19 +205,18 @@ public class Playing extends javax.swing.JFrame {
         herbiCount.setText("??/??");
         carniCount.setText("??/??");
         moneyCount.setText("??/??");
-        
+
         shopLabel1.setText("Út építés - 200$/db");
         shopLabel2.setText("Biztonság");
         shopLabel3.setText("Állatok");
         shopLabel4.setText("Környezet");
 
-
     }
-    
 
-    public GamePanel getGamePanel(){
+    public GamePanel getGamePanel() {
         return (GamePanel) gamePanel;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -735,6 +743,8 @@ public class Playing extends javax.swing.JFrame {
 
     private void roundButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roundButton2ActionPerformed
         System.out.println("1x speed");
+        gamePanel.requestFocusInWindow();
+
 
     }//GEN-LAST:event_roundButton2ActionPerformed
 
@@ -753,7 +763,7 @@ public class Playing extends javax.swing.JFrame {
             shopPanel.setVisible(false);
             secondaryShopPanel.setVisible(false);
         } else {
-            shopPanel.setVisible(true);            
+            shopPanel.setVisible(true);
             secondaryShopPanel.setVisible(false);
 
         }
@@ -766,7 +776,7 @@ public class Playing extends javax.swing.JFrame {
     private void buyRoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyRoadButtonActionPerformed
         // TODO add your handling code here:
         System.out.println("Building roads!");
-        
+
     }//GEN-LAST:event_buyRoadButtonActionPerformed
 
     private void buySecurityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buySecurityButtonActionPerformed
@@ -780,10 +790,10 @@ public class Playing extends javax.swing.JFrame {
             buyButton_2Label.setText("Töltő Állomás - 500$");
             buyButton_3Label.setText("Drón - 1000$");
             buyButton_4Label.setText("Léghajó - 4000$");
-            
+
             buyButton_1.setIconPath("buySecurityCamera_Item.jpg");
             buyButton_2.setIconPath("buyChargingstation_Item.png");
-            buyButton_3.setIconPath("buyDrone_Item.png");          
+            buyButton_3.setIconPath("buyDrone_Item.png");
             buyButton_4.setIconPath("buyAirship_Item.png");
             secondaryShopPanel.setVisible(true);
         }
@@ -796,12 +806,12 @@ public class Playing extends javax.swing.JFrame {
             secondaryShopPanel.setVisible(false);
         } else {
             setAnimalButtonActions();
-            
+
             buyButton_1Label.setText("Gazella - 500$/db");
             buyButton_2Label.setText("Elepánt - 1000$/db");
             buyButton_3Label.setText("Oroszlán - 2000$/db");
             buyButton_4Label.setText("Gepárd - 2800$/db");
-            
+
             buyButton_1.setIconPath("gazelle_Icon.png");
             buyButton_2.setIconPath("elephant_Icon.jpg");
             buyButton_3.setIconPath("lion_Icon.jpg");
@@ -817,12 +827,12 @@ public class Playing extends javax.swing.JFrame {
             secondaryShopPanel.setVisible(false);
         } else {
             setPlantButtonActions();
-            
+
             buyButton_1Label.setText("Legelő(Fű) - 500$");
             buyButton_2Label.setText("Pagony(Fa) - 1000$/db");
             buyButton_3Label.setText("Oázis(Tó) - 2000$/db");
             buyButton_4Label.setText("");
-            
+
             buyButton_1.setIconPath("grass_Icon.png");
             buyButton_2.setIconPath("tree_Icon.png");
             buyButton_3.setIconPath("lake_Icon.png");

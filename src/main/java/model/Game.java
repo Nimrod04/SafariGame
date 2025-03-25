@@ -46,6 +46,20 @@ public class Game implements Runnable {
 
         SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
 
+        gamePanel = playing.getJPanel();
+        gamePanel.setFocusable(true);
+        gamePanel.requestFocusInWindow();
+
+        playing.getGamePanel().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_W) {
+                    System.out.println("W lenyomva!");
+                    // Ide jön a mozgás logikája
+                }
+            }
+        });
+
         gamePanel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -53,11 +67,11 @@ public class Game implements Runnable {
                     case KeyEvent.VK_A ->
                         playing.getGamePanel().setCameraX(Math.max(0, playing.getGamePanel().getCameraX() - 1));
                     case KeyEvent.VK_D ->
-                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getWidth()-20, playing.getGamePanel().getCameraX() + 1));
+                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getWidth() - 20, playing.getGamePanel().getCameraX() + 1));
                     case KeyEvent.VK_W ->
                         playing.getGamePanel().setCameraY(Math.max(0, playing.getGamePanel().getCameraY() - 1));
                     case KeyEvent.VK_S ->
-                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getHeight()-15, playing.getGamePanel().getCameraY() + 1));
+                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getHeight() - 15, playing.getGamePanel().getCameraY() + 1));
                 }
                 gamePanel.repaint();
             }

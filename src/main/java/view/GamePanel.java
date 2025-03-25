@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GamePanel extends JPanel implements KeyListener {
+
     private final GameMap gameMap;
     private final Map<Tile.TileType, Image> tileImages = new HashMap<>();
 
@@ -33,19 +34,26 @@ public class GamePanel extends JPanel implements KeyListener {
         this.cameraY = cameraY;
     }
 
-    public GameMap getGameMap(){
+    public GameMap getGameMap() {
         return this.gameMap;
     }
-    
-    
+
     public GamePanel(GameMap gameMap) {
         this.gameMap = gameMap;
         loadImages();
         this.setPreferredSize(new Dimension(VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE));
         this.setFocusable(true);
         addKeyListener(this);
-        setFocusable(true);
-        requestFocusInWindow();
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SwingUtilities.invokeLater(() -> requestFocusInWindow());
+            }
+        });
+
     }
 
     private void loadImages() {
@@ -69,7 +77,7 @@ public class GamePanel extends JPanel implements KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         for (int y = 0; y < VIEWPORT_HEIGHT; y++) {
             for (int x = 0; x < VIEWPORT_WIDTH; x++) {
                 int worldX = cameraX + x;
@@ -86,15 +94,25 @@ public class GamePanel extends JPanel implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        System.out.println("ZZ");
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_A -> cameraX = Math.max(0, cameraX - 1);
-            case KeyEvent.VK_D -> cameraX = Math.min(gameMap.getWidth() - VIEWPORT_WIDTH, cameraX + 1);
-            case KeyEvent.VK_W -> cameraY = Math.max(0, cameraY - 1);
-            case KeyEvent.VK_S -> cameraY = Math.min(gameMap.getHeight() - VIEWPORT_HEIGHT, cameraY + 1);
+            case KeyEvent.VK_A ->
+                cameraX = Math.max(0, cameraX - 1);
+            case KeyEvent.VK_D ->
+                cameraX = Math.min(gameMap.getWidth() - VIEWPORT_WIDTH, cameraX + 1);
+            case KeyEvent.VK_W ->
+                cameraY = Math.max(0, cameraY - 1);
+            case KeyEvent.VK_S ->
+                cameraY = Math.min(gameMap.getHeight() - VIEWPORT_HEIGHT, cameraY + 1);
         }
         repaint();
     }
 
-    @Override public void keyReleased(KeyEvent e) {}
-    @Override public void keyTyped(KeyEvent e) {}
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
 }
