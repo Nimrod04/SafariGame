@@ -12,4 +12,19 @@ public class Carnivore extends Animal {
     public void eat(){}
     @Override
     public void drink(){}
+
+    @Override
+    public void findWater() {
+
+    }
+
+    @Override
+    public void findFood() {
+
+    }
+
+    @Override
+    public void nap() {
+
+    }
 }
