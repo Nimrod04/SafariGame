@@ -8,6 +8,10 @@ public abstract class Animal {
     protected int lifetime; //konstruktorban random értéket adni neki
     protected int age;
 
+    Coordinate actualCoordinate;
+    Coordinate targetCoordinate;
+
+
     protected double foodLevel;
     protected int maxFood;
     protected double waterLevel;
@@ -21,6 +25,16 @@ public abstract class Animal {
     public abstract void drink();
     public abstract void nap();  // esetleg true/false értékkel
 
+    public void setActualCoordinate(Coordinate c){
+        actualCoordinate = c;
+    };
+    public void setTargetCoordinate(Coordinate c){
+        targetCoordinate = c;
+    };
+
+    protected List<Animal> getGroup() {
+        return group;
+    };
 
 
 

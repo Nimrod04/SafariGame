@@ -27,4 +27,7 @@ public class Carnivore extends Animal {
     public void nap() {
 
     }
+
+
+
 }
