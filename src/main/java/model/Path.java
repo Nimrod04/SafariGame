@@ -6,20 +6,18 @@ public class Path {
     private Coordinate start;
     private Coordinate end;
     private List<Coordinate> waypoints;
-    private String imagePath;
-
+    String imagePath;
     Coordinate coordinate;
     public Path(Coordinate coordinate,  boolean l) {
         this.coordinate = coordinate;
     }
 
-    void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImagePath(String path){
+        this.imagePath = path;
     }
 
-    public String getImagePath() {
-        return this.imagePath;
+    public String getImagePath(){
+        return imagePath;
     }
-
 
 }

@@ -1,4 +1,4 @@
-package org.example;
+package start;
 import model.Game;
 import view.Menu;
 
@@ -8,5 +8,6 @@ public class Main {
         Menu menu = new Menu();
         menu.setVisible(true);
         System.out.println("Helloooooooooo");
+
     }
 }

@@ -1,7 +1,8 @@
 package model;
 
-public class Ranger extends Entity{
+public class Ranger extends Entity {
     private double salary;
+
 
     public void stopPoacher(Poacher poacher) {
         // Orvvadász megállítása

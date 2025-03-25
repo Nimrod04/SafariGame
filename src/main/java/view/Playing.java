@@ -4,10 +4,17 @@
  */
 package view;
 
+import model.GameMap;
+import model.Tile;
+import view.GamePanel;
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
-import javax.swing.JPanel;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.*;
 
 /**
  *
@@ -18,6 +25,7 @@ public class Playing extends javax.swing.JFrame {
     public boolean inAnimalShop = false;
     public boolean inPlantShop = false;
     public boolean inRoadShop = false;
+
 
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
@@ -150,14 +158,18 @@ public class Playing extends javax.swing.JFrame {
     }
     
     public JPanel getJPanel(){
-        return jPanel1;
+        return gamePanel;
     }
+    
+    
     /**
      * Creates new form Playing
      */
     public Playing() {
 
         initComponents();
+
+        gamePanel = new GamePanel(new GameMap(20, 15));
         shopPanel.setVisible(false);
 
         roundIconPanel2.setIconPath("visitor.png");
@@ -194,6 +206,9 @@ public class Playing extends javax.swing.JFrame {
     }
     
 
+    public GamePanel getGamePanel(){
+        return (GamePanel) gamePanel;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -203,7 +218,7 @@ public class Playing extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gamePanel = new javax.swing.JPanel();
+        gamePanel = new GamePanel(new GameMap(40, 20));
         roundIconPanel2 = new view.RoundIconPanel();
         roundIconPanel3 = new view.RoundIconPanel();
         roundIconPanel4 = new view.RoundIconPanel();
