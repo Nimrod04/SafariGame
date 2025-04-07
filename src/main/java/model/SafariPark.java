@@ -14,6 +14,8 @@ public class SafariPark {
     private Exit exit;
     private Path[][] mapGrid;
 
+
+
     private static final int MAP_SIZE = 10;
     private static final double TREE_PROBABILITY = 0.1;
     private static final double WATER_PROBABILITY = 0.1;
@@ -74,6 +76,8 @@ public class SafariPark {
 
         System.out.println("Térkép generálása kész.");
     }
+
+
 
     public void updateEntities() {
         for (Entity e : entities) {

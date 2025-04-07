@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameMap {
@@ -8,12 +9,26 @@ public class GameMap {
     private Tile[][] map;
     private Random random = new Random();
 
+    public ArrayList<Elephant> elephants;
+    public ArrayList<Gazelle> gazelles;
+    public ArrayList<Lion> lions;
+    public ArrayList<Cheetah> cheetahs;
+
+
+
     public GameMap(int width, int height) {
         this.width = width;
         this.height = height;
         this.map = new Tile[width][height];
+        elephants = new ArrayList<>();
+        gazelles = new ArrayList<>();
+        lions = new ArrayList<>();
+        cheetahs = new ArrayList<>();
+
         generateRandomMap();
+        generateAnimals();
     }
+
 
     private void generateRandomMap() {
         for (int x = 0; x < width; x++) {
@@ -30,6 +45,25 @@ public class GameMap {
                     map[x][y] = new Tile(Tile.TileType.SAND);
                 }
             }
+        }
+    }
+
+    private void generateAnimals(){
+        int num = (int) (Math.random() * 5) + 5;
+        for (int i = 0; i <= num; i++){
+            elephants.add(new Elephant());
+        }
+        num = (int) (Math.random() * 5) + 5;
+        for (int i = 0; i <= num; i++){
+            gazelles.add(new Gazelle());
+        }
+        num = (int) (Math.random() * 5) + 5;
+        for (int i = 0; i <= num; i++){
+            lions.add(new Lion());
+        }
+        num = (int) (Math.random() * 5) + 5;
+        for (int i = 0; i <= num; i++){
+            cheetahs.add(new Cheetah());
         }
     }
 

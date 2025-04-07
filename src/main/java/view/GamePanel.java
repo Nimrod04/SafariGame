@@ -1,7 +1,6 @@
 package view;
 
-import model.GameMap;
-import model.Tile;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,8 +12,8 @@ public class GamePanel extends JPanel implements KeyListener {
     private final GameMap gameMap;
     private final Map<Tile.TileType, Image> tileImages = new HashMap<>();
 
-    private static final int TILE_SIZE = 64;
-    private static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
+    public static final int TILE_SIZE = 64;
+    public static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
     private int cameraX = 0, cameraY = 0;
 
     public int getCameraX() {
@@ -82,6 +81,20 @@ public class GamePanel extends JPanel implements KeyListener {
                 }
             }
         }
+
+        for (Elephant e : gameMap.elephants){
+            g.drawImage(tileImages.get(Tile.TileType.ELEPHANT), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+        }
+        for (Gazelle e : gameMap.gazelles){
+            g.drawImage(tileImages.get(Tile.TileType.GAZELLE), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+        }
+        for (Lion e : gameMap.lions){
+            g.drawImage(tileImages.get(Tile.TileType.LION), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+        }
+        for (Cheetah e : gameMap.cheetahs){
+            g.drawImage(tileImages.get(Tile.TileType.CHEETAH), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+        }
+
     }
 
     @Override

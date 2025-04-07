@@ -1,6 +1,10 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import static view.GamePanel.*;
 
 public abstract class Animal {
     protected String species;
@@ -17,13 +21,42 @@ public abstract class Animal {
     protected double waterLevel;
     protected int maxWater;
 
+    ArrayList<Integer[]> food;
+    ArrayList<Integer[]> drink;
     protected List<Animal> group;
+    Random random = new Random();
 
-    public abstract void findWater();
-    public abstract void findFood();
-    public abstract void eat();
-    public abstract void drink();
-    public abstract void nap();  // esetleg true/false értékkel
+    public Animal(){
+        this.lifetime = (int) (Math.random() * 7) + 5;
+        age = 0;
+        targetCoordinate = null;
+        int posX = (int) (Math.random() *1280) ;
+        int posY = (int) (Math.random() * 720) ;
+        actualCoordinate = new Coordinate(posX,posY);
+    }
+    public Animal(int x, int y){
+        this.lifetime = (int) (Math.random() * 7) + 5;
+        age = 0;
+        targetCoordinate = null;
+        actualCoordinate = new Coordinate(x,y);
+    }
+
+    public void findWater(){
+        if(!drink.isEmpty()){
+            targetCoordinate = new Coordinate(drink.getLast()[0],drink.getLast()[1]);
+        }
+    };
+    public void findFood(){
+        if(!food.isEmpty()){
+            targetCoordinate = new Coordinate(food.getLast()[0],food.getLast()[1]);
+        }
+    };
+
+    private void addFood(){
+        //ha van a környéken víz vagy étel
+
+    }
+
 
     public void setActualCoordinate(Coordinate c){
         actualCoordinate = c;
@@ -31,12 +64,18 @@ public abstract class Animal {
     public void setTargetCoordinate(Coordinate c){
         targetCoordinate = c;
     };
+    public Coordinate getCoordinate(){
+        return actualCoordinate;
+    };
+
 
     protected List<Animal> getGroup() {
         return group;
     };
 
-
+    public abstract void eat();
+    public abstract void drink();
+    public abstract void nap();  // esetleg true/false értékkel
 
 
 }
