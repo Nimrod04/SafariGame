@@ -7,4 +7,11 @@ public class Coordinate {
         this.x = x; 
         this.y = y; 
     }
+
+    public int getPosX(){
+        return x;
+    }
+    public int getPosY(){
+        return y;
+    }
 }
