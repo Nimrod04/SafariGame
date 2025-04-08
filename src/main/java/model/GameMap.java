@@ -8,6 +8,7 @@ public class GameMap {
     private final int height;
     private Tile[][] map;
     private Random random = new Random();
+    private ArrayList<ArrayList<Integer>> data;
 
     public ArrayList<Elephant> elephants;
     public ArrayList<Gazelle> gazelles;
@@ -17,6 +18,7 @@ public class GameMap {
 
 
     public GameMap(int width, int height) {
+        this.data = new ArrayList<>();
         this.width = width;
         this.height = height;
         this.map = new Tile[width][height];
@@ -32,20 +34,27 @@ public class GameMap {
 
     private void generateRandomMap() {
         for (int x = 0; x < width; x++) {
+            ArrayList<Integer> tmp = new ArrayList<>();
             for (int y = 0; y < height; y++) {
                 double chance = random.nextDouble();
                 if (chance < 0.02) {
+                    tmp.add(3);
                     map[x][y] = new Tile(Tile.TileType.WATER);
                 } else if (chance < 0.04) {
+                    tmp.add(2);
                     map[x][y] = new Tile(Tile.TileType.TREE);
                 } else if (chance < 0.07) {
+                    tmp.add(1);
                     map[x][y] = new Tile(Tile.TileType.GRASS);
                 }
                 else {
+                    tmp.add(0);
                     map[x][y] = new Tile(Tile.TileType.SAND);
                 }
             }
+            data.add(tmp);
         }
+        System.out.println(data.toString());
     }
 
     private void generateAnimals(){

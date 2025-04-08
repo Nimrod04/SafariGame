@@ -30,8 +30,8 @@ public abstract class Animal {
         this.lifetime = (int) (Math.random() * 7) + 5;
         age = 0;
         targetCoordinate = null;
-        int posX = (int) (Math.random() *1280) ;
-        int posY = (int) (Math.random() * 720) ;
+        int posX = (int) (Math.random() *40*TILE_SIZE) ;
+        int posY = (int) (Math.random() * 20*TILE_SIZE) ;
         actualCoordinate = new Coordinate(posX,posY);
     }
     public Animal(int x, int y){
