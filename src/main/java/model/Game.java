@@ -21,6 +21,8 @@ public class Game implements Runnable {
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
 
+    private GameSpeed gameSpeed; // Új GameSpeed példány
+
     public final static int TILES_DEFAULT_SIZE = 16;
     public final static float SCALE = 4.0f;
     public final static int TILES_IN_WIDTH = 20;
@@ -34,6 +36,9 @@ public class Game implements Runnable {
         this.park = new SafariPark();
         this.finance = new Finance();
         this.state = GameState.READY;
+
+        this.gameSpeed = new GameSpeed(); // GameSpeed inicializálása
+        this.gameSpeed.startTimer(); // Időzítő indítása
 
         playing = new Playing();
         playing.setSafariName(safariName);
@@ -55,7 +60,6 @@ public class Game implements Runnable {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_W) {
                     System.out.println("W lenyomva!");
-                    // Ide jön a mozgás logikája
                 }
             }
         });
@@ -80,46 +84,17 @@ public class Game implements Runnable {
         startGameLoop();
     }
 
-    public void startGame() {
-        state = GameState.RUNNING;
-        //safariPark.generateMap();
-        //view.updateView();
-    }
-
-    public void endGame() {
-        state = GameState.ENDED;
-        //view.displayGameOver();
-    }
-
-    public void checkWinCondition() {
-        // Ellenőrzi a nyerési feltételeket
-    }
-
     private void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
     }
 
-    /**
-     * frissíti a játékmenetet
-     */
-    public void update() {
-        //playing.update();
-
-    }
-
-    /**
-     * kirajzolja a játékot
-     *
-     * @param g
-     */
-    public void render(Graphics g) {
-        //playing.draw(g);
-    }
+   public void update() {
+    playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
+}
 
     @Override
     public void run() {
-
         double timePerFrame = 1000000000.0 / FPS_SET;
         double timePerUpdate = 1000000000.0 / UPS_SET;
 
@@ -151,30 +126,11 @@ public class Game implements Runnable {
                 deltaF--;
             }
 
-            /*if (System.nanoTime()-lastFrame >= timePerFrame) {
-                gamePanel.repaint();
-                lastFrame = now;
-                frames++;
-            }*/
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                //System.out.println("FPS: " + frames + " | UPS: " + updates);
                 frames = 0;
                 updates = 0;
             }
-
         }
-
-    }
-
-    /**
-     * ha másik ablakba kattintanánk, a karakter megáll
-     */
-    public void windowFocusLost() {
-        //playing.getPlayer().resetDirBooleans();
-    }
-
-    public JPanel getGamePanel() {
-        return gamePanel;
     }
 }

@@ -164,6 +164,14 @@ public class Playing extends javax.swing.JFrame {
         return gamePanel;
     }
 
+    // ...existing code...
+
+public void updateTime(String time) {
+    dateLabel.setText(time); // Az idő megjelenítése a dateLabel-en
+}
+
+// ...existing code...
+
     /**
      * Creates new form Playing
      */
