@@ -56,6 +56,7 @@ public class GameMap {
         }
         System.out.println(data.toString());
     }
+    
 
     private void generateAnimals(){
         int num = (int) (Math.random() * 5) + 5;

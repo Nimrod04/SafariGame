@@ -176,50 +176,56 @@ public void updateTime(String time) {
      * Creates new form Playing
      */
     public Playing() {
+    initComponents();
 
-        initComponents();
+    // Egyetlen GameMap példány létrehozása
+    GameMap gameMap = new GameMap(40, 20);
 
-        gamePanel = new GamePanel(new GameMap(20, 15));
-        shopPanel.setVisible(false);
+    // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
+    gamePanel = new GamePanel(gameMap);
+    miniMap = new MiniMap(gameMap);
 
-        gamePanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
-            }
-        });
+    //gameMap.setOnMapChange(() -> miniMap.refresh());
 
-        roundIconPanel2.setIconPath("visitor.png");
-        roundIconPanel3.setIconPath("carni.png");
-        roundIconPanel4.setIconPath("herbi.png");
-        roundIconPanel5.setIconPath("m.png");
+    shopPanel.setVisible(false);
 
-        hireButton.setIconPath("shop.png");
-        shopButton.setIconPath("hire.png");
-        roundButton2.setIconPath("play.png");
-        roundButton3.setIconPath("dplay.png");
-        roundButton4.setIconPath("tplay.png");
-        roundButton5.setBorderThickness(0);
-        roundButton5.setIconPath("exit.png");
+    gamePanel.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
+        }
+    });
 
-        buyRoadButton.setIconPath("buyRoad.png");
-        buySecurityButton.setIconPath("buyCamera.jpg");
-        buyAnimalsButton.setIconPath("buyAnimal.png");
-        buyPlantsButton.setIconPath("buyPlants.png");
+    roundIconPanel2.setIconPath("visitor.png");
+    roundIconPanel3.setIconPath("carni.png");
+    roundIconPanel4.setIconPath("herbi.png");
+    roundIconPanel5.setIconPath("m.png");
 
-        secondaryShopPanel.setVisible(false);
+    hireButton.setIconPath("shop.png");
+    shopButton.setIconPath("hire.png");
+    roundButton2.setIconPath("play.png");
+    roundButton3.setIconPath("dplay.png");
+    roundButton4.setIconPath("tplay.png");
+    roundButton5.setBorderThickness(0);
+    roundButton5.setIconPath("exit.png");
 
-        visitorCount.setText("??/??");
-        herbiCount.setText("??/??");
-        carniCount.setText("??/??");
-        moneyCount.setText("??/??");
+    buyRoadButton.setIconPath("buyRoad.png");
+    buySecurityButton.setIconPath("buyCamera.jpg");
+    buyAnimalsButton.setIconPath("buyAnimal.png");
+    buyPlantsButton.setIconPath("buyPlants.png");
 
-        shopLabel1.setText("Út építés - 200$/db");
-        shopLabel2.setText("Biztonság");
-        shopLabel3.setText("Állatok");
-        shopLabel4.setText("Környezet");
+    secondaryShopPanel.setVisible(false);
 
-    }
+    visitorCount.setText("??/??");
+    herbiCount.setText("??/??");
+    carniCount.setText("??/??");
+    moneyCount.setText("??/??");
+
+    shopLabel1.setText("Út építés - 200$/db");
+    shopLabel2.setText("Biztonság");
+    shopLabel3.setText("Állatok");
+    shopLabel4.setText("Környezet");
+}
 
     public GamePanel getGamePanel() {
         return (GamePanel) gamePanel;
@@ -280,6 +286,21 @@ public void updateTime(String time) {
         setBounds(new java.awt.Rectangle(0, 0, 1280, 720));
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
+
+        miniMap = new MiniMap(new GameMap(40, 20)); // MiniMap inicializálása
+    miniMap.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+    javax.swing.GroupLayout miniMapLayout = new javax.swing.GroupLayout(miniMap);
+    miniMap.setLayout(miniMapLayout);
+    miniMapLayout.setHorizontalGroup(
+        miniMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 318, Short.MAX_VALUE)
+    );
+    miniMapLayout.setVerticalGroup(
+        miniMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 255, Short.MAX_VALUE)
+    );
+
 
         gamePanel.setMaximumSize(new java.awt.Dimension(1270, 710));
         gamePanel.setMinimumSize(new java.awt.Dimension(1270, 710));
@@ -628,7 +649,7 @@ public void updateTime(String time) {
 
         miniMap.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout miniMapLayout = new javax.swing.GroupLayout(miniMap);
+        //javax.swing.GroupLayout miniMapLayout = new javax.swing.GroupLayout(miniMap);
         miniMap.setLayout(miniMapLayout);
         miniMapLayout.setHorizontalGroup(
             miniMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
