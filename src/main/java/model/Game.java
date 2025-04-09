@@ -18,7 +18,7 @@ public class Game implements Runnable {
     private Playing playing;
 
     private Thread gameThread;
-    private final int FPS_SET = 120;
+    private final int FPS_SET = 60; // 60 FPS-re állítva
     private final int UPS_SET = 200;
 
     private GameSpeed gameSpeed; // Új GameSpeed példány
@@ -93,44 +93,53 @@ public class Game implements Runnable {
     playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
 }
 
-    @Override
-    public void run() {
-        double timePerFrame = 1000000000.0 / FPS_SET;
-        double timePerUpdate = 1000000000.0 / UPS_SET;
+   @Override
+public void run() {
+    double timePerFrame = 1000000000.0 / FPS_SET; // Idő egy képkockára nanosec-ben
+    double timePerUpdate = 1000000000.0 / UPS_SET;
 
-        long previousTime = System.nanoTime();
+    long previousTime = System.nanoTime();
 
-        int frames = 0;
-        int updates = 0;
-        long lastCheck = System.currentTimeMillis();
+    int frames = 0;
+    int updates = 0;
+    long lastCheck = System.currentTimeMillis();
 
-        double deltaU = 0;
-        double deltaF = 0;
+    double deltaU = 0;
+    double deltaF = 0;
 
-        while (true) {
-            long currentTime = System.nanoTime();
+    while (true) {
+        long currentTime = System.nanoTime();
 
-            deltaU += (currentTime - previousTime) / timePerUpdate;
-            deltaF += (currentTime - previousTime) / timePerFrame;
-            previousTime = currentTime;
+        deltaU += (currentTime - previousTime) / timePerUpdate;
+        deltaF += (currentTime - previousTime) / timePerFrame;
+        previousTime = currentTime;
 
-            if (deltaU >= 1) {
-                update();
-                updates++;
-                deltaU--;
-            }
+        if (deltaU >= 1) {
+            update(); // Játékállapot frissítése
+            updates++;
+            deltaU--;
+        }
 
-            if (deltaF >= 1) {
-                gamePanel.repaint();
-                frames++;
-                deltaF--;
-            }
+        if (deltaF >= 1) {
+            gamePanel.repaint(); // Vászon újrarajzolása
+            frames++;
+            deltaF--;
+        }
 
-            if (System.currentTimeMillis() - lastCheck >= 1000) {
-                lastCheck = System.currentTimeMillis();
-                frames = 0;
-                updates = 0;
-            }
+        // Ellenőrzés másodpercenként
+        if (System.currentTimeMillis() - lastCheck >= 1000) {
+            System.out.println("FPS: " + frames + " | UPS: " + updates);
+            lastCheck = System.currentTimeMillis();
+            frames = 0;
+            updates = 0;
+        }
+
+        // Alvás a pontos FPS érdekében
+        try {
+            Thread.sleep((long) (timePerFrame / 1000000)); // Alvás milliszekundumban
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
+}
 }

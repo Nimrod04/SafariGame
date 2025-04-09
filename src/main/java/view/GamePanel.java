@@ -5,6 +5,7 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,25 +18,7 @@ public class GamePanel extends JPanel implements KeyListener {
     public static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
     private int cameraX = 0, cameraY = 0;
 
-    public int getCameraX() {
-        return cameraX;
-    }
-
-    public void setCameraX(int cameraX) {
-        this.cameraX = cameraX;
-    }
-
-    public int getCameraY() {
-        return cameraY;
-    }
-
-    public void setCameraY(int cameraY) {
-        this.cameraY = cameraY;
-    }
-
-    public GameMap getGameMap() {
-        return this.gameMap;
-    }
+    private BufferedImage mapImage; // Gyorsítótárazott térkép kép
 
     public GamePanel(GameMap gameMap) {
         this.gameMap = gameMap;
@@ -43,7 +26,6 @@ public class GamePanel extends JPanel implements KeyListener {
         this.setPreferredSize(new Dimension(VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE));
         this.setFocusable(true);
         addKeyListener(this);
-        this.setFocusable(true);
         this.requestFocusInWindow();
 
         this.addMouseListener(new MouseAdapter() {
@@ -53,6 +35,22 @@ public class GamePanel extends JPanel implements KeyListener {
             }
         });
 
+        renderMap(); // Térkép előzetes renderelése
+    }
+
+    private void renderMap() {
+        mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = mapImage.getGraphics();
+
+        for (int y = 0; y < gameMap.getHeight(); y++) {
+            for (int x = 0; x < gameMap.getWidth(); x++) {
+                Tile tile = gameMap.getTile(x, y);
+                g.drawImage(tileImages.get(Tile.TileType.SAND), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+                g.drawImage(tileImages.get(tile.getType()), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+            }
+        }
+
+        g.dispose();
     }
 
     private void loadImages() {
@@ -75,50 +73,74 @@ public class GamePanel extends JPanel implements KeyListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        super.paintComponent(g); // Vászon törlése
 
-        for (int y = 0; y < VIEWPORT_HEIGHT; y++) {
-            for (int x = 0; x < VIEWPORT_WIDTH; x++) {
-                int worldX = cameraX + x;
-                int worldY = cameraY + y;
+        // Csak a látható részt rajzoljuk ki a gyorsítótárazott térképből
+        g.drawImage(mapImage, 0, 0, VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE,
+                cameraX * TILE_SIZE, cameraY * TILE_SIZE,
+                (cameraX + VIEWPORT_WIDTH) * TILE_SIZE, (cameraY + VIEWPORT_HEIGHT) * TILE_SIZE, null);
 
-                if (worldX >= 0 && worldX < gameMap.getWidth() && worldY >= 0 && worldY < gameMap.getHeight()) {
-                    Tile tile = gameMap.getTile(worldX, worldY);
-                    g.drawImage(tileImages.get(Tile.TileType.SAND), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
-                    g.drawImage(tileImages.get(tile.getType()), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
-                }
-            }
+        // Állatok kirajzolása
+        for (Elephant e : gameMap.elephants) {
+            g.drawImage(tileImages.get(Tile.TileType.ELEPHANT),
+                    e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
+                    e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE, this);
         }
-
-        for (Elephant e : gameMap.elephants){
-            g.drawImage(tileImages.get(Tile.TileType.ELEPHANT), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+        for (Gazelle e : gameMap.gazelles) {
+            g.drawImage(tileImages.get(Tile.TileType.GAZELLE),
+                    e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
+                    e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE, this);
         }
-        for (Gazelle e : gameMap.gazelles){
-            g.drawImage(tileImages.get(Tile.TileType.GAZELLE), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+        for (Lion e : gameMap.lions) {
+            g.drawImage(tileImages.get(Tile.TileType.LION),
+                    e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
+                    e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE, this);
         }
-        for (Lion e : gameMap.lions){
-            g.drawImage(tileImages.get(Tile.TileType.LION), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+        for (Cheetah e : gameMap.cheetahs) {
+            g.drawImage(tileImages.get(Tile.TileType.CHEETAH),
+                    e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
+                    e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE, this);
         }
-        for (Cheetah e : gameMap.cheetahs){
-            g.drawImage(tileImages.get(Tile.TileType.CHEETAH), e.getCoordinate().getPosX()-cameraX*TILE_SIZE, e.getCoordinate().getPosY()-cameraY*TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
-        }
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("ZZ");
+        boolean moved = false;
+
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_A ->
-                cameraX = Math.max(0, cameraX - 1);
-            case KeyEvent.VK_D ->
-                cameraX = Math.min(gameMap.getWidth() - VIEWPORT_WIDTH, cameraX + 1);
-            case KeyEvent.VK_W ->
-                cameraY = Math.max(0, cameraY - 1);
-            case KeyEvent.VK_S ->
-                cameraY = Math.min(gameMap.getHeight() - VIEWPORT_HEIGHT, cameraY + 1);
+            case KeyEvent.VK_A -> {
+                if (cameraX > 0) {
+                    cameraX--;
+                    moved = true;
+                }
+            }
+            case KeyEvent.VK_D -> {
+                if (cameraX < gameMap.getWidth() - VIEWPORT_WIDTH) {
+                    cameraX++;
+                    moved = true;
+                }
+            }
+            case KeyEvent.VK_W -> {
+                if (cameraY > 0) {
+                    cameraY--;
+                    moved = true;
+                }
+            }
+            case KeyEvent.VK_S -> {
+                if (cameraY < gameMap.getHeight() - VIEWPORT_HEIGHT) {
+                    cameraY++;
+                    moved = true;
+                }
+            }
         }
-        repaint();
+
+        if (moved) {
+            repaint(); // Csak akkor rajzoljuk újra, ha ténylegesen mozgott a kamera
+        }
     }
 
     @Override
@@ -127,5 +149,25 @@ public class GamePanel extends JPanel implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
+    }
+
+    public int getCameraX() {
+        return cameraX;
+    }
+
+    public void setCameraX(int cameraX) {
+        this.cameraX = cameraX;
+    }
+
+    public int getCameraY() {
+        return cameraY;
+    }
+
+    public void setCameraY(int cameraY) {
+        this.cameraY = cameraY;
+    }
+
+    public GameMap getGameMap() {
+        return this.gameMap;
     }
 }
