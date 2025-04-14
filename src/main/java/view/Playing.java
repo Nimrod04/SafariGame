@@ -178,65 +178,114 @@ public TimeIntensity getTimeIntensity(){
     return this.timeIntensity;
 }
 
-// ...existing code...
+public boolean isInRoadShop() {
+        return inRoadShop;
+}
 
+// ...existing code...
     /**
      * Creates new form Playing
      */
+    public void setInRoadShop(boolean inRoadShop) {
+        this.inRoadShop = inRoadShop;
+    }
+
     public Playing(Game game) {
         this.game = game;
-    initComponents();
-    
-    timeIntensity = TimeIntensity.NORMAL;
+        initComponents();
+        
+        timeIntensity = TimeIntensity.NORMAL;
+        
+        // Egyetlen GameMap példány létrehozása
+        GameMap gameMap = new GameMap(40, 20);
+        
+        // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
+        gamePanel = new GamePanel(new GameMap(40, 20),this);
+        getContentPane().add(gamePanel); // Hozzáadjuk a fő ablakhoz
+        gamePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Mouse clicked on gamePanel!");
+            }
+        });
+        miniMap = new MiniMap(gameMap);
+        
+        //gameMap.setOnMapChange(() -> miniMap.refresh());
+        
+        shopPanel.setVisible(false);
+        
+        gamePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
+                int tileX = e.getX() / GamePanel.TILE_SIZE; // Csempe X koordinátája
+                int tileY = e.getY() / GamePanel.TILE_SIZE; // Csempe Y koordinátája
+                gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
+                if (inRoadShop) {
+                    //int tileX = e.getX() / GamePanel.TILE_SIZE; // Csempe X koordinátája
+                    //int tileY = e.getY() / GamePanel.TILE_SIZE; // Csempe Y koordinátája
+                    System.out.println("Tile clicked: " + tileX + ", " + tileY);
+                    // Hozzáadjuk az utat a GameMap-hez
+                    
+                    
+                    // Újrarajzoljuk a panelt
+                    gamePanel.repaint();
+                    
+                    System.out.println("Road built at: " + tileX + ", " + tileY);
+                    
+                    // Kilépünk az útépítési módból
+                    inRoadShop = false;
+                }
+            }
+        });
 
-    // Egyetlen GameMap példány létrehozása
-    GameMap gameMap = new GameMap(40, 20);
-
-    // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
-    gamePanel = new GamePanel(gameMap);
-    miniMap = new MiniMap(gameMap);
-
-    //gameMap.setOnMapChange(() -> miniMap.refresh());
-
-    shopPanel.setVisible(false);
-
-    gamePanel.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
-        }
-    });
-
-    roundIconPanel2.setIconPath("visitor.png");
-    roundIconPanel3.setIconPath("carni.png");
-    roundIconPanel4.setIconPath("herbi.png");
-    roundIconPanel5.setIconPath("m.png");
-
-    hireButton.setIconPath("shop.png");
-    shopButton.setIconPath("hire.png");
-    roundButton2.setIconPath("play.png");
-    roundButton3.setIconPath("dplay.png");
-    roundButton4.setIconPath("tplay.png");
-    roundButton5.setBorderThickness(0);
-    roundButton5.setIconPath("exit.png");
-
-    buyRoadButton.setIconPath("buyRoad.png");
-    buySecurityButton.setIconPath("buyCamera.jpg");
-    buyAnimalsButton.setIconPath("buyAnimal.png");
-    buyPlantsButton.setIconPath("buyPlants.png");
-
-    secondaryShopPanel.setVisible(false);
-
-    visitorCount.setText("??/??");
-    herbiCount.setText("??/??");
-    carniCount.setText("??/??");
-    moneyCount.setText("??/??");
-
-    shopLabel1.setText("Út építés - 200$/db");
-    shopLabel2.setText("Biztonság");
-    shopLabel3.setText("Állatok");
-    shopLabel4.setText("Környezet");
-}
+        gamePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
+                int tileX = e.getX() / GamePanel.TILE_SIZE; // Csempe X koordinátája
+                int tileY = e.getY() / GamePanel.TILE_SIZE; // Csempe Y koordinátája
+        
+                if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                    gameMap.setTile(tileX, tileY, Tile.TileType.ROAD); // Csempe típusának beállítása
+                    gamePanel.repaint(); // Panel újrarajzolása
+                    System.out.println("Road built at: " + tileX + ", " + tileY);
+                } else {
+                    System.out.println("Clicked outside the map bounds.");
+                }
+            }
+        });
+        
+        roundIconPanel2.setIconPath("visitor.png");
+        roundIconPanel3.setIconPath("carni.png");
+        roundIconPanel4.setIconPath("herbi.png");
+        roundIconPanel5.setIconPath("m.png");
+        
+        hireButton.setIconPath("shop.png");
+        shopButton.setIconPath("hire.png");
+        roundButton2.setIconPath("play.png");
+        roundButton3.setIconPath("dplay.png");
+        roundButton4.setIconPath("tplay.png");
+        roundButton5.setBorderThickness(0);
+        roundButton5.setIconPath("exit.png");
+        
+        buyRoadButton.setIconPath("buyRoad.png");
+        buySecurityButton.setIconPath("buyCamera.jpg");
+        buyAnimalsButton.setIconPath("buyAnimal.png");
+        buyPlantsButton.setIconPath("buyPlants.png");
+        
+        secondaryShopPanel.setVisible(false);
+        
+        visitorCount.setText("??/??");
+        herbiCount.setText("??/??");
+        carniCount.setText("??/??");
+        moneyCount.setText("??/??");
+        
+        shopLabel1.setText("Út építés - 200$/db");
+        shopLabel2.setText("Biztonság");
+        shopLabel3.setText("Állatok");
+        shopLabel4.setText("Környezet");
+    }
 
     public GamePanel getGamePanel() {
         return (GamePanel) gamePanel;
@@ -251,7 +300,7 @@ public TimeIntensity getTimeIntensity(){
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gamePanel = new GamePanel(new GameMap(40, 20));
+        gamePanel = new GamePanel(new GameMap(40, 20),this);
         roundIconPanel2 = new view.RoundIconPanel();
         roundIconPanel3 = new view.RoundIconPanel();
         roundIconPanel4 = new view.RoundIconPanel();
@@ -817,6 +866,11 @@ public TimeIntensity getTimeIntensity(){
 
     private void buyRoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyRoadButtonActionPerformed
         // TODO add your handling code here:
+        if (inRoadShop) {
+            inRoadShop = false;
+        }else{
+            inRoadShop = true;
+        }
         System.out.println("Building roads!");
 
     }//GEN-LAST:event_buyRoadButtonActionPerformed

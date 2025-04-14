@@ -1,11 +1,14 @@
 package model;
 
+import view.GamePanel;
 import view.Playing;
 
 import javax.swing.*;
-import java.awt.Graphics;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Game implements Runnable {
 
@@ -67,6 +70,7 @@ public class Game implements Runnable {
         gamePanel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                System.out.println("ZZ");
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_A ->
                         playing.getGamePanel().setCameraX(Math.max(0, playing.getGamePanel().getCameraX() - 1));
@@ -80,7 +84,7 @@ public class Game implements Runnable {
                 gamePanel.repaint();
             }
         });
-
+       
         startGameLoop();
     }
     

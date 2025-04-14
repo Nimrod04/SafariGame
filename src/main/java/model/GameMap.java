@@ -56,6 +56,11 @@ public class GameMap {
         }
         System.out.println(data.toString());
     }
+    public void setTile(int x, int y, Tile.TileType type) {
+        if (x >= 0 && x < width && y >= 0 && y < height) {
+            map[x][y].setType(type);
+        }
+    }
     
 
     private void generateAnimals(){

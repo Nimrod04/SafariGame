@@ -18,10 +18,12 @@ public class GamePanel extends JPanel implements KeyListener {
     public static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
     private int cameraX = 0, cameraY = 0;
 
+    private Playing playing;
     private BufferedImage mapImage; // Gyorsítótárazott térkép kép
 
-    public GamePanel(GameMap gameMap) {
+    public GamePanel(GameMap gameMap, Playing playing) {
         this.gameMap = gameMap;
+        this.playing = playing;
         loadImages();
         this.setPreferredSize(new Dimension(VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE));
         this.setFocusable(true);
@@ -31,10 +33,20 @@ public class GamePanel extends JPanel implements KeyListener {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (playing != null && playing.isInRoadShop()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
+                        renderMap();
+                        repaint();
+                        //playing.setInRoadShop(false); // csak egy kattintás után kilép az útépítésből
+                        System.out.println("Road built at: " + tileX + ", " + tileY);
+                    }
+                }
                 SwingUtilities.invokeLater(() -> requestFocusInWindow());
             }
         });
-
         renderMap(); // Térkép előzetes renderelése
     }
 
@@ -55,6 +67,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
     private void loadImages() {
         try {
+            tileImages.put(Tile.TileType.ROAD, new ImageIcon(getClass().getResource("/images/dirt.png")).getImage());
             tileImages.put(Tile.TileType.GRASS, new ImageIcon(getClass().getResource("/images/grass.png")).getImage());
             tileImages.put(Tile.TileType.WATER, new ImageIcon(getClass().getResource("/images/water.png")).getImage());
             tileImages.put(Tile.TileType.TREE, new ImageIcon(getClass().getResource("/images/tree.png")).getImage());
@@ -75,6 +88,13 @@ public class GamePanel extends JPanel implements KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // Vászon törlése
 
+
+        for (int y = 0; y < gameMap.getHeight(); y++) {
+            for (int x = 0; x < gameMap.getWidth(); x++) {
+                Tile tile = gameMap.getTile(x, y);
+                g.drawImage(tileImages.get(tile.getType()), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+            }
+        }
         // Csak a látható részt rajzoljuk ki a gyorsítótárazott térképből
         g.drawImage(mapImage, 0, 0, VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE,
                 cameraX * TILE_SIZE, cameraY * TILE_SIZE,

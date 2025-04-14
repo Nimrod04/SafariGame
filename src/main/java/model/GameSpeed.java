@@ -9,6 +9,7 @@ public class GameSpeed {
         this.multi = 1;
         this.startTime = System.currentTimeMillis();
         this.elapsedTime = 0;
+        
     }
 
     public void changeGameSpeed(int newMulti) {
