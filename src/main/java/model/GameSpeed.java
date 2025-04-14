@@ -3,10 +3,19 @@ package model;
 public class GameSpeed {
     private long startTime;
     private long elapsedTime;
+    private int multi;
 
     public GameSpeed() {
-        this.startTime = 0;
+        this.multi = 1;
+        this.startTime = System.currentTimeMillis();
         this.elapsedTime = 0;
+    }
+
+    public void changeGameSpeed(int newMulti) {
+        // Frissítjük az eltelt időt az aktuális sebesség alapján
+        elapsedTime += (System.currentTimeMillis() - startTime) * multi;
+        startTime = System.currentTimeMillis(); // Új időzítés kezdete
+        this.multi = newMulti; // Új sebességszorzó beállítása
     }
 
     public void startTimer() {
@@ -14,11 +23,12 @@ public class GameSpeed {
     }
 
     public void stopTimer() {
-        this.elapsedTime = System.currentTimeMillis() - startTime;
+        this.elapsedTime += (System.currentTimeMillis() - startTime) * multi;
     }
 
     public long getElapsedTimeInSeconds() {
-        return (System.currentTimeMillis() - startTime) / 1000;
+        // Az eltelt idő kiszámítása az aktuális sebesség alapján
+        return (elapsedTime + (System.currentTimeMillis() - startTime) * multi) / 1000;
     }
 
     public String getFormattedTime() {

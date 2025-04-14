@@ -4,6 +4,7 @@
  */
 package view;
 
+import model.Game;
 import model.GameMap;
 import model.Tile;
 import view.GamePanel;
@@ -18,6 +19,8 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+import model.GameSpeed;
+import model.TimeIntensity;
 
 /**
  *
@@ -29,6 +32,8 @@ public class Playing extends javax.swing.JFrame {
     public boolean inAnimalShop = false;
     public boolean inPlantShop = false;
     public boolean inRoadShop = false;
+    private TimeIntensity timeIntensity;
+    private Game game; // A Game példány tárolása
 
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
@@ -169,14 +174,20 @@ public class Playing extends javax.swing.JFrame {
 public void updateTime(String time) {
     dateLabel.setText(time); // Az idő megjelenítése a dateLabel-en
 }
+public TimeIntensity getTimeIntensity(){
+    return this.timeIntensity;
+}
 
 // ...existing code...
 
     /**
      * Creates new form Playing
      */
-    public Playing() {
+    public Playing(Game game) {
+        this.game = game;
     initComponents();
+    
+    timeIntensity = TimeIntensity.NORMAL;
 
     // Egyetlen GameMap példány létrehozása
     GameMap gameMap = new GameMap(40, 20);
@@ -772,17 +783,19 @@ public void updateTime(String time) {
 
     private void roundButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roundButton2ActionPerformed
         System.out.println("1x speed");
-        gamePanel.requestFocusInWindow();
+        game.getGameSpeed().changeGameSpeed(1);
 
 
     }//GEN-LAST:event_roundButton2ActionPerformed
 
     private void roundButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roundButton3ActionPerformed
-        System.out.println("2x speed");
+        System.out.println("5x speed");
+        game.getGameSpeed().changeGameSpeed(5);
     }//GEN-LAST:event_roundButton3ActionPerformed
 
     private void roundButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roundButton4ActionPerformed
-        System.out.println("3x speed");
+        System.out.println("10x speed");
+        game.getGameSpeed().changeGameSpeed(10); // 10x sebesség
 
     }//GEN-LAST:event_roundButton4ActionPerformed
 
@@ -920,11 +933,6 @@ public void updateTime(String time) {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Playing().setVisible(true);
-            }
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

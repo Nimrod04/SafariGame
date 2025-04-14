@@ -40,7 +40,7 @@ public class Game implements Runnable {
         this.gameSpeed = new GameSpeed(); // GameSpeed inicializálása
         this.gameSpeed.startTimer(); // Időzítő indítása
 
-        playing = new Playing();
+        playing = new Playing(this);
         playing.setSafariName(safariName);
         playing.setVisible(true);
         gamePanel = playing.getJPanel();
@@ -83,6 +83,7 @@ public class Game implements Runnable {
 
         startGameLoop();
     }
+    
 
     private void startGameLoop() {
         gameThread = new Thread(this);
@@ -90,7 +91,11 @@ public class Game implements Runnable {
     }
 
    public void update() {
+    //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
     playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
+}
+public GameSpeed getGameSpeed() {
+    return this.gameSpeed;
 }
 
    @Override
@@ -135,11 +140,13 @@ public void run() {
         }
 
         // Alvás a pontos FPS érdekében
+        /*
         try {
             Thread.sleep((long) (timePerFrame / 1000000)); // Alvás milliszekundumban
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        */
     }
 }
 }
