@@ -56,6 +56,7 @@ public class GameMap {
         }
         System.out.println(data.toString());
     }
+
     
 
     private void generateAnimals(){
@@ -74,6 +75,15 @@ public class GameMap {
         num = (int) (Math.random() * 5) + 5;
         for (int i = 0; i <= num; i++){
             cheetahs.add(new Cheetah());
+        }
+    }
+
+    public void updateAnimals() {
+        int i = 0;
+        for (Animal a : elephants) {
+            i +=1;
+            System.out.println(i);
+            a.moveTo();
         }
     }
 

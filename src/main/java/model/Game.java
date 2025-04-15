@@ -3,7 +3,7 @@ package model;
 import view.Playing;
 
 import javax.swing.*;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -92,7 +92,9 @@ public class Game implements Runnable {
 
    public void update() {
     //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
+    playing.gameMap.updateAnimals();
     playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
+
 }
 public GameSpeed getGameSpeed() {
     return this.gameSpeed;

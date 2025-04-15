@@ -34,6 +34,7 @@ public class Playing extends javax.swing.JFrame {
     public boolean inRoadShop = false;
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
+    public GameMap gameMap;
 
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
@@ -190,7 +191,7 @@ public TimeIntensity getTimeIntensity(){
     timeIntensity = TimeIntensity.NORMAL;
 
     // Egyetlen GameMap példány létrehozása
-    GameMap gameMap = new GameMap(40, 20);
+    gameMap = new GameMap(40, 20);
 
     // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
     gamePanel = new GamePanel(gameMap);

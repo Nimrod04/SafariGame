@@ -18,7 +18,16 @@ public abstract class Entity {
         actualCoordinate = new Coordinate(posX,posY);
     }
 
-    public abstract void moveTo(Coordinate target);
+
+    public void moveTo(Coordinate target) {
+        int deltaX = target.getPosX() - actualCoordinate.getPosX();
+        int deltaY = target.getPosY() - actualCoordinate.getPosY();
+
+        int stepX = (int) ( Math.signum(deltaX) * Math.min(Math.abs(deltaX), movementSpeed));
+        int stepY = (int) ( Math.signum(deltaY) * Math.min(Math.abs(deltaY), movementSpeed));
+
+        actualCoordinate = new Coordinate(actualCoordinate.getPosX() + stepX, actualCoordinate.getPosY() + stepY);
+    }
 
     public abstract void move();
 

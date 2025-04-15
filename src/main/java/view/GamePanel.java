@@ -50,6 +50,10 @@ public class GamePanel extends JPanel implements KeyListener {
             }
         }
 
+        for (Elephant e : gameMap.elephants) {
+
+        }
+
         g.dispose();
     }
 

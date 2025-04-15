@@ -77,5 +77,11 @@ public abstract class Animal {
     public abstract void drink();
     public abstract void nap();  // esetleg true/false értékkel
 
+    public abstract void moveTo();
 
+    public abstract boolean hasReachedTarget();
+
+    public abstract void generateRandomTarget();
+
+    public abstract void moveTo(Coordinate target);
 }

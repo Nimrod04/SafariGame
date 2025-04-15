@@ -79,10 +79,8 @@ public class SafariPark {
 
 
 
-    public void updateEntities() {
-        for (Entity e : entities) {
-            e.move();
-        }
+    public void updateAnimals() {
+
     }
 
     public Path[][] getMapGrid() {
