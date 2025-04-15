@@ -37,12 +37,25 @@ public class GamePanel extends JPanel implements KeyListener {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
                     if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
-                        gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
+                            renderMap();
+                            repaint();
+                            System.out.println("Road built at: " + tileX + ", " + tileY);
+                        }
+
+                    }
+                }
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.ROAD) {
+                        gameMap.setTile(tileX, tileY, Tile.TileType.SAND);
                         renderMap();
                         repaint();
-                        //playing.setInRoadShop(false); // csak egy kattintás után kilép az útépítésből
-                        System.out.println("Road built at: " + tileX + ", " + tileY);
+                        System.out.println("Sand placed at: " + tileX + ", " + tileY);
                     }
+                    
                 }
                 SwingUtilities.invokeLater(() -> requestFocusInWindow());
             }
@@ -87,7 +100,6 @@ public class GamePanel extends JPanel implements KeyListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // Vászon törlése
-
 
         for (int y = 0; y < gameMap.getHeight(); y++) {
             for (int x = 0; x < gameMap.getWidth(); x++) {
