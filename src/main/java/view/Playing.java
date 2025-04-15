@@ -208,7 +208,7 @@ public boolean isInRoadShop() {
                 System.out.println("Mouse clicked on gamePanel!");
             }
         });
-        miniMap = new MiniMap(gameMap);
+        
         
         //gameMap.setOnMapChange(() -> miniMap.refresh());
         
@@ -285,6 +285,7 @@ public boolean isInRoadShop() {
         shopLabel2.setText("Biztonság");
         shopLabel3.setText("Állatok");
         shopLabel4.setText("Környezet");
+        miniMap = new MiniMap(this.getGamePanel());
     }
 
     public GamePanel getGamePanel() {
@@ -347,7 +348,7 @@ public boolean isInRoadShop() {
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
 
-        miniMap = new MiniMap(new GameMap(40, 20)); // MiniMap inicializálása
+        miniMap = new MiniMap(this.getGamePanel()); // MiniMap inicializálása
     miniMap.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
     javax.swing.GroupLayout miniMapLayout = new javax.swing.GroupLayout(miniMap);

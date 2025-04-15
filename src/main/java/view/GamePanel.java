@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class GamePanel extends JPanel implements KeyListener {
 
-    private final GameMap gameMap;
-    private final Map<Tile.TileType, Image> tileImages = new HashMap<>();
+    private GameMap gameMap;
+    private Map<Tile.TileType, Image> tileImages = new HashMap<>();
 
     public static final int TILE_SIZE = 64;
     public static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
@@ -63,7 +63,11 @@ public class GamePanel extends JPanel implements KeyListener {
         renderMap(); // Térkép előzetes renderelése
     }
 
-    private void renderMap() {
+    public Map<Tile.TileType, Image> getTileImages() {
+        return tileImages;
+    }
+
+    public void renderMap() {
         mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
         Graphics g = mapImage.getGraphics();
 
