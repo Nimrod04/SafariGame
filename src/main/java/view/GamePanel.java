@@ -20,12 +20,14 @@ public class GamePanel extends JPanel implements KeyListener {
     public static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
     private int cameraX = 0, cameraY = 0;
 
+    private Playing playing;
     private BufferedImage mapImage; // Gyorsítótárazott térkép kép
     private Timer gameTimer;
 
     public GamePanel(GameMap gameMap, Playing p) {
         this.playing = p;
         this.gameMap = gameMap;
+        this.playing = playing;
         loadImages();
         this.setPreferredSize(new Dimension(VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE));
         this.setFocusable(true);
@@ -35,6 +37,30 @@ public class GamePanel extends JPanel implements KeyListener {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if (playing != null && playing.isInRoadShop()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
+                            renderMap();
+                            repaint();
+                            System.out.println("Road built at: " + tileX + ", " + tileY);
+                        }
+
+                    }
+                }
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.ROAD) {
+                        gameMap.setTile(tileX, tileY, Tile.TileType.SAND);
+                        renderMap();
+                        repaint();
+                        System.out.println("Sand placed at: " + tileX + ", " + tileY);
+                    }
+                    
+                }
                 SwingUtilities.invokeLater(() -> requestFocusInWindow());
                 if (playing != null /*&& playing.isInRoadShop()*/ && playing.isBuildingRoad()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
@@ -246,7 +272,6 @@ public class GamePanel extends JPanel implements KeyListener {
 
             }
         });
-
         renderMap(); // Térkép előzetes renderelése
 
         // Időzítő a játék frissítéséhez
@@ -258,7 +283,11 @@ public class GamePanel extends JPanel implements KeyListener {
         gameTimer.start();
     }
 
-    private void renderMap() {
+    public Map<Tile.TileType, Image> getTileImages() {
+        return tileImages;
+    }
+
+    public void renderMap() {
         mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
         Graphics g = mapImage.getGraphics();
 
@@ -279,6 +308,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
     private void loadImages() {
         try {
+            tileImages.put(Tile.TileType.ROAD, new ImageIcon(getClass().getResource("/images/dirt.png")).getImage());
             tileImages.put(Tile.TileType.GRASS, new ImageIcon(getClass().getResource("/images/grass.png")).getImage());
             tileImages.put(Tile.TileType.WATER, new ImageIcon(getClass().getResource("/images/water.png")).getImage());
             tileImages.put(Tile.TileType.TREE, new ImageIcon(getClass().getResource("/images/tree.png")).getImage());
@@ -306,6 +336,12 @@ public class GamePanel extends JPanel implements KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // Vászon törlése
 
+        for (int y = 0; y < gameMap.getHeight(); y++) {
+            for (int x = 0; x < gameMap.getWidth(); x++) {
+                Tile tile = gameMap.getTile(x, y);
+                g.drawImage(tileImages.get(tile.getType()), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+            }
+        }
         // Csak a látható részt rajzoljuk ki a gyorsítótárazott térképből
         g.drawImage(mapImage, 0, 0, VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE,
                 cameraX * TILE_SIZE, cameraY * TILE_SIZE,

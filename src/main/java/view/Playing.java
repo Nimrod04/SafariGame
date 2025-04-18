@@ -219,10 +219,18 @@ public class Playing extends javax.swing.JFrame {
         return this.timeIntensity;
     }
 
+public boolean isInRoadShop() {
+        return inRoadShop;
+}
+
 // ...existing code...
     /**
      * Creates new form Playing
      */
+    public void setInRoadShop(boolean inRoadShop) {
+        this.inRoadShop = inRoadShop;
+    }
+
     public Playing(Game game) {
         this.balance = new Finance();
         this.game = game;
@@ -277,6 +285,7 @@ public class Playing extends javax.swing.JFrame {
         shopLabel2.setText("Biztonság");
         shopLabel3.setText("Állatok");
         shopLabel4.setText("Környezet");
+        miniMap = new MiniMap(this.getGamePanel());
     }
 
     public GamePanel getGamePanel() {
@@ -339,7 +348,7 @@ public class Playing extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
 
-        miniMap = new MiniMap(new GameMap(40, 20)); // MiniMap inicializálása
+        miniMap = new MiniMap(this.getGamePanel()); // MiniMap inicializálása
     miniMap.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
     javax.swing.GroupLayout miniMapLayout = new javax.swing.GroupLayout(miniMap);
