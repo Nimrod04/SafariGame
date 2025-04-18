@@ -1,19 +1,26 @@
 package model;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Drone {
     private Coordinate position;
     private Rectangle hitbox;
     private static final int HITBOX_RADIUS = 1; // 3x3 hitbox (radius of 1)
     private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1);
-
     public static final int PRICE = 1500;
 
     private ChargingStation chargingStation;
     private int orbitStep = 0; // 0-15, a 5x5 négyzet 16 pontja körül
     private long lastMoveTime = 0; // új mező a mozgás időzítéséhez
     private static final long MOVE_DELAY = 1000; // 1000ms = 1 másodperc
+
+    private List<Coordinate> waypoints = new ArrayList<>(); // Útvonalpontok
+    private boolean returningToStation = false; // Jelzi, hogy a drón visszatér-e a töltőállomásra
+    private long waitStartTime = 0; // A várakozás kezdési ideje
+    private static final long WAIT_DURATION = 4000; // 4 másodperc várakozás
+    private static final long RETURN_INTERVAL = 20000; // 20 másodpercenként visszatérés
 
     public Drone(Coordinate position, ChargingStation chargingStation) {
         this.position = position;
@@ -40,6 +47,18 @@ public class Drone {
 
     public void setChargingStation(ChargingStation chargingStation) {
         this.chargingStation = chargingStation;
+    }
+
+    public List<Coordinate> getWaypoints() {
+        return waypoints;
+    }
+
+    public void addWaypoint(Coordinate waypoint) {
+        waypoints.add(waypoint);
+    }
+
+    public void clearWaypoints() {
+        waypoints.clear();
     }
 
     // Körbe mozgatás a charging station körül egy 5x5 négyzeten

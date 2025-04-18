@@ -55,6 +55,78 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
+                //Airship
+
+                if (playing != null && playing.isBuildingAirship()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Airship.PRICE) {
+                                gameMap.addAirship(new Airship(new Coordinate(tileX, tileY)));
+                                //gameMap.setTile(tileX, tileY, Tile.TileType.AIRSHIP);
+                                playing.getFinance().decrease(Airship.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Airship placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("No");
+                            }
+
+                        }
+
+                    }
+                }
+                // Kattintás az Airship-re
+                // Ellenőrizzük, hogy van-e aktív Airship, és ha igen, akkor hozzáadunk egy waypointot
+                // Ellenőrizzük, hogy pontosan az Airship pozíciójára kattintottunk-e
+                // Ellenőrizzük, hogy pontosan az Airship pozíciójára kattintottunk-e
+                for (Airship airship : gameMap.getAirships()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (airship.isWaypoint(tileX, tileY)) {
+                        // Waypoint törlése és Airship unselect
+                        airship.clearWaypoints();
+                        airship.setSelected(false);
+                        System.out.println("Waypoint cleared and Airship unselected.");
+                        return;
+                    }
+                }
+
+                // Ellenőrizzük, hogy az Airship pozíciójára kattintottunk-e
+                for (Airship airship : gameMap.getAirships()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (airship.isClickedOnTile(tileX, tileY)) {
+                        if (airship.isSelected()) {
+                            // Waypointok elmentése és mozgás indítása
+                            airship.setSelected(false);
+                            airship.setMoving(true); // Mozgás indítása
+                            System.out.println("Waypoints saved and Airship started moving.");
+                        } else {
+                            // Airship kijelölése waypointok hozzáadásához
+                            airship.setSelected(true);
+                            airship.setMoving(false); // Mozgás leállítása kijelöléskor
+                            System.out.println("Airship selected at: " + tileX + ", " + tileY);
+                        }
+                        return;
+                    }
+                }
+
+                // Ha waypointot akarunk hozzáadni az aktív Airship-hez
+                for (Airship airship : gameMap.getAirships()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (airship.isSelected()) {
+                        airship.addWaypoint(new Coordinate(tileX, tileY));
+                        System.out.println("Waypoint added: " + tileX + ", " + tileY);
+                        return;
+                    }
+                }
 
                 //Camera
                 if (playing != null && playing.isBuildingCamera()) {
@@ -171,20 +243,20 @@ public class GamePanel extends JPanel implements KeyListener {
                         System.out.println("Sand placed at: " + tileX + ", " + tileY);
                     }
                 }
-            
 
-            }});
+            }
+        });
 
-            renderMap(); // Térkép előzetes renderelése
+        renderMap(); // Térkép előzetes renderelése
 
-            // Időzítő a játék frissítéséhez
-            gameTimer  = new Timer(100, e -> {
-                gameMap.updateAnimals(); // Állatok frissítése
-                repaint(); // Képernyő újrarajzolása
-            });
+        // Időzítő a játék frissítéséhez
+        gameTimer = new Timer(100, e -> {
+            gameMap.updateAnimals(); // Állatok frissítése
+            repaint(); // Képernyő újrarajzolása
+        });
 
-            gameTimer.start ();
-        }
+        gameTimer.start();
+    }
 
     private void renderMap() {
         mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
@@ -220,10 +292,10 @@ public class GamePanel extends JPanel implements KeyListener {
             tileImages.put(Tile.TileType.GATE, new ImageIcon(getClass().getResource("/images/gate.png")).getImage());
             tileImages.put(Tile.TileType.ROAD, new ImageIcon(getClass().getResource("/images/dirt.png")).getImage());
 
-            
             tileImages.put(Tile.TileType.CAMERA, new ImageIcon(getClass().getResource("/images/camera.png")).getImage());
             tileImages.put(Tile.TileType.CHARGINGSTATION, new ImageIcon(getClass().getResource("/images/charging_station.png")).getImage());
             tileImages.put(Tile.TileType.DRONE, new ImageIcon(getClass().getResource("/images/drone_up.png")).getImage());
+            tileImages.put(Tile.TileType.AIRSHIP, new ImageIcon(getClass().getResource("/images/airship.png")).getImage());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -271,8 +343,41 @@ public class GamePanel extends JPanel implements KeyListener {
         }
         for (Drone drone : gameMap.getDrones()) {
             drone.orbitChargingStation();
+            int centerX = drone.getHitbox().x + drone.getHitbox().width / 2;
+            int centerY = drone.getHitbox().y + drone.getHitbox().height / 2;
+
+            g.drawImage(tileImages.get(Tile.TileType.DRONE),
+                    (centerX - cameraX) * TILE_SIZE - TILE_SIZE / 2, // Középre igazítás
+                    (centerY - cameraY) * TILE_SIZE - TILE_SIZE / 2, // Középre igazítás
+                    TILE_SIZE, TILE_SIZE, this);
             drone.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
 
+        }
+
+        // Airship-ek kirajzolása és mozgatása
+        for (Airship airship : gameMap.getAirships()) {
+            int centerX = airship.getHitbox().x + airship.getHitbox().width / 2;
+            int centerY = airship.getHitbox().y + airship.getHitbox().height / 2;
+
+            g.drawImage(tileImages.get(Tile.TileType.AIRSHIP),
+                    (centerX - cameraX) * TILE_SIZE - TILE_SIZE / 2, // Középre igazítás
+                    (centerY - cameraY) * TILE_SIZE - TILE_SIZE / 2, // Középre igazítás
+                    TILE_SIZE, TILE_SIZE, this); // Egy tile méretű kép
+
+            airship.moveToNextWaypoint(); // Mozgás a waypointok között, ha aktív
+            airship.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+
+            // Waypointok kirajzolása
+            g.setColor(new Color(0, 255, 0, 120)); // Halvány zöld szín
+int circleDiameter = TILE_SIZE / 2; // Kör átmérője
+int circleRadius = circleDiameter / 2;
+
+for (Coordinate waypoint : airship.getWaypoints()) {
+    int CcenterX = (waypoint.getPosX() - cameraX) * TILE_SIZE + TILE_SIZE / 2;
+    int CcenterY = (waypoint.getPosY() - cameraY) * TILE_SIZE + TILE_SIZE / 2;
+
+    g.fillOval(CcenterX - circleRadius, CcenterY - circleRadius, circleDiameter, circleDiameter);
+}
         }
     }
 

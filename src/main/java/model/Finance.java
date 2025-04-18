@@ -5,7 +5,7 @@ public class Finance {
     private double currentBalance;
 
     public Finance() {
-        this.currentBalance = 10000;
+        this.currentBalance = 100000;
     }
 
     public void increase(double amount) {

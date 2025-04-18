@@ -19,8 +19,11 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+
+import model.Airship;
 import model.Camera;
 import model.ChargingStation;
+import model.Coordinate;
 import model.Drone;
 import model.Finance;
 import model.GameSpeed;
@@ -43,6 +46,8 @@ public class Playing extends javax.swing.JFrame {
     private boolean buildingCamera = false;
     private boolean buildingDrone = false;
     private boolean buildingRoad = false;
+    private boolean buildingAirship = false;
+
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
     public GameMap gameMap;
@@ -57,6 +62,7 @@ public class Playing extends javax.swing.JFrame {
         buyButton_1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
                 System.out.println("Kamera");
                 if (buildingCamera) {
                     buildingCamera = false;
@@ -69,6 +75,7 @@ public class Playing extends javax.swing.JFrame {
         buyButton_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
                 System.out.println("Töltőállomás");
                 if (buildingChargingStation) {
                     buildingChargingStation = false;
@@ -81,6 +88,7 @@ public class Playing extends javax.swing.JFrame {
         buyButton_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
                 System.out.println("Drón");
                 if (buildingDrone) {
                     buildingDrone = false;
@@ -94,6 +102,12 @@ public class Playing extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Léghajó");
+                resetAllBools();
+                if (buildingAirship) {
+                    buildingAirship = false;
+                } else {
+                    buildingAirship = true;
+                }
             }
         });
     }
@@ -836,6 +850,7 @@ public class Playing extends javax.swing.JFrame {
             secondaryShopPanel.setVisible(false);
 
         }
+        resetAllBools();
     }//GEN-LAST:event_hireButtonActionPerformed
 
     private void roundButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roundButton5ActionPerformed
@@ -844,6 +859,7 @@ public class Playing extends javax.swing.JFrame {
 
     private void buyRoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyRoadButtonActionPerformed
         // TODO add your handling code here:
+        resetAllBools();
         buildingRoad = !buildingRoad;
         // Kapcsolóként működik
         System.out.println("Road building mode: " + (inRoadShop ? "ON" : "OFF"));
@@ -1030,5 +1046,22 @@ public class Playing extends javax.swing.JFrame {
 
     public void refreshBalance() {
         moneyLabel.setText(balance.getBalance() + "$");
+    }
+
+    public boolean isBuildingAirship() {
+        return buildingAirship;
+    }
+
+    public void resetAllBools() {
+        inSecurityShop = false;
+        inAnimalShop = false;
+        inPlantShop = false;
+        inRoadShop = false;
+
+        buildingChargingStation = false;
+        buildingCamera = false;
+        buildingDrone = false;
+        buildingRoad = false;
+        buildingAirship = false;
     }
 }

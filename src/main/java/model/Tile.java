@@ -6,7 +6,7 @@ public class Tile {
         this.type = type;
     }
     public enum TileType {
-        GRASS, WATER, ROAD, TREE, BUSH, DIRT, SAND, GAZELLE, ELEPHANT, LION, CHEETAH, GATE, CAMERA, CHARGINGSTATION,DRONE
+        GRASS, WATER, ROAD, TREE, BUSH, DIRT, SAND, GAZELLE, ELEPHANT, LION, CHEETAH, GATE, CAMERA, CHARGINGSTATION,DRONE,AIRSHIP
     }
 
     private TileType type;

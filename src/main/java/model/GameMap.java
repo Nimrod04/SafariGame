@@ -20,6 +20,7 @@ public class GameMap {
     private ArrayList<Camera> cameras;
     private ArrayList<ChargingStation> chargingStations;
     private ArrayList<Drone> drones;
+    private List<Airship> airships; // Airship-ek tárolása
 
     public GameMap(int width, int height) {
         this.data = new ArrayList<>();
@@ -34,6 +35,7 @@ public class GameMap {
         this.cameras = new ArrayList<>();
         this.chargingStations = new ArrayList<>();
         this.drones = new ArrayList<>();
+        this.airships = new ArrayList<>();
 
         generateRandomMap();
         generateAnimals();
@@ -130,7 +132,7 @@ public class GameMap {
         return height;
     }
     
-        public void addCamera(Camera camera) {
+    public void addCamera(Camera camera) {
         cameras.add(camera);
     }
     public ArrayList<Camera> getCameras() {
@@ -151,5 +153,17 @@ public class GameMap {
 
     public void addDrone(Drone drone) {
         this.drones.add(drone);
+    }
+
+    public List<Airship> getAirships() {
+        return airships;
+    }
+
+    public void addAirship(Airship airship) {
+        airships.add(airship);
+    }
+
+    public void removeAirship(Airship airship) {
+        airships.remove(airship);
     }
 }
