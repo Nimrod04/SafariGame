@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements KeyListener {
     private int cameraX = 0, cameraY = 0;
 
     private BufferedImage mapImage; // Gyorsítótárazott térkép kép
+    private Timer gameTimer;
 
     public GamePanel(GameMap gameMap) {
         this.gameMap = gameMap;
@@ -36,6 +37,13 @@ public class GamePanel extends JPanel implements KeyListener {
         });
 
         renderMap(); // Térkép előzetes renderelése
+
+        // Időzítő a játék frissítéséhez
+        gameTimer = new Timer(100, e -> {
+            gameMap.updateAnimals(); // Állatok frissítése
+            repaint(); // Képernyő újrarajzolása
+        });
+        gameTimer.start();
     }
 
     private void renderMap() {
@@ -90,6 +98,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
+            System.out.println("hello  GamePanel(93)");
         }
         for (Gazelle e : gameMap.gazelles) {
             g.drawImage(tileImages.get(Tile.TileType.GAZELLE),

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GameMap {
@@ -79,11 +80,32 @@ public class GameMap {
     }
 
     public void updateAnimals() {
-        int i = 0;
-        for (Animal a : elephants) {
-            i +=1;
-            System.out.println(i);
-            a.moveTo();
+        // Elefántok csoportosítása és mozgatása
+        groupAnimals(elephants);
+
+        // Gazellák csoportosítása és mozgatása
+        groupAnimals(gazelles);
+
+        // Oroszlánok csoportosítása és mozgatása
+        groupAnimals(lions);
+
+        // Gepárdok csoportosítása és mozgatása
+        groupAnimals(cheetahs);
+    }
+
+    // Általános csoportosítási logika
+    private void groupAnimals(List<? extends Animal> animals) {
+        for (Animal animal : animals) {
+            if (!animal.isInGroup()) {
+                List<Animal> newGroup = new ArrayList<>();
+                newGroup.add(animal);
+                for (Animal other : animals) {
+                    if (animal != other && !other.isInGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
+                        other.joinGroup(newGroup);
+                    }
+                }
+            }
+            animal.moveTo();
         }
     }
 

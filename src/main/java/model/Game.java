@@ -88,12 +88,14 @@ public class Game implements Runnable {
     private void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
+        
     }
 
    public void update() {
     //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
     playing.gameMap.updateAnimals();
     playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
+    //gamePanel.repaint();
 
 }
 public GameSpeed getGameSpeed() {

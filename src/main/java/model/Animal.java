@@ -26,6 +26,8 @@ public abstract class Animal {
     protected List<Animal> group;
     Random random = new Random();
 
+    protected static final int GROUP_RADIUS = 200; // Csoportosítási távolság (px)
+
     public Animal(){
         this.lifetime = (int) (Math.random() * 7) + 5;
         age = 0;
@@ -72,6 +74,22 @@ public abstract class Animal {
     protected List<Animal> getGroup() {
         return group;
     };
+
+    public void joinGroup(List<Animal> group) {
+        this.group = group;
+        group.add(this);
+    }
+
+    public boolean isInGroup() {
+        return group != null && !group.isEmpty();
+    }
+
+    // Távolság kiszámítása két állat között
+    public double distanceTo(Animal other) {
+        int dx = this.actualCoordinate.getPosX() - other.actualCoordinate.getPosX();
+        int dy = this.actualCoordinate.getPosY() - other.actualCoordinate.getPosY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 
     public abstract void eat();
     public abstract void drink();
