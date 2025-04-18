@@ -4,7 +4,7 @@ import view.GamePanel;
 import view.Playing;
 
 import javax.swing.*;
-
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -92,11 +92,15 @@ public class Game implements Runnable {
     private void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
+        
     }
 
    public void update() {
     //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
+    playing.gameMap.updateAnimals();
     playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
+    //gamePanel.repaint();
+
 }
 public GameSpeed getGameSpeed() {
     return this.gameSpeed;

@@ -2,16 +2,22 @@ package model;
 
 import java.util.List;
 
+import static view.GamePanel.TILE_SIZE;
+
 public class Herbivore extends Animal {
     private List<Plant> preferredPlants;
 
     public void graze() {
         // Legelés logika
     }
+
     @Override
-    public void eat(){}
+    public void eat() {
+    }
+
     @Override
-    public void drink(){}
+    public void drink() {
+    }
 
     @Override
     public void findWater() {
@@ -27,4 +33,67 @@ public class Herbivore extends Animal {
     public void nap() {
 
     }
+
+    @Override
+    public void moveTo() {
+
+        if (isInGroup()) {
+        // Ha csoportban van, kövesse a csoport vezetőjét
+        Animal leader = group.get(0);
+        if (leader != this) {
+            // Véletlenszerű eltolás a vezető körül
+            int offsetX = (int) (Math.random() * 20 - 10); // -10 és 10 között
+            int offsetY = (int) (Math.random() * 20 - 10); // -10 és 10 között
+            Coordinate targetWithOffset = new Coordinate(
+                leader.targetCoordinate.getPosX() + offsetX,
+                leader.targetCoordinate.getPosY() + offsetY
+            );
+            moveTo(targetWithOffset);
+            return;
+        }
+    }
+
+    // Ha nincs célkoordináta, vagy elérte a célját, generáljon újat
+    if (targetCoordinate == null || hasReachedTarget()) {
+        generateRandomTarget();
+    }
+    moveTo(targetCoordinate);
+    }
+
+    @Override
+    public boolean hasReachedTarget() {
+        return actualCoordinate.getPosX() == targetCoordinate.getPosX() && actualCoordinate.getPosY() == targetCoordinate.getPosY();
+    }
+
+    @Override
+    public void generateRandomTarget() {
+        int randomX = (int) (Math.random() * 40 * TILE_SIZE); // Adjust map size as needed
+        int randomY = (int) (Math.random() * 20 * TILE_SIZE);
+        targetCoordinate = new Coordinate(randomX, randomY);
+    }
+
+    @Override
+    public void moveTo(Coordinate target) {
+
+        int speedInPx = 5;
+
+        int deltaX = target.getPosX() - actualCoordinate.getPosX();
+        int deltaY = target.getPosY() - actualCoordinate.getPosY();
+
+        int stepX = (int) Math.signum(deltaX); // -1, 0 vagy 1
+        int stepY = (int) Math.signum(deltaY); // -1, 0 vagy 1
+
+        int nextX = actualCoordinate.getPosX() + stepX * speedInPx;
+        int nextY = actualCoordinate.getPosY() + stepY * speedInPx;
+
+        if (Math.abs(deltaX) <= Math.abs(stepX * speedInPx)) {
+            nextX = target.getPosX();
+        }
+        if (Math.abs(deltaY) <= Math.abs(stepY * speedInPx)) {
+            nextY = target.getPosY();
+        }
+
+        actualCoordinate = new Coordinate(nextX, nextY);
+    }
+
 }

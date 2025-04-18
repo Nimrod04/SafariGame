@@ -19,6 +19,13 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+
+import model.Airship;
+import model.Camera;
+import model.ChargingStation;
+import model.Coordinate;
+import model.Drone;
+import model.Finance;
 import model.GameSpeed;
 import model.TimeIntensity;
 
@@ -28,12 +35,22 @@ import model.TimeIntensity;
  */
 public class Playing extends javax.swing.JFrame {
 
+    private Finance balance;
+
     public boolean inSecurityShop = false;
     public boolean inAnimalShop = false;
     public boolean inPlantShop = false;
     public boolean inRoadShop = false;
+
+    private boolean buildingChargingStation = false;
+    private boolean buildingCamera = false;
+    private boolean buildingDrone = false;
+    private boolean buildingRoad = false;
+    private boolean buildingAirship = false;
+
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
+    public GameMap gameMap;
 
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
@@ -45,21 +62,39 @@ public class Playing extends javax.swing.JFrame {
         buyButton_1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
                 System.out.println("Kamera");
+                if (buildingCamera) {
+                    buildingCamera = false;
+                } else {
+                    buildingCamera = true;
+                }
             }
         });
 
         buyButton_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
                 System.out.println("Töltőállomás");
+                if (buildingChargingStation) {
+                    buildingChargingStation = false;
+                } else {
+                    buildingChargingStation = true;
+                }
             }
         });
 
         buyButton_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
                 System.out.println("Drón");
+                if (buildingDrone) {
+                    buildingDrone = false;
+                } else {
+                    buildingDrone = true;
+                }
             }
         });
 
@@ -67,6 +102,12 @@ public class Playing extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Léghajó");
+                resetAllBools();
+                if (buildingAirship) {
+                    buildingAirship = false;
+                } else {
+                    buildingAirship = true;
+                }
             }
         });
     }
@@ -170,13 +211,13 @@ public class Playing extends javax.swing.JFrame {
     }
 
     // ...existing code...
+    public void updateTime(String time) {
+        dateLabel.setText(time); // Az idő megjelenítése a dateLabel-en
+    }
 
-public void updateTime(String time) {
-    dateLabel.setText(time); // Az idő megjelenítése a dateLabel-en
-}
-public TimeIntensity getTimeIntensity(){
-    return this.timeIntensity;
-}
+    public TimeIntensity getTimeIntensity() {
+        return this.timeIntensity;
+    }
 
 public boolean isInRoadShop() {
         return inRoadShop;
@@ -191,76 +232,35 @@ public boolean isInRoadShop() {
     }
 
     public Playing(Game game) {
+        this.balance = new Finance();
         this.game = game;
         initComponents();
-        
+        refreshBalance();
+
         timeIntensity = TimeIntensity.NORMAL;
-        
+
         // Egyetlen GameMap példány létrehozása
-        GameMap gameMap = new GameMap(40, 20);
-        
+        gameMap = new GameMap(40, 20);
+
         // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
-        gamePanel = new GamePanel(new GameMap(40, 20),this);
-        getContentPane().add(gamePanel); // Hozzáadjuk a fő ablakhoz
-        gamePanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("Mouse clicked on gamePanel!");
-            }
-        });
-        
-        
+        gamePanel = new GamePanel(gameMap, this);
+        miniMap = new MiniMap(this.getGamePanel());
+
         //gameMap.setOnMapChange(() -> miniMap.refresh());
-        
         shopPanel.setVisible(false);
-        
-        gamePanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
-                int tileX = e.getX() / GamePanel.TILE_SIZE; // Csempe X koordinátája
-                int tileY = e.getY() / GamePanel.TILE_SIZE; // Csempe Y koordinátája
-                gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
-                if (inRoadShop) {
-                    //int tileX = e.getX() / GamePanel.TILE_SIZE; // Csempe X koordinátája
-                    //int tileY = e.getY() / GamePanel.TILE_SIZE; // Csempe Y koordinátája
-                    System.out.println("Tile clicked: " + tileX + ", " + tileY);
-                    // Hozzáadjuk az utat a GameMap-hez
-                    
-                    
-                    // Újrarajzoljuk a panelt
-                    gamePanel.repaint();
-                    
-                    System.out.println("Road built at: " + tileX + ", " + tileY);
-                    
-                    // Kilépünk az útépítési módból
-                    inRoadShop = false;
-                }
-            }
-        });
 
         gamePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
-                int tileX = e.getX() / GamePanel.TILE_SIZE; // Csempe X koordinátája
-                int tileY = e.getY() / GamePanel.TILE_SIZE; // Csempe Y koordinátája
-        
-                if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
-                    gameMap.setTile(tileX, tileY, Tile.TileType.ROAD); // Csempe típusának beállítása
-                    gamePanel.repaint(); // Panel újrarajzolása
-                    System.out.println("Road built at: " + tileX + ", " + tileY);
-                } else {
-                    System.out.println("Clicked outside the map bounds.");
-                }
             }
         });
-        
+
         roundIconPanel2.setIconPath("visitor.png");
         roundIconPanel3.setIconPath("carni.png");
         roundIconPanel4.setIconPath("herbi.png");
         roundIconPanel5.setIconPath("m.png");
-        
+
         hireButton.setIconPath("shop.png");
         shopButton.setIconPath("hire.png");
         roundButton2.setIconPath("play.png");
@@ -268,19 +268,19 @@ public boolean isInRoadShop() {
         roundButton4.setIconPath("tplay.png");
         roundButton5.setBorderThickness(0);
         roundButton5.setIconPath("exit.png");
-        
+
         buyRoadButton.setIconPath("buyRoad.png");
         buySecurityButton.setIconPath("buyCamera.jpg");
         buyAnimalsButton.setIconPath("buyAnimal.png");
         buyPlantsButton.setIconPath("buyPlants.png");
-        
+
         secondaryShopPanel.setVisible(false);
-        
+
         visitorCount.setText("??/??");
         herbiCount.setText("??/??");
         carniCount.setText("??/??");
         moneyCount.setText("??/??");
-        
+
         shopLabel1.setText("Út építés - 200$/db");
         shopLabel2.setText("Biztonság");
         shopLabel3.setText("Állatok");
@@ -859,6 +859,7 @@ public boolean isInRoadShop() {
             secondaryShopPanel.setVisible(false);
 
         }
+        resetAllBools();
     }//GEN-LAST:event_hireButtonActionPerformed
 
     private void roundButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_roundButton5ActionPerformed
@@ -867,11 +868,10 @@ public boolean isInRoadShop() {
 
     private void buyRoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyRoadButtonActionPerformed
         // TODO add your handling code here:
-        if (inRoadShop) {
-            inRoadShop = false;
-        }else{
-            inRoadShop = true;
-        }
+        resetAllBools();
+        buildingRoad = !buildingRoad;
+        // Kapcsolóként működik
+        System.out.println("Road building mode: " + (inRoadShop ? "ON" : "OFF"));
         System.out.println("Building roads!");
 
     }//GEN-LAST:event_buyRoadButtonActionPerformed
@@ -883,9 +883,9 @@ public boolean isInRoadShop() {
             secondaryShopPanel.setVisible(false);
         } else {
             setSecurityButtonActions();
-            buyButton_1Label.setText("Kamera - 200$");
-            buyButton_2Label.setText("Töltő Állomás - 500$");
-            buyButton_3Label.setText("Drón - 1000$");
+            buyButton_1Label.setText("Kamera - " + Camera.PRICE + "$");
+            buyButton_2Label.setText("Töltő Állomás - " + ChargingStation.PRICE + "$");
+            buyButton_3Label.setText("Drón - " + Drone.PRICE + "$");
             buyButton_4Label.setText("Léghajó - 4000$");
 
             buyButton_1.setIconPath("buySecurityCamera_Item.jpg");
@@ -1032,4 +1032,45 @@ public boolean isInRoadShop() {
     private javax.swing.JPanel shopPanel;
     private javax.swing.JLabel visitorCount;
     // End of variables declaration//GEN-END:variables
+
+    public boolean isBuildingRoad() {
+        return buildingRoad;
+    }
+
+    public boolean isBuildingCamera() {
+        return buildingCamera;
+    }
+
+    public Finance getFinance() {
+        return balance;
+    }
+
+    public boolean isBuildingChargingStation() {
+        return buildingChargingStation;
+    }
+
+    public boolean isBuildingDrone() {
+        return buildingDrone;
+    }
+
+    public void refreshBalance() {
+        moneyLabel.setText(balance.getBalance() + "$");
+    }
+
+    public boolean isBuildingAirship() {
+        return buildingAirship;
+    }
+
+    public void resetAllBools() {
+        inSecurityShop = false;
+        inAnimalShop = false;
+        inPlantShop = false;
+        inRoadShop = false;
+
+        buildingChargingStation = false;
+        buildingCamera = false;
+        buildingDrone = false;
+        buildingRoad = false;
+        buildingAirship = false;
+    }
 }

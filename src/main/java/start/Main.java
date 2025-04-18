@@ -1,5 +1,4 @@
 package start;
-import model.Game;
 import view.Menu;
 
 public class Main {

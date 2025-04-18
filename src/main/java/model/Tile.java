@@ -1,8 +1,12 @@
 package model;
 
 public class Tile {
+
+    public void setType(TileType type) {
+        this.type = type;
+    }
     public enum TileType {
-        GRASS, WATER, ROAD, TREE, BUSH, DIRT, SAND, GAZELLE, ELEPHANT, LION, CHEETAH, GATE
+        GRASS, WATER, ROAD, TREE, BUSH, DIRT, SAND, GAZELLE, ELEPHANT, LION, CHEETAH, GATE, CAMERA, CHARGINGSTATION,DRONE,AIRSHIP
     }
 
     private TileType type;
@@ -13,10 +17,6 @@ public class Tile {
 
     public TileType getType() {
         return type;
-    }
-
-    public void setType(TileType type) {
-        this.type = type;
     }
 }
 

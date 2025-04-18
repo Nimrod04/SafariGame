@@ -17,7 +17,6 @@ public class MiniMap extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         int mapWidth = gamePanel.getGameMap().getWidth();
         int mapHeight = gamePanel.getGameMap().getHeight();
 
