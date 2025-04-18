@@ -19,6 +19,10 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+import model.Camera;
+import model.ChargingStation;
+import model.Drone;
+import model.Finance;
 import model.GameSpeed;
 import model.TimeIntensity;
 
@@ -28,10 +32,17 @@ import model.TimeIntensity;
  */
 public class Playing extends javax.swing.JFrame {
 
+    private Finance balance;
+
     public boolean inSecurityShop = false;
     public boolean inAnimalShop = false;
     public boolean inPlantShop = false;
     public boolean inRoadShop = false;
+
+    private boolean buildingChargingStation = false;
+    private boolean buildingCamera = false;
+    private boolean buildingDrone = false;
+    private boolean buildingRoad = false;
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
     public GameMap gameMap;
@@ -47,6 +58,11 @@ public class Playing extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Kamera");
+                if (buildingCamera) {
+                    buildingCamera = false;
+                } else {
+                    buildingCamera = true;
+                }
             }
         });
 
@@ -54,6 +70,11 @@ public class Playing extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Töltőállomás");
+                if (buildingChargingStation) {
+                    buildingChargingStation = false;
+                } else {
+                    buildingChargingStation = true;
+                }
             }
         });
 
@@ -61,6 +82,11 @@ public class Playing extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Drón");
+                if (buildingDrone) {
+                    buildingDrone = false;
+                } else {
+                    buildingDrone = true;
+                }
             }
         });
 
@@ -171,73 +197,73 @@ public class Playing extends javax.swing.JFrame {
     }
 
     // ...existing code...
+    public void updateTime(String time) {
+        dateLabel.setText(time); // Az idő megjelenítése a dateLabel-en
+    }
 
-public void updateTime(String time) {
-    dateLabel.setText(time); // Az idő megjelenítése a dateLabel-en
-}
-public TimeIntensity getTimeIntensity(){
-    return this.timeIntensity;
-}
+    public TimeIntensity getTimeIntensity() {
+        return this.timeIntensity;
+    }
 
 // ...existing code...
-
     /**
      * Creates new form Playing
      */
     public Playing(Game game) {
+        this.balance = new Finance();
         this.game = game;
-    initComponents();
-    
-    timeIntensity = TimeIntensity.NORMAL;
+        initComponents();
+        refreshBalance();
 
-    // Egyetlen GameMap példány létrehozása
-    gameMap = new GameMap(40, 20);
+        timeIntensity = TimeIntensity.NORMAL;
 
-    // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
-    gamePanel = new GamePanel(gameMap);
-    miniMap = new MiniMap(gameMap);
+        // Egyetlen GameMap példány létrehozása
+        gameMap = new GameMap(40, 20);
 
-    //gameMap.setOnMapChange(() -> miniMap.refresh());
+        // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
+        gamePanel = new GamePanel(gameMap, this);
+        miniMap = new MiniMap(gameMap);
 
-    shopPanel.setVisible(false);
+        //gameMap.setOnMapChange(() -> miniMap.refresh());
+        shopPanel.setVisible(false);
 
-    gamePanel.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
-        }
-    });
+        gamePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                SwingUtilities.invokeLater(() -> gamePanel.requestFocusInWindow());
+            }
+        });
 
-    roundIconPanel2.setIconPath("visitor.png");
-    roundIconPanel3.setIconPath("carni.png");
-    roundIconPanel4.setIconPath("herbi.png");
-    roundIconPanel5.setIconPath("m.png");
+        roundIconPanel2.setIconPath("visitor.png");
+        roundIconPanel3.setIconPath("carni.png");
+        roundIconPanel4.setIconPath("herbi.png");
+        roundIconPanel5.setIconPath("m.png");
 
-    hireButton.setIconPath("shop.png");
-    shopButton.setIconPath("hire.png");
-    roundButton2.setIconPath("play.png");
-    roundButton3.setIconPath("dplay.png");
-    roundButton4.setIconPath("tplay.png");
-    roundButton5.setBorderThickness(0);
-    roundButton5.setIconPath("exit.png");
+        hireButton.setIconPath("shop.png");
+        shopButton.setIconPath("hire.png");
+        roundButton2.setIconPath("play.png");
+        roundButton3.setIconPath("dplay.png");
+        roundButton4.setIconPath("tplay.png");
+        roundButton5.setBorderThickness(0);
+        roundButton5.setIconPath("exit.png");
 
-    buyRoadButton.setIconPath("buyRoad.png");
-    buySecurityButton.setIconPath("buyCamera.jpg");
-    buyAnimalsButton.setIconPath("buyAnimal.png");
-    buyPlantsButton.setIconPath("buyPlants.png");
+        buyRoadButton.setIconPath("buyRoad.png");
+        buySecurityButton.setIconPath("buyCamera.jpg");
+        buyAnimalsButton.setIconPath("buyAnimal.png");
+        buyPlantsButton.setIconPath("buyPlants.png");
 
-    secondaryShopPanel.setVisible(false);
+        secondaryShopPanel.setVisible(false);
 
-    visitorCount.setText("??/??");
-    herbiCount.setText("??/??");
-    carniCount.setText("??/??");
-    moneyCount.setText("??/??");
+        visitorCount.setText("??/??");
+        herbiCount.setText("??/??");
+        carniCount.setText("??/??");
+        moneyCount.setText("??/??");
 
-    shopLabel1.setText("Út építés - 200$/db");
-    shopLabel2.setText("Biztonság");
-    shopLabel3.setText("Állatok");
-    shopLabel4.setText("Környezet");
-}
+        shopLabel1.setText("Út építés - 200$/db");
+        shopLabel2.setText("Biztonság");
+        shopLabel3.setText("Állatok");
+        shopLabel4.setText("Környezet");
+    }
 
     public GamePanel getGamePanel() {
         return (GamePanel) gamePanel;
@@ -252,7 +278,7 @@ public TimeIntensity getTimeIntensity(){
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gamePanel = new GamePanel(new GameMap(40, 20));
+        gamePanel = new GamePanel(new GameMap(40, 20),this);
         roundIconPanel2 = new view.RoundIconPanel();
         roundIconPanel3 = new view.RoundIconPanel();
         roundIconPanel4 = new view.RoundIconPanel();
@@ -818,6 +844,9 @@ public TimeIntensity getTimeIntensity(){
 
     private void buyRoadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyRoadButtonActionPerformed
         // TODO add your handling code here:
+        buildingRoad = !buildingRoad;
+        // Kapcsolóként működik
+        System.out.println("Road building mode: " + (inRoadShop ? "ON" : "OFF"));
         System.out.println("Building roads!");
 
     }//GEN-LAST:event_buyRoadButtonActionPerformed
@@ -829,9 +858,9 @@ public TimeIntensity getTimeIntensity(){
             secondaryShopPanel.setVisible(false);
         } else {
             setSecurityButtonActions();
-            buyButton_1Label.setText("Kamera - 200$");
-            buyButton_2Label.setText("Töltő Állomás - 500$");
-            buyButton_3Label.setText("Drón - 1000$");
+            buyButton_1Label.setText("Kamera - " + Camera.PRICE + "$");
+            buyButton_2Label.setText("Töltő Állomás - " + ChargingStation.PRICE + "$");
+            buyButton_3Label.setText("Drón - " + Drone.PRICE + "$");
             buyButton_4Label.setText("Léghajó - 4000$");
 
             buyButton_1.setIconPath("buySecurityCamera_Item.jpg");
@@ -978,4 +1007,28 @@ public TimeIntensity getTimeIntensity(){
     private javax.swing.JPanel shopPanel;
     private javax.swing.JLabel visitorCount;
     // End of variables declaration//GEN-END:variables
+
+    public boolean isBuildingRoad() {
+        return buildingRoad;
+    }
+
+    public boolean isBuildingCamera() {
+        return buildingCamera;
+    }
+
+    public Finance getFinance() {
+        return balance;
+    }
+
+    public boolean isBuildingChargingStation() {
+        return buildingChargingStation;
+    }
+
+    public boolean isBuildingDrone() {
+        return buildingDrone;
+    }
+
+    public void refreshBalance() {
+        moneyLabel.setText(balance.getBalance() + "$");
+    }
 }
