@@ -124,12 +124,6 @@ public class GameMap {
         return map[x][y];
     }
 
-    public void setTile(int x, int y, Tile.TileType type) {
-        if (x >= 0 && x < width && y >= 0 && y < height) {
-            map[x][y].setType(type);
-        }
-    }
-
     public int getWidth() {
         return width;
     }

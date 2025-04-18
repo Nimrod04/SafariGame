@@ -20,7 +20,6 @@ public class GamePanel extends JPanel implements KeyListener {
     public static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
     private int cameraX = 0, cameraY = 0;
 
-    private Playing playing;
     private BufferedImage mapImage; // Gyorsítótárazott térkép kép
     private Timer gameTimer;
 

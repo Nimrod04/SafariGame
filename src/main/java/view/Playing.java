@@ -244,7 +244,7 @@ public boolean isInRoadShop() {
 
         // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
         gamePanel = new GamePanel(gameMap, this);
-        miniMap = new MiniMap(gameMap);
+        miniMap = new MiniMap(this.getGamePanel());
 
         //gameMap.setOnMapChange(() -> miniMap.refresh());
         shopPanel.setVisible(false);
