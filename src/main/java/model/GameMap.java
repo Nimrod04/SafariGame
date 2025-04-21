@@ -64,12 +64,12 @@ public class GameMap {
         }
         System.out.println(data.toString());
     }
+
     public void setTile(int x, int y, Tile.TileType type) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             map[x][y].setType(type);
         }
     }
-    
 
     private void generateAnimals() {
         int num = (int) (Math.random() * 5) + 5;
@@ -131,10 +131,11 @@ public class GameMap {
     public int getHeight() {
         return height;
     }
-    
+
     public void addCamera(Camera camera) {
         cameras.add(camera);
     }
+
     public ArrayList<Camera> getCameras() {
         return cameras;
     }
@@ -165,5 +166,25 @@ public class GameMap {
 
     public void removeAirship(Airship airship) {
         airships.remove(airship);
+    }
+
+    public void addGazelle(Gazelle g) {
+        gazelles.add(g);
+        System.out.println(gazelles.size());
+    }
+
+    public void addElephant(Elephant elephant) {
+        elephants.add(elephant);
+        System.out.println(elephants.size());
+    }
+
+    public void addLion(Lion lion) {
+        lions.add(lion);
+        System.out.println(lions.size());
+    }
+
+    public void addCheetah(Cheetah cheetah) {
+        cheetahs.add(cheetah);
+        System.out.println(cheetahs.size());
     }
 }
