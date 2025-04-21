@@ -11,6 +11,9 @@ public class GameSpeed {
         this.elapsedTime = 0;
         
     }
+    public int getMulti() {
+        return this.multi;
+    }
 
     public void changeGameSpeed(int newMulti) {
         // Frissítjük az eltelt időt az aktuális sebesség alapján
