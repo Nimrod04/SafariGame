@@ -1,6 +1,7 @@
 package model;
 
 public class Tree extends Plant {
+    public static final int PRICE = 800;
     private double shadeArea;
 
     Coordinate coordinate;

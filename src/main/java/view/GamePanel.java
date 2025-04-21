@@ -58,7 +58,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         repaint();
                         System.out.println("Sand placed at: " + tileX + ", " + tileY);
                     }
-                    
+
                 }
                 SwingUtilities.invokeLater(() -> requestFocusInWindow());
                 if (playing != null /*&& playing.isInRoadShop()*/ && playing.isBuildingRoad()) {
@@ -121,31 +121,34 @@ public class GamePanel extends JPanel implements KeyListener {
                 }
 
                 // Ellenőrizzük, hogy az Airship pozíciójára kattintottunk-e
-                for (Airship airship : gameMap.getAirships()) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
 
-                    if (airship.isClickedOnTile(tileX, tileY)) {
-                        if (airship.isSelected()) {
-                            // Waypointok elmentése és mozgás indítása
-                            airship.setSelected(false);
-                            airship.setMoving(true); // Mozgás indítása
-                            System.out.println("Waypoints saved and Airship started moving.");
-                        } else {
-                            // Airship kijelölése waypointok hozzáadásához
-                            airship.setSelected(true);
-                            airship.setMoving(false); // Mozgás leállítása kijelöléskor
-                            System.out.println("Airship selected at: " + tileX + ", " + tileY);
+                    // Ellenőrizzük, hogy az Airship pozíciójára kattintottunk-e
+                    for (Airship airship : gameMap.getAirships()) {
+                        if (airship.isClickedOnTile(tileX, tileY)) {
+                            if (airship.isSelected()) {
+                                // Waypointok elmentése és mozgás indítása
+                                airship.setSelected(false);
+                                airship.setMoving(true); // Mozgás indítása
+                                System.out.println("Waypoints saved and Airship started moving.");
+                            } else {
+                                // Airship kijelölése waypointok hozzáadásához
+                                airship.setSelected(true);
+                                airship.setMoving(false); // Mozgás leállítása kijelöléskor
+                                System.out.println("Airship selected at: " + tileX + ", " + tileY);
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
 
                 // Ha waypointot akarunk hozzáadni az aktív Airship-hez
+                // Ha waypointot akarunk hozzáadni az aktív Airship-hez
                 for (Airship airship : gameMap.getAirships()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
-
                     if (airship.isSelected()) {
                         airship.addWaypoint(new Coordinate(tileX, tileY));
                         System.out.println("Waypoint added: " + tileX + ", " + tileY);
@@ -238,16 +241,114 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
+                //Grass
+                if (playing != null && playing.isBuildingGrass()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Grass.PRICE) {
+                                gameMap.setTile(tileX, tileY, Tile.TileType.GRASS);
+                                playing.getFinance().decrease(Grass.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Grass placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("No");
+                            }
 
+                        }
+
+                    }
+                }
+                //Tree
+                if (playing != null && playing.isBuildingTree()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Tree.PRICE) {
+                                gameMap.setTile(tileX, tileY, Tile.TileType.TREE);
+                                playing.getFinance().decrease(Tree.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Tree placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("No");
+                            }
+
+                        }
+
+                    }
+                }
+
+                //Lake
+                if (playing != null && playing.isBuildingLake()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= WaterBody.PRICE) {
+                                gameMap.setTile(tileX, tileY, Tile.TileType.WATER);
+                                playing.getFinance().decrease(WaterBody.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Water placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("No");
+                            }
+
+                        }
+
+                    }
+                }
                 //Delete
                 if (SwingUtilities.isRightMouseButton(e)) {
                     ArrayList<Tile.TileType> toDelete = new ArrayList<>();
                     toDelete.add(Tile.TileType.ROAD);
                     toDelete.add(Tile.TileType.CAMERA);
                     toDelete.add(Tile.TileType.CHARGINGSTATION);
+                    toDelete.add(Tile.TileType.DRONE);
+                    toDelete.add(Tile.TileType.AIRSHIP);
+
+                    toDelete.add(Tile.TileType.GRASS);
+                    toDelete.add(Tile.TileType.TREE);
+                    toDelete.add(Tile.TileType.WATER);
 
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    // Ellenőrizzük, hogy a kattintás egy drón pozíciójára esik-e
+                    for (Drone drone : gameMap.getDrones()) {
+                        if (drone.getPosition().getPosX() == tileX && drone.getPosition().getPosY() == tileY) {
+                            // Töröljük a drónt a GameMap-ből
+                            gameMap.getDrones().remove(drone);
+                            System.out.println("Drone removed at: " + tileX + ", " + tileY);
+
+                            // Frissítsük a térképet és a képernyőt
+                            renderMap();
+                            repaint();
+                            return; // Kilépünk, mert a drónt megtaláltuk és töröltük
+                        }
+                    }
+                    // Ellenőrizzük, hogy a kattintás egy Airship pozíciójára esik-e
+                    for (Airship airship : gameMap.getAirships()) {
+                        if (airship.getPosition().getPosX() == tileX && airship.getPosition().getPosY() == tileY) {
+                            // Töröljük az Airship-et a GameMap-ből
+                            gameMap.getAirships().remove(airship);
+                            airship.clearWaypoints(); // Waypointok törlése
+                            System.out.println("Airship removed at: " + tileX + ", " + tileY);
+
+                            // Frissítsük a térképet és a képernyőt
+                            renderMap();
+                            repaint();
+                            return; // Kilépünk, mert az Airship-et megtaláltuk és töröltük
+                        }
+                    }
+
                     if (toDelete.contains(gameMap.getTile(tileX, tileY).getType())) {
 
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.CAMERA) {
@@ -257,11 +358,22 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
 
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.CHARGINGSTATION) {
-                            gameMap.getCameras().removeIf(charging
-                                    -> charging.getPosition().getPosX() == tileX && charging.getPosition().getPosY() == tileY
+                            // Töröljük a hozzá kapcsolódó drónokat
+                            gameMap.getDrones().removeIf(drone -> {
+                                if (drone.getChargingStation().getPosition().getPosX() == tileX
+                                        && drone.getChargingStation().getPosition().getPosY() == tileY) {
+                                    System.out.println("Drone removed due to ChargingStation removal at: " + tileX + ", " + tileY);
+                                    return true; // Töröljük a drónt
+                                }
+                                return false;
+                            });
+
+                            // Töröljük a ChargingStation-t
+                            gameMap.getChargingStations().removeIf(chargingStation
+                                    -> chargingStation.getPosition().getPosX() == tileX
+                                    && chargingStation.getPosition().getPosY() == tileY
                             );
                         }
-
                         gameMap.setTile(tileX, tileY, Tile.TileType.SAND);
                         renderMap();
                         repaint();
@@ -404,15 +516,15 @@ public class GamePanel extends JPanel implements KeyListener {
 
             // Waypointok kirajzolása
             g.setColor(new Color(0, 255, 0, 120)); // Halvány zöld szín
-int circleDiameter = TILE_SIZE / 2; // Kör átmérője
-int circleRadius = circleDiameter / 2;
+            int circleDiameter = TILE_SIZE / 2; // Kör átmérője
+            int circleRadius = circleDiameter / 2;
 
-for (Coordinate waypoint : airship.getWaypoints()) {
-    int CcenterX = (waypoint.getPosX() - cameraX) * TILE_SIZE + TILE_SIZE / 2;
-    int CcenterY = (waypoint.getPosY() - cameraY) * TILE_SIZE + TILE_SIZE / 2;
+            for (Coordinate waypoint : airship.getWaypoints()) {
+                int CcenterX = (waypoint.getPosX() - cameraX) * TILE_SIZE + TILE_SIZE / 2;
+                int CcenterY = (waypoint.getPosY() - cameraY) * TILE_SIZE + TILE_SIZE / 2;
 
-    g.fillOval(CcenterX - circleRadius, CcenterY - circleRadius, circleDiameter, circleDiameter);
-}
+                g.fillOval(CcenterX - circleRadius, CcenterY - circleRadius, circleDiameter, circleDiameter);
+            }
         }
     }
 
