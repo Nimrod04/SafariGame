@@ -27,7 +27,10 @@ import model.Coordinate;
 import model.Drone;
 import model.Finance;
 import model.GameSpeed;
+import model.Grass;
 import model.TimeIntensity;
+import model.Tree;
+import model.WaterBody;
 
 /**
  *
@@ -47,6 +50,10 @@ public class Playing extends javax.swing.JFrame {
     private boolean buildingDrone = false;
     private boolean buildingRoad = false;
     private boolean buildingAirship = false;
+
+    private boolean buildingGrass = false;
+    private boolean buildingTree = false;
+    private boolean buildingLake = false;
 
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
@@ -177,6 +184,12 @@ public class Playing extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Fű");
+                resetAllBools();
+                if (buildingGrass) {
+                    buildingGrass = false;
+                } else {
+                    buildingGrass = true;
+                }
             }
         });
 
@@ -184,13 +197,26 @@ public class Playing extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Fa");
+                resetAllBools();
+                if (buildingTree) {
+                    buildingTree = false;
+                } else {
+                    buildingTree = true;
+                }
             }
         });
 
         buyButton_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
                 System.out.println("Tó");
+
+                if (buildingLake) {
+                    buildingLake = false;
+                } else {
+                    buildingLake = true;
+                }
             }
         });
 
@@ -219,9 +245,9 @@ public class Playing extends javax.swing.JFrame {
         return this.timeIntensity;
     }
 
-public boolean isInRoadShop() {
+    public boolean isInRoadShop() {
         return inRoadShop;
-}
+    }
 
 // ...existing code...
     /**
@@ -925,9 +951,9 @@ public boolean isInRoadShop() {
         } else {
             setPlantButtonActions();
 
-            buyButton_1Label.setText("Legelő(Fű) - 500$");
-            buyButton_2Label.setText("Pagony(Fa) - 1000$/db");
-            buyButton_3Label.setText("Oázis(Tó) - 2000$/db");
+            buyButton_1Label.setText("Legelő(Fű) - "+Grass.PRICE+"$");
+            buyButton_2Label.setText("Pagony(Fa) - "+Tree.PRICE+"$/db");
+            buyButton_3Label.setText("Oázis(Tó) - "+WaterBody.PRICE+"$/db");
             buyButton_4Label.setText("");
 
             buyButton_1.setIconPath("grass_Icon.png");
@@ -1060,8 +1086,21 @@ public boolean isInRoadShop() {
     public boolean isBuildingAirship() {
         return buildingAirship;
     }
+
     public Game getGame() {
         return this.game;
+    }
+
+    public boolean isBuildingGrass() {
+        return buildingGrass;
+    }
+
+    public boolean isBuildingTree() {
+        return buildingTree;
+    }
+
+    public boolean isBuildingLake() {
+        return buildingLake;
     }
 
     public void resetAllBools() {
@@ -1075,5 +1114,9 @@ public boolean isInRoadShop() {
         buildingDrone = false;
         buildingRoad = false;
         buildingAirship = false;
+
+        buildingGrass = false;
+        buildingTree = false;
+        buildingLake = false;
     }
 }
