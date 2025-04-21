@@ -21,6 +21,7 @@ public class GameMap {
     private ArrayList<ChargingStation> chargingStations;
     private ArrayList<Drone> drones;
     private List<Airship> airships; // Airship-ek tárolása
+    private ArrayList<Ranger> rangers;
 
     public GameMap(int width, int height) {
         this.data = new ArrayList<>();
@@ -32,6 +33,7 @@ public class GameMap {
         lions = new ArrayList<>();
         cheetahs = new ArrayList<>();
 
+        this.rangers = new ArrayList<>();
         this.cameras = new ArrayList<>();
         this.chargingStations = new ArrayList<>();
         this.drones = new ArrayList<>();
@@ -186,5 +188,12 @@ public class GameMap {
     public void addCheetah(Cheetah cheetah) {
         cheetahs.add(cheetah);
         System.out.println(cheetahs.size());
+    }
+    public void addRanger(Ranger ranger) {
+        rangers.add(ranger);
+    }
+
+    public ArrayList<Ranger> getRangers() {
+        return rangers;
     }
 }
