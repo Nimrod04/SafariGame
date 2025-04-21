@@ -14,7 +14,7 @@ public class Drone {
     private ChargingStation chargingStation;
     private int orbitStep = 0; // 0-15, a 5x5 négyzet 16 pontja körül
     private long lastMoveTime = 0; // új mező a mozgás időzítéséhez
-    private static final long MOVE_DELAY = 1000; // 1000ms = 1 másodperc
+    private static final long BASE_MOVE_DELAY = 1000; // Alap késleltetés 1 másodperc
 
     private List<Coordinate> waypoints = new ArrayList<>(); // Útvonalpontok
     private boolean returningToStation = false; // Jelzi, hogy a drón visszatér-e a töltőállomásra
@@ -22,9 +22,12 @@ public class Drone {
     private static final long WAIT_DURATION = 4000; // 4 másodperc várakozás
     private static final long RETURN_INTERVAL = 20000; // 20 másodpercenként visszatérés
 
-    public Drone(Coordinate position, ChargingStation chargingStation) {
+    private GameSpeed gameSpeed;
+
+    public Drone(Coordinate position, ChargingStation chargingStation, GameSpeed gameSpeed) {
         this.position = position;
         this.chargingStation = chargingStation;
+        this.gameSpeed = gameSpeed;
         this.hitbox = calculateHitbox();
     }
 
@@ -65,9 +68,11 @@ public class Drone {
     public void orbitChargingStation() {
         if (chargingStation == null) return;
         
-        // Ellenőrizzük, hogy eltelt-e már 1 másodperc az utolsó mozgás óta
+        // A késleltetés kiszámítása a játék sebességének függvényében
+        long currentMoveDelay = BASE_MOVE_DELAY / gameSpeed.getMulti();
+        
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastMoveTime < MOVE_DELAY) {
+        if (currentTime - lastMoveTime < currentMoveDelay) {
             return;
         }
         

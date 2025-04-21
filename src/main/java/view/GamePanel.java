@@ -26,7 +26,7 @@ public class GamePanel extends JPanel implements KeyListener {
     public GamePanel(GameMap gameMap, Playing p) {
         this.playing = p;
         this.gameMap = gameMap;
-        this.playing = playing;
+        this.playing = p;
         loadImages();
         this.setPreferredSize(new Dimension(VIEWPORT_WIDTH * TILE_SIZE, VIEWPORT_HEIGHT * TILE_SIZE));
         this.setFocusable(true);
@@ -88,7 +88,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
                             if (playing.getFinance().getBalance() >= Airship.PRICE) {
-                                gameMap.addAirship(new Airship(new Coordinate(tileX, tileY)));
+                                gameMap.addAirship(new Airship(new Coordinate(tileX, tileY), playing.getGame().getGameSpeed()));
                                 //gameMap.setTile(tileX, tileY, Tile.TileType.AIRSHIP);
                                 playing.getFinance().decrease(Airship.PRICE);
                                 playing.refreshBalance();
@@ -225,7 +225,7 @@ public class GamePanel extends JPanel implements KeyListener {
                                     System.out.println("Nincs szabad charging station!");
                                     return;
                                 }
-                                gameMap.addDrone(new Drone(new Coordinate(tileX, tileY), freeStation));
+                                gameMap.addDrone(new Drone(new Coordinate(tileX, tileY), freeStation, playing.getGame().getGameSpeed()));
                                 //gameMap.setTile(tileX, tileY, Tile.TileType.DRONE);
                                 playing.getFinance().decrease(Drone.PRICE);
                                 playing.refreshBalance();

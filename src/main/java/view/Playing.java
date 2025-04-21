@@ -1060,6 +1060,9 @@ public boolean isInRoadShop() {
     public boolean isBuildingAirship() {
         return buildingAirship;
     }
+    public Game getGame() {
+        return this.game;
+    }
 
     public void resetAllBools() {
         inSecurityShop = false;

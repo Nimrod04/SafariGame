@@ -8,8 +8,9 @@ public class Airship {
     private static final int HITBOX_RADIUS = 2; // 5x5-es hitbox (radius of 2)
     private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1); // Teljes hitbox méret
     public static final int PRICE = 4000;
-    private static final long MOVE_DELAY = 333; // 333ms = 3 tile/mp
+    private static final long BASE_MOVE_DELAY = 333; // Alap késleltetés (3 tile/mp)
 
+    private GameSpeed gameSpeed;
     private Coordinate position;
     private Rectangle hitbox; // Hitbox tárolása
     private List<Coordinate> waypoints; // Járőrözési útvonal
@@ -17,8 +18,9 @@ public class Airship {
     private boolean isMoving; // Jelzi, hogy az Airship mozog-e
     private long lastMoveTime = 0; // Az utolsó mozgás időbélyege
 
-    public Airship(Coordinate position) {
+    public Airship(Coordinate position, GameSpeed gameSpeed) {
         this.position = position;
+        this.gameSpeed = gameSpeed;
         this.hitbox = calculateHitbox(); // Hitbox inicializálása
         this.waypoints = new ArrayList<>();
         this.selected = false; // Alapértelmezés szerint nincs kijelölve
@@ -109,12 +111,14 @@ public class Airship {
 
     public void moveToNextWaypoint() {
         if (!isMoving || waypoints.isEmpty()) {
-            return; // Nem mozog vagy nincs waypoint
+            return;
         }
 
-        // Ellenőrizzük, hogy eltelt-e a szükséges idő az utolsó mozgás óta
+        // Késleltetés kiszámítása a játék sebességének függvényében
+        long currentMoveDelay = BASE_MOVE_DELAY / gameSpeed.getMulti();
+        
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastMoveTime < MOVE_DELAY) {
+        if (currentTime - lastMoveTime < currentMoveDelay) {
             return;
         }
 
