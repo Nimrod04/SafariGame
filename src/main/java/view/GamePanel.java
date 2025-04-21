@@ -305,6 +305,93 @@ public class GamePanel extends JPanel implements KeyListener {
 
                     }
                 }
+
+                //Gazella
+                if (playing != null && playing.isBuyingGazelle()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Gazelle.PRICE) {
+                                // Gazella hozzáadása a játéktérhez
+                                gameMap.addGazelle(new Gazelle());
+                                playing.getFinance().decrease(Gazelle.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Gazelle placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("Not enough money!");
+                            }
+                        }
+                    }
+                }
+                
+                //Elefánt
+                if (playing != null && playing.isBuyingElephant()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Elephant.PRICE) {
+                                // Gazella hozzáadása a játéktérhez
+                                gameMap.addElephant(new Elephant());
+                                playing.getFinance().decrease(Elephant.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Elephant placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("Not enough money!");
+                            }
+                        }
+                    }
+                }
+                //Oroszlán
+                if (playing != null && playing.isBuyingLion()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Lion.PRICE) {
+                                // Gazella hozzáadása a játéktérhez
+                                gameMap.addLion(new Lion());
+                                playing.getFinance().decrease(Lion.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Lion placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("Not enough money!");
+                            }
+                        }
+                    }
+                }
+                
+                //Gepárd
+                if (playing != null && playing.isBuyingGepard()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Cheetah.PRICE) {
+                                // Gazella hozzáadása a játéktérhez
+                                gameMap.addCheetah(new Cheetah());
+                                playing.getFinance().decrease(Cheetah.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Cheetah placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("Not enough money!");
+                            }
+                        }
+                    }
+                }
                 //Delete
                 if (SwingUtilities.isRightMouseButton(e)) {
                     ArrayList<Tile.TileType> toDelete = new ArrayList<>();

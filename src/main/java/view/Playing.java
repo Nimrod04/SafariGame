@@ -23,11 +23,15 @@ import javax.swing.*;
 import model.Airship;
 import model.Camera;
 import model.ChargingStation;
+import model.Cheetah;
 import model.Coordinate;
 import model.Drone;
+import model.Elephant;
 import model.Finance;
 import model.GameSpeed;
+import model.Gazelle;
 import model.Grass;
+import model.Lion;
 import model.TimeIntensity;
 import model.Tree;
 import model.WaterBody;
@@ -54,6 +58,11 @@ public class Playing extends javax.swing.JFrame {
     private boolean buildingGrass = false;
     private boolean buildingTree = false;
     private boolean buildingLake = false;
+
+    private boolean buyingGazelle = false;
+    private boolean buyingElephant = false;
+    private boolean buyingLion = false;
+    private boolean buyingGepard = false;
 
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
@@ -138,6 +147,12 @@ public class Playing extends javax.swing.JFrame {
         buyButton_1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
+                if (buyingGazelle) {
+                    buyingGazelle = false;
+                } else {
+                    buyingGazelle = true;
+                }
                 System.out.println("Gazella");
             }
         });
@@ -145,6 +160,12 @@ public class Playing extends javax.swing.JFrame {
         buyButton_2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
+                if (buyingElephant) {
+                    buyingElephant = false;
+                } else {
+                    buyingElephant = true;
+                }
                 System.out.println("Elefánt");
             }
         });
@@ -152,6 +173,12 @@ public class Playing extends javax.swing.JFrame {
         buyButton_3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
+                if (buyingLion) {
+                    buyingLion = false;
+                } else {
+                    buyingLion = true;
+                }
                 System.out.println("Oroszlán");
             }
         });
@@ -159,6 +186,12 @@ public class Playing extends javax.swing.JFrame {
         buyButton_4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                resetAllBools();
+                if (buyingGepard) {
+                    buyingGepard = false;
+                } else {
+                    buyingGepard = true;
+                }
                 System.out.println("Gepárd");
             }
         });
@@ -912,7 +945,7 @@ public class Playing extends javax.swing.JFrame {
             buyButton_1Label.setText("Kamera - " + Camera.PRICE + "$");
             buyButton_2Label.setText("Töltő Állomás - " + ChargingStation.PRICE + "$");
             buyButton_3Label.setText("Drón - " + Drone.PRICE + "$");
-            buyButton_4Label.setText("Léghajó - 4000$");
+            buyButton_4Label.setText("Léghajó - " + Airship.PRICE + "$");
 
             buyButton_1.setIconPath("buySecurityCamera_Item.jpg");
             buyButton_2.setIconPath("buyChargingstation_Item.png");
@@ -930,10 +963,10 @@ public class Playing extends javax.swing.JFrame {
         } else {
             setAnimalButtonActions();
 
-            buyButton_1Label.setText("Gazella - 500$/db");
-            buyButton_2Label.setText("Elepánt - 1000$/db");
-            buyButton_3Label.setText("Oroszlán - 2000$/db");
-            buyButton_4Label.setText("Gepárd - 2800$/db");
+            buyButton_1Label.setText("Gazella - " + Gazelle.PRICE + "/db");
+            buyButton_2Label.setText("Elepánt - " + Elephant.PRICE + "$/db");
+            buyButton_3Label.setText("Oroszlán - " + Lion.PRICE + "$/db");
+            buyButton_4Label.setText("Gepárd - " + Cheetah.PRICE + "$/db");
 
             buyButton_1.setIconPath("gazelle_Icon.png");
             buyButton_2.setIconPath("elephant_Icon.jpg");
@@ -951,9 +984,9 @@ public class Playing extends javax.swing.JFrame {
         } else {
             setPlantButtonActions();
 
-            buyButton_1Label.setText("Legelő(Fű) - "+Grass.PRICE+"$");
-            buyButton_2Label.setText("Pagony(Fa) - "+Tree.PRICE+"$/db");
-            buyButton_3Label.setText("Oázis(Tó) - "+WaterBody.PRICE+"$/db");
+            buyButton_1Label.setText("Legelő(Fű) - " + Grass.PRICE + "$");
+            buyButton_2Label.setText("Pagony(Fa) - " + Tree.PRICE + "$/db");
+            buyButton_3Label.setText("Oázis(Tó) - " + WaterBody.PRICE + "$/db");
             buyButton_4Label.setText("");
 
             buyButton_1.setIconPath("grass_Icon.png");
@@ -1103,6 +1136,22 @@ public class Playing extends javax.swing.JFrame {
         return buildingLake;
     }
 
+    public boolean isBuyingGazelle() {
+        return buyingGazelle;
+    }
+
+    public boolean isBuyingElephant() {
+        return buyingElephant;
+    }
+
+    public boolean isBuyingLion() {
+        return buyingLion;
+    }
+
+    public boolean isBuyingGepard() {
+        return buyingGepard;
+    }
+
     public void resetAllBools() {
         inSecurityShop = false;
         inAnimalShop = false;
@@ -1118,5 +1167,10 @@ public class Playing extends javax.swing.JFrame {
         buildingGrass = false;
         buildingTree = false;
         buildingLake = false;
+
+        buyingGazelle = false;
+        buyingElephant = false;
+        buyingLion = false;
+        buyingGepard = false;
     }
 }
