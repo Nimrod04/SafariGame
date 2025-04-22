@@ -933,6 +933,7 @@ public class Playing extends javax.swing.JFrame {
         // Kapcsolóként működik
         System.out.println("Road building mode: " + (inRoadShop ? "ON" : "OFF"));
         System.out.println("Building roads!");
+       
 
     }//GEN-LAST:event_buyRoadButtonActionPerformed
 

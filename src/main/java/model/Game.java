@@ -84,77 +84,77 @@ public class Game implements Runnable {
                 gamePanel.repaint();
             }
         });
-       
+
         startGameLoop();
     }
-    
 
     private void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
-        
+
     }
 
-   public void update() {
-    //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
-    playing.gameMap.updateAnimals();
-    playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
-    //gamePanel.repaint();
+    public void update() {
+        //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
+        playing.gameMap.updateAnimals();
+        playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
+        //gamePanel.repaint();
 
-}
-public GameSpeed getGameSpeed() {
-    return this.gameSpeed;
-}
+    }
 
-   @Override
-public void run() {
-    double timePerFrame = 1000000000.0 / FPS_SET; // Idő egy képkockára nanosec-ben
-    double timePerUpdate = 1000000000.0 / UPS_SET;
+    public GameSpeed getGameSpeed() {
+        return this.gameSpeed;
+    }
 
-    long previousTime = System.nanoTime();
+    @Override
+    public void run() {
+        double timePerFrame = 1000000000.0 / FPS_SET; // Idő egy képkockára nanosec-ben
+        double timePerUpdate = 1000000000.0 / UPS_SET;
 
-    int frames = 0;
-    int updates = 0;
-    long lastCheck = System.currentTimeMillis();
+        long previousTime = System.nanoTime();
 
-    double deltaU = 0;
-    double deltaF = 0;
+        int frames = 0;
+        int updates = 0;
+        long lastCheck = System.currentTimeMillis();
 
-    while (true) {
-        long currentTime = System.nanoTime();
+        double deltaU = 0;
+        double deltaF = 0;
 
-        deltaU += (currentTime - previousTime) / timePerUpdate;
-        deltaF += (currentTime - previousTime) / timePerFrame;
-        previousTime = currentTime;
+        while (true) {
+            long currentTime = System.nanoTime();
 
-        if (deltaU >= 1) {
-            update(); // Játékállapot frissítése
-            updates++;
-            deltaU--;
-        }
+            deltaU += (currentTime - previousTime) / timePerUpdate;
+            deltaF += (currentTime - previousTime) / timePerFrame;
+            previousTime = currentTime;
 
-        if (deltaF >= 1) {
-            gamePanel.repaint(); // Vászon újrarajzolása
-            frames++;
-            deltaF--;
-        }
+            if (deltaU >= 1) {
+                update(); // Játékállapot frissítése
+                updates++;
+                deltaU--;
+            }
 
-        // Ellenőrzés másodpercenként
-        if (System.currentTimeMillis() - lastCheck >= 1000) {
-            System.out.println("FPS: " + frames + " | UPS: " + updates);
-            lastCheck = System.currentTimeMillis();
-            frames = 0;
-            updates = 0;
-        }
+            if (deltaF >= 1) {
+                gamePanel.repaint(); // Vászon újrarajzolása
+                frames++;
+                deltaF--;
+            }
 
-        // Alvás a pontos FPS érdekében
-        /*
+            // Ellenőrzés másodpercenként
+            if (System.currentTimeMillis() - lastCheck >= 1000) {
+                System.out.println("FPS: " + frames + " | UPS: " + updates);
+                lastCheck = System.currentTimeMillis();
+                frames = 0;
+                updates = 0;
+            }
+
+            // Alvás a pontos FPS érdekében
+            /*
         try {
             Thread.sleep((long) (timePerFrame / 1000000)); // Alvás milliszekundumban
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        */
+             */
+        }
     }
-}
 }
