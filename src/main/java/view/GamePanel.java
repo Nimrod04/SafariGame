@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import model.Coordinate;
+import java.util.Set;
 
 public class GamePanel extends JPanel implements KeyListener {
 
@@ -26,6 +26,8 @@ public class GamePanel extends JPanel implements KeyListener {
 
     private Ranger selectedRanger = null; // Kiválasztott ranger
 
+    private HashMap<Integer, Coordinate> roads = new HashMap<>();
+
     public GamePanel(GameMap gameMap, Playing p) {
         this.playing = p;
         this.gameMap = gameMap;
@@ -39,19 +41,6 @@ public class GamePanel extends JPanel implements KeyListener {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (playing != null && playing.isInRoadShop()) {
-                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
-                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
-                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
-                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
-                            gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
-                            renderMap();
-                            repaint();
-                            System.out.println("Road built at: " + tileX + ", " + tileY);
-                        }
-
-                    }
-                }
                 if (SwingUtilities.isRightMouseButton(e)) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -72,11 +61,12 @@ public class GamePanel extends JPanel implements KeyListener {
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
                             if (playing.getFinance().getBalance() >= Road.PRICE) {
                                 gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
+                                gameMap.addRoads(new Coordinate(tileX, tileY));
+                                System.out.println("Van-e út? "+ gameMap.isPathBetweenGates());
                                 playing.getFinance().decrease(Road.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
                                 repaint();
-                                System.out.println("Road built at: " + tileX + ", " + tileY);
                             } else {
                                 System.out.println("Not enough money!");
                             }
@@ -432,6 +422,21 @@ public class GamePanel extends JPanel implements KeyListener {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
 
+                    // Ellenőrizzük, hogy az adott csempe út-e
+                    if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.ROAD) {
+                        // Töröljük az utat a roads listából
+                        gameMap.getRoads().removeIf(road -> road.getPosX() == tileX && road.getPosY() == tileY);
+
+                        // Állítsuk vissza a csempe típusát homokra
+                        gameMap.setTile(tileX, tileY, Tile.TileType.SAND);
+                        System.out.println("Van-e út? "+gameMap.isPathBetweenGates());
+
+                        // Frissítsük a térképet és a képernyőt
+                        renderMap();
+                        repaint();
+
+                        System.out.println("Road removed at: " + tileX + ", " + tileY);
+                    }
                     // Ellenőrizzük, hogy a kattintás egy drón pozíciójára esik-e
                     for (Drone drone : gameMap.getDrones()) {
                         if (drone.getPosition().getPosX() == tileX && drone.getPosition().getPosY() == tileY) {
@@ -513,6 +518,7 @@ public class GamePanel extends JPanel implements KeyListener {
         mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
         Graphics g = mapImage.getGraphics();
 
+        int db = 0;
         for (int y = 0; y < gameMap.getHeight(); y++) {
             for (int x = 0; x < gameMap.getWidth(); x++) {
                 Tile tile = gameMap.getTile(x, y);
@@ -520,11 +526,6 @@ public class GamePanel extends JPanel implements KeyListener {
                 g.drawImage(tileImages.get(tile.getType()), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
             }
         }
-
-        for (Elephant e : gameMap.elephants) {
-
-        }
-
         g.dispose();
     }
 

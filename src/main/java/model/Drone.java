@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Drone {
+
     private Coordinate position;
     private Rectangle hitbox;
     private static final int HITBOX_RADIUS = 1; // 3x3 hitbox (radius of 1)
@@ -66,16 +67,18 @@ public class Drone {
 
     // Körbe mozgatás a charging station körül egy 5x5 négyzeten
     public void orbitChargingStation() {
-        if (chargingStation == null) return;
-        
+        if (chargingStation == null) {
+            return;
+        }
+
         // A késleltetés kiszámítása a játék sebességének függvényében
         long currentMoveDelay = BASE_MOVE_DELAY / gameSpeed.getMulti();
-        
+
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastMoveTime < currentMoveDelay) {
             return;
         }
-        
+
         int cx = chargingStation.getPosition().getPosX();
         int cy = chargingStation.getPosition().getPosY();
 
@@ -86,14 +89,21 @@ public class Drone {
             {1, 2}, {0, 2}, {-1, 2}, {-2, 2},
             {-2, 1}, {-2, 0}, {-2, -1}
         };
-        
+
         orbitStep = (orbitStep + 1) % offsets.length;
         int[] offset = offsets[orbitStep];
         setPosition(new Coordinate(cx + offset[0], cy + offset[1]));
-        
+
         lastMoveTime = currentTime; // Frissítjük az utolsó mozgás idejét
     }
 
+    /**
+     * Kiszámítja a drón hitboxát az aktuális pozíciója alapján. A hitbox egy
+     * négyzet, amely a drón pozíciója köré van középpontozva, és méretét a
+     * HITBOX_RADIUS és HITBOX_SIZE konstansok határozzák meg.
+     *
+     * @return Egy Rectangle objektum, amely a drón hitboxát reprezentálja.
+     */
     private Rectangle calculateHitbox() {
         int x = position.getPosX() - HITBOX_RADIUS;
         int y = position.getPosY() - HITBOX_RADIUS;
