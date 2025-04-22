@@ -7,9 +7,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class GamePanel extends JPanel implements KeyListener {
 
@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
                 }
                 SwingUtilities.invokeLater(() -> requestFocusInWindow());
-                if (playing != null /*&& playing.isInRoadShop()*/ && playing.isBuildingRoad()) {
+                if (playing != null /* && playing.isInRoadShop() */ && playing.isBuildingRoad()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
 
@@ -62,7 +62,8 @@ public class GamePanel extends JPanel implements KeyListener {
                             if (playing.getFinance().getBalance() >= Road.PRICE) {
                                 gameMap.setTile(tileX, tileY, Tile.TileType.ROAD);
                                 gameMap.addRoads(new Coordinate(tileX, tileY));
-                                System.out.println("Van-e út? "+ gameMap.isPathBetweenGates());
+                                System.out.println("Van-e út? " + gameMap.isPathBetweenGates());
+                                playing.setCanBuyJeeps(gameMap.isPathBetweenGates());
                                 playing.getFinance().decrease(Road.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
@@ -73,7 +74,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
-                //Airship
+                // Airship
 
                 if (playing != null && playing.isBuildingAirship()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
@@ -81,8 +82,9 @@ public class GamePanel extends JPanel implements KeyListener {
                     if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
                             if (playing.getFinance().getBalance() >= Airship.PRICE) {
-                                gameMap.addAirship(new Airship(new Coordinate(tileX, tileY), playing.getGame().getGameSpeed()));
-                                //gameMap.setTile(tileX, tileY, Tile.TileType.AIRSHIP);
+                                gameMap.addAirship(
+                                        new Airship(new Coordinate(tileX, tileY), playing.getGame().getGameSpeed()));
+                                // gameMap.setTile(tileX, tileY, Tile.TileType.AIRSHIP);
                                 playing.getFinance().decrease(Airship.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
@@ -97,7 +99,8 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
                 // Kattintás az Airship-re
-                // Ellenőrizzük, hogy van-e aktív Airship, és ha igen, akkor hozzáadunk egy waypointot
+                // Ellenőrizzük, hogy van-e aktív Airship, és ha igen, akkor hozzáadunk egy
+                // waypointot
                 // Ellenőrizzük, hogy pontosan az Airship pozíciójára kattintottunk-e
                 // Ellenőrizzük, hogy pontosan az Airship pozíciójára kattintottunk-e
                 for (Airship airship : gameMap.getAirships()) {
@@ -149,7 +152,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                //Camera
+                // Camera
                 if (playing != null && playing.isBuildingCamera()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -172,7 +175,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                //Charging station
+                // Charging station
                 if (playing != null && playing.isBuildingChargingStation()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -195,7 +198,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                //Drone
+                // Drone
                 if (playing != null && playing.isBuildingDrone()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -221,8 +224,9 @@ public class GamePanel extends JPanel implements KeyListener {
                                     System.out.println("Nincs szabad charging station!");
                                     return;
                                 }
-                                gameMap.addDrone(new Drone(new Coordinate(tileX, tileY), freeStation, playing.getGame().getGameSpeed()));
-                                //gameMap.setTile(tileX, tileY, Tile.TileType.DRONE);
+                                gameMap.addDrone(new Drone(new Coordinate(tileX, tileY), freeStation,
+                                        playing.getGame().getGameSpeed()));
+                                // gameMap.setTile(tileX, tileY, Tile.TileType.DRONE);
                                 playing.getFinance().decrease(Drone.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
@@ -234,7 +238,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
-                //Grass
+                // Grass
                 if (playing != null && playing.isBuildingGrass()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -255,7 +259,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
                     }
                 }
-                //Tree
+                // Tree
                 if (playing != null && playing.isBuildingTree()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -277,7 +281,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                //Lake
+                // Lake
                 if (playing != null && playing.isBuildingLake()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -298,7 +302,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
                     }
                 }
-                //Ranger
+                // Ranger
                 if (playing != null && playing.isHiringStaff()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -320,7 +324,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                //Gazella
+                // Gazella
                 if (playing != null && playing.isBuyingGazelle()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -342,7 +346,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                //Elefánt
+                // Elefánt
                 if (playing != null && playing.isBuyingElephant()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -363,7 +367,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
-                //Oroszlán
+                // Oroszlán
                 if (playing != null && playing.isBuyingLion()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -385,7 +389,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                //Gepárd
+                // Gepárd
                 if (playing != null && playing.isBuyingGepard()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -406,7 +410,35 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
-                //Delete
+
+                // Jeeps
+                if (playing != null && playing.isBuyingJeeps()) {
+                    // A startGate pozíciója
+                    Coordinate startGate = new Coordinate(0, 10); // Példa: a startGate pozíciója (x=0, y=10)
+
+                    // Ellenőrizzük, hogy van-e érvényes útvonal a kapuk között
+                    List<Coordinate> path = gameMap.getPathBetweenGates();
+                    if (path.isEmpty()) {
+                        System.out.println("Nincs érvényes útvonal a kapuk között!");
+                        return;
+                    }
+
+                    if (playing.getFinance().getBalance() >= Jeep.PRICE) { // Jeep árának ellenőrzése
+                        // Jeep létrehozása a startGate pozícióval és az útvonallal
+                        Jeep newJeep = new Jeep(startGate, path);
+                        gameMap.addJeep(newJeep); // Jeep hozzáadása a GameMap-hez
+
+                        playing.getFinance().decrease(Jeep.PRICE); // Pénz levonása
+                        playing.refreshBalance();
+                        renderMap();
+                        repaint();
+                        System.out.println("Jeep placed at startGate: " + startGate);
+                    } else {
+                        System.out.println("Not enough money!");
+                    }
+                }
+
+                // Delete
                 if (SwingUtilities.isRightMouseButton(e)) {
                     ArrayList<Tile.TileType> toDelete = new ArrayList<>();
                     toDelete.add(Tile.TileType.ROAD);
@@ -429,7 +461,8 @@ public class GamePanel extends JPanel implements KeyListener {
 
                         // Állítsuk vissza a csempe típusát homokra
                         gameMap.setTile(tileX, tileY, Tile.TileType.SAND);
-                        System.out.println("Van-e út? "+gameMap.isPathBetweenGates());
+                        System.out.println("Van-e út? " + gameMap.isPathBetweenGates());
+                        playing.setCanBuyJeeps(gameMap.isPathBetweenGates());
 
                         // Frissítsük a térképet és a képernyőt
                         renderMap();
@@ -468,9 +501,8 @@ public class GamePanel extends JPanel implements KeyListener {
                     if (toDelete.contains(gameMap.getTile(tileX, tileY).getType())) {
 
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.CAMERA) {
-                            gameMap.getCameras().removeIf(camera
-                                    -> camera.getPosition().getPosX() == tileX && camera.getPosition().getPosY() == tileY
-                            );
+                            gameMap.getCameras().removeIf(camera -> camera.getPosition().getPosX() == tileX
+                                    && camera.getPosition().getPosY() == tileY);
                         }
 
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.CHARGINGSTATION) {
@@ -478,17 +510,17 @@ public class GamePanel extends JPanel implements KeyListener {
                             gameMap.getDrones().removeIf(drone -> {
                                 if (drone.getChargingStation().getPosition().getPosX() == tileX
                                         && drone.getChargingStation().getPosition().getPosY() == tileY) {
-                                    System.out.println("Drone removed due to ChargingStation removal at: " + tileX + ", " + tileY);
+                                    System.out.println(
+                                            "Drone removed due to ChargingStation removal at: " + tileX + ", " + tileY);
                                     return true; // Töröljük a drónt
                                 }
                                 return false;
                             });
 
                             // Töröljük a ChargingStation-t
-                            gameMap.getChargingStations().removeIf(chargingStation
-                                    -> chargingStation.getPosition().getPosX() == tileX
-                                    && chargingStation.getPosition().getPosY() == tileY
-                            );
+                            gameMap.getChargingStations()
+                                    .removeIf(chargingStation -> chargingStation.getPosition().getPosX() == tileX
+                                            && chargingStation.getPosition().getPosY() == tileY);
                         }
                         gameMap.setTile(tileX, tileY, Tile.TileType.SAND);
                         renderMap();
@@ -504,6 +536,7 @@ public class GamePanel extends JPanel implements KeyListener {
         // Időzítő a játék frissítéséhez
         gameTimer = new Timer(100, e -> {
             gameMap.updateAnimals(); // Állatok frissítése
+            gameMap.updateJeeps(); // Jeepek frissítése
             repaint(); // Képernyő újrarajzolása
         });
 
@@ -515,14 +548,16 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     public void renderMap() {
-        mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE, BufferedImage.TYPE_INT_ARGB);
+        mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE,
+                BufferedImage.TYPE_INT_ARGB);
         Graphics g = mapImage.getGraphics();
 
         int db = 0;
         for (int y = 0; y < gameMap.getHeight(); y++) {
             for (int x = 0; x < gameMap.getWidth(); x++) {
                 Tile tile = gameMap.getTile(x, y);
-                g.drawImage(tileImages.get(Tile.TileType.SAND), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
+                g.drawImage(tileImages.get(Tile.TileType.SAND), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE,
+                        null);
                 g.drawImage(tileImages.get(tile.getType()), x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, null);
             }
         }
@@ -538,19 +573,29 @@ public class GamePanel extends JPanel implements KeyListener {
             tileImages.put(Tile.TileType.BUSH, new ImageIcon(getClass().getResource("/images/bush.png")).getImage());
             tileImages.put(Tile.TileType.DIRT, new ImageIcon(getClass().getResource("/images/dirt.png")).getImage());
             tileImages.put(Tile.TileType.SAND, new ImageIcon(getClass().getResource("/images/sand.png")).getImage());
-            tileImages.put(Tile.TileType.GAZELLE, new ImageIcon(getClass().getResource("/images/gazelle.png")).getImage());
-            tileImages.put(Tile.TileType.ELEPHANT, new ImageIcon(getClass().getResource("/images/elephant.png")).getImage());
+            tileImages.put(Tile.TileType.GAZELLE,
+                    new ImageIcon(getClass().getResource("/images/gazelle.png")).getImage());
+            tileImages.put(Tile.TileType.ELEPHANT,
+                    new ImageIcon(getClass().getResource("/images/elephant.png")).getImage());
             tileImages.put(Tile.TileType.LION, new ImageIcon(getClass().getResource("/images/lion.png")).getImage());
-            tileImages.put(Tile.TileType.CHEETAH, new ImageIcon(getClass().getResource("/images/cheetah.png")).getImage());
+            tileImages.put(Tile.TileType.CHEETAH,
+                    new ImageIcon(getClass().getResource("/images/cheetah.png")).getImage());
             tileImages.put(Tile.TileType.GATE, new ImageIcon(getClass().getResource("/images/gate.png")).getImage());
             tileImages.put(Tile.TileType.ROAD, new ImageIcon(getClass().getResource("/images/dirt.png")).getImage());
 
-            tileImages.put(Tile.TileType.CAMERA, new ImageIcon(getClass().getResource("/images/camera.png")).getImage());
-            tileImages.put(Tile.TileType.CHARGINGSTATION, new ImageIcon(getClass().getResource("/images/charging_station.png")).getImage());
-            tileImages.put(Tile.TileType.DRONE, new ImageIcon(getClass().getResource("/images/drone_up.png")).getImage());
-            tileImages.put(Tile.TileType.AIRSHIP, new ImageIcon(getClass().getResource("/images/airship.png")).getImage());
+            tileImages.put(Tile.TileType.CAMERA,
+                    new ImageIcon(getClass().getResource("/images/camera.png")).getImage());
+            tileImages.put(Tile.TileType.CHARGINGSTATION,
+                    new ImageIcon(getClass().getResource("/images/charging_station.png")).getImage());
+            tileImages.put(Tile.TileType.DRONE,
+                    new ImageIcon(getClass().getResource("/images/drone_up.png")).getImage());
+            tileImages.put(Tile.TileType.AIRSHIP,
+                    new ImageIcon(getClass().getResource("/images/airship.png")).getImage());
 
-            tileImages.put(Tile.TileType.RANGER, new ImageIcon(getClass().getResource("/images/ranger.png")).getImage());
+            tileImages.put(Tile.TileType.RANGER,
+                    new ImageIcon(getClass().getResource("/images/ranger.png")).getImage());
+            tileImages.put(Tile.TileType.JEEP,
+                    new ImageIcon(getClass().getResource("/images/jeep.png")).getImage());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -578,7 +623,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
-            //System.out.println("hello  GamePanel(93)");
+            // System.out.println("hello GamePanel(93)");
         }
         for (Gazelle e : gameMap.gazelles) {
             g.drawImage(tileImages.get(Tile.TileType.GAZELLE),
@@ -649,6 +694,22 @@ public class GamePanel extends JPanel implements KeyListener {
                     (centerY - cameraY) * TILE_SIZE - TILE_SIZE / 2, // Középre igazítás
                     TILE_SIZE, TILE_SIZE, this);
             ranger.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+        }
+        // Jeep-ek kirajzolása
+        for (Jeep jeep : gameMap.getJeeps()) {
+            Coordinate jeepPos = jeep.getPosition();
+            g.drawImage(tileImages.get(Tile.TileType.JEEP),
+                    (jeepPos.getPosX() - cameraX) * TILE_SIZE,
+                    (jeepPos.getPosY() - cameraY) * TILE_SIZE,
+                    TILE_SIZE, TILE_SIZE, this);
+
+            // Hitbox kirajzolása
+            Rectangle hitbox = jeep.getHitbox();
+            g.setColor(new Color(255, 0, 0, 100)); // Átlátszó piros szín
+            g.fillRect((hitbox.x - cameraX) * TILE_SIZE,
+                    (hitbox.y - cameraY) * TILE_SIZE,
+                    hitbox.width * TILE_SIZE,
+                    hitbox.height * TILE_SIZE);
         }
     }
 
