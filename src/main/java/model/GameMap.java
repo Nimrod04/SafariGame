@@ -1,7 +1,9 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -24,9 +26,9 @@ public class GameMap {
     private ArrayList<Drone> drones;
     private List<Airship> airships; // Airship-ek tárolása
     private ArrayList<Ranger> rangers;
-    
+
     private ArrayList<Coordinate> roads; // Az utak pozícióinak tárolása
-    
+    private ArrayList<Jeep> jeeps;
 
     public GameMap(int width, int height) {
         this.data = new ArrayList<>();
@@ -44,6 +46,7 @@ public class GameMap {
         this.drones = new ArrayList<>();
         this.airships = new ArrayList<>();
 
+        jeeps = new ArrayList<>();
         roads = new ArrayList<>();
 
         generateRandomMap();
@@ -71,12 +74,11 @@ public class GameMap {
             }
             data.add(tmp);
         }
-        map[0][10] = new Tile(Tile.TileType.GATE);        
+        map[0][10] = new Tile(Tile.TileType.GATE);
         map[39][10] = new Tile(Tile.TileType.GATE);
 
         roads.add(new Coordinate(0, 10));
         roads.add(new Coordinate(39, 10));
-    
 
         System.out.println(data.toString());
     }
@@ -203,6 +205,7 @@ public class GameMap {
         cheetahs.add(cheetah);
         System.out.println(cheetahs.size());
     }
+
     public void addRanger(Ranger ranger) {
         rangers.add(ranger);
     }
@@ -218,7 +221,8 @@ public class GameMap {
     public ArrayList<Coordinate> getRoads() {
         return this.roads;
     }
-    public void addRoads(Coordinate c){
+
+    public void addRoads(Coordinate c) {
         roads.add(c);
     }
 
@@ -228,13 +232,13 @@ public class GameMap {
 
         // BFS algoritmus az út ellenőrzésére
         boolean[][] visited = new boolean[width][height];
-        System.out.println("1: "+visited.length +" 2: "+ visited[0].length);
+        System.out.println("1: " + visited.length + " 2: " + visited[0].length);
         Queue<Coordinate> queue = new LinkedList<>();
         queue.add(startGate);
         visited[startGate.getPosX()][startGate.getPosY()] = true;
 
         // Négy irány: fel, le, balra, jobbra
-        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
 
         while (!queue.isEmpty()) {
             Coordinate current = queue.poll();
@@ -252,9 +256,10 @@ public class GameMap {
                 int newX = current.getPosX() + dir[0];
                 int newY = current.getPosY() + dir[1];
 
-                // Ellenőrizzük, hogy a szomszédos csempe az `roads` listában van-e, és még nem látogattuk meg
+                // Ellenőrizzük, hogy a szomszédos csempe az `roads` listában van-e, és még nem
+                // látogattuk meg
                 if (newX >= 0 && newX < width && newY >= 0 && newY < height &&
-                    !visited[newX][newY] && roads.contains(new Coordinate(newX, newY))) {
+                        !visited[newX][newY] && roads.contains(new Coordinate(newX, newY))) {
                     queue.add(new Coordinate(newX, newY));
                     visited[newX][newY] = true;
                 }
@@ -262,5 +267,75 @@ public class GameMap {
         }
 
         return false; // Ha nem találtunk utat, akkor nincs összeköttetés
+    }
+
+    public List<Coordinate> getPathBetweenGates() {
+        Coordinate startGate = new Coordinate(0, 10); // Fix kezdő GATE pozíció
+        Coordinate endGate = new Coordinate(39, 10); // Fix végső GATE pozíció
+
+        List<Coordinate> path = new LinkedList<>();
+        boolean[][] visited = new boolean[width][height];
+        Queue<Coordinate> queue = new LinkedList<>();
+        Map<Coordinate, Coordinate> previous = new HashMap<>();
+
+        queue.add(startGate);
+        visited[startGate.getPosX()][startGate.getPosY()] = true;
+
+        int[][] directions = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+
+        while (!queue.isEmpty()) {
+            Coordinate current = queue.poll();
+
+            if (current.equals(endGate)) {
+                // Útvonal visszafejtése
+                while (current != null) {
+                    path.add(0, current);
+                    current = previous.get(current);
+                }
+                return path;
+            }
+
+            for (int[] dir : directions) {
+                int newX = current.getPosX() + dir[0];
+                int newY = current.getPosY() + dir[1];
+
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height &&
+                        !visited[newX][newY] && roads.contains(new Coordinate(newX, newY))) {
+                    queue.add(new Coordinate(newX, newY));
+                    visited[newX][newY] = true;
+                    previous.put(new Coordinate(newX, newY), current);
+                }
+            }
+        }
+
+        return path; // Ha nincs út, üres lista
+    }
+    public void addJeep(Jeep jeep) {
+        if (jeep == null) {
+            System.out.println("A Jeep nem lehet null!");
+            return;
+        }
+    
+        // Ellenőrizzük, hogy a Jeep-nek van-e érvényes útvonala
+        if (jeep.getPosition() == null || jeep.hasReachedEnd()) {
+            System.out.println("A Jeep-nek érvényes útvonallal kell rendelkeznie!");
+            return;
+        }
+    
+        jeeps.add(jeep); // Jeep hozzáadása a listához
+        System.out.println("Jeep hozzáadva: " + jeep.getPosition());
+    }
+    public List<Jeep> getJeeps() {
+        return jeeps;
+    }
+    public void updateJeeps() {
+        for (Jeep jeep : jeeps) {
+            if (!jeep.hasReachedEnd()) {
+                jeep.move(); // Jeep következő pozícióra lép
+                System.out.println("Jeep moved to: " + jeep.getPosition());
+            } else {
+                System.out.println("Jeep reached the end.");
+            }
+        }
     }
 }

@@ -9,7 +9,7 @@ public class Tile {
         GRASS, WATER, ROAD, TREE, BUSH, DIRT, SAND,
         GAZELLE, ELEPHANT, LION, CHEETAH, GATE, 
         CAMERA, CHARGINGSTATION,DRONE,AIRSHIP,
-        RANGER
+        RANGER, JEEP
     }
 
     private TileType type;
