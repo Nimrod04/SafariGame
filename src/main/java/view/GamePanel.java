@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import model.Coordinate;
 
 public class GamePanel extends JPanel implements KeyListener {
 
@@ -22,6 +23,8 @@ public class GamePanel extends JPanel implements KeyListener {
 
     private BufferedImage mapImage; // Gyorsítótárazott térkép kép
     private Timer gameTimer;
+
+    private Ranger selectedRanger = null; // Kiválasztott ranger
 
     public GamePanel(GameMap gameMap, Playing p) {
         this.playing = p;
@@ -305,6 +308,27 @@ public class GamePanel extends JPanel implements KeyListener {
 
                     }
                 }
+                //Ranger
+                if (playing != null && playing.isHiringStaff()) {
+                    int tileX = (e.getX() / TILE_SIZE) + cameraX;
+                    int tileY = (e.getY() / TILE_SIZE) + cameraY;
+
+                    if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
+                        if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
+                            if (playing.getFinance().getBalance() >= Ranger.PRICE) {
+                                // Ranger hozzáadása a játéktérhez
+                                gameMap.addRanger(new Ranger(new Coordinate(tileX, tileY)));
+                                playing.getFinance().decrease(Ranger.PRICE);
+                                playing.refreshBalance();
+                                renderMap();
+                                repaint();
+                                System.out.println("Ranger placed at: " + tileX + ", " + tileY);
+                            } else {
+                                System.out.println("Not enough money!");
+                            }
+                        }
+                    }
+                }
 
                 //Gazella
                 if (playing != null && playing.isBuyingGazelle()) {
@@ -327,7 +351,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
-                
+
                 //Elefánt
                 if (playing != null && playing.isBuyingElephant()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
@@ -370,7 +394,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
-                
+
                 //Gepárd
                 if (playing != null && playing.isBuyingGepard()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
@@ -525,6 +549,8 @@ public class GamePanel extends JPanel implements KeyListener {
             tileImages.put(Tile.TileType.DRONE, new ImageIcon(getClass().getResource("/images/drone_up.png")).getImage());
             tileImages.put(Tile.TileType.AIRSHIP, new ImageIcon(getClass().getResource("/images/airship.png")).getImage());
 
+            tileImages.put(Tile.TileType.RANGER, new ImageIcon(getClass().getResource("/images/ranger.png")).getImage());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -612,6 +638,16 @@ public class GamePanel extends JPanel implements KeyListener {
 
                 g.fillOval(CcenterX - circleRadius, CcenterY - circleRadius, circleDiameter, circleDiameter);
             }
+        }
+
+        for (Ranger ranger : gameMap.getRangers()) {
+            int centerX = ranger.getHitbox().x + ranger.getHitbox().width / 2;
+            int centerY = ranger.getHitbox().y + ranger.getHitbox().height / 2;
+            g.drawImage(tileImages.get(Tile.TileType.RANGER),
+                    (centerX - cameraX) * TILE_SIZE - TILE_SIZE / 2, // Középre igazítás
+                    (centerY - cameraY) * TILE_SIZE - TILE_SIZE / 2, // Középre igazítás
+                    TILE_SIZE, TILE_SIZE, this);
+            ranger.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
         }
     }
 

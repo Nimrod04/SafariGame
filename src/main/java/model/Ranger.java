@@ -1,20 +1,54 @@
 package model;
 
-public class Ranger extends Entity {
-    private double salary;
+import java.awt.*;
 
+public class Ranger {
+    private Coordinate position;
+    private Rectangle hitbox; // Hitbox stored as a Rectangle
+    private static final int HITBOX_RADIUS = 4; // 4x4 hitbox (radius of 2)
+    private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1); // Total size of the hitbox
 
-    public void stopPoacher(Poacher poacher) {
-        // Orvvadász megállítása
+    public static final int PRICE = 5000;
+    
+    public Ranger(Coordinate position) {
+        this.position = position;
+        this.hitbox = calculateHitbox(); // Initialize the hitbox
     }
 
-    @Override
-    public void moveTo(Coordinate target) {
 
+    public Coordinate getPosition() {
+        return position;
     }
 
-    @Override
-    public void move() {
+    public void setPosition(Coordinate position) {
+        this.position = position;
+        this.hitbox = calculateHitbox(); // Recalculate the hitbox when position changes
+    }
 
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+
+    private Rectangle calculateHitbox() {
+        int x = position.getPosX() - HITBOX_RADIUS;
+        int y = position.getPosY() - HITBOX_RADIUS;
+        int size = HITBOX_SIZE;
+        return new Rectangle(x, y, size, size);
+    }
+
+    public void drawHitbox(Graphics g, int cameraX, int cameraY, int tileSize) {
+        int drawX = (hitbox.x - cameraX) * tileSize;
+        int drawY = (hitbox.y - cameraY) * tileSize;
+        int drawWidth = hitbox.width * tileSize;
+        int drawHeight = hitbox.height * tileSize;
+
+        // Draw border (dark blue)
+        g.setColor(new Color(0, 0, 128, 120));
+        g.drawRect(drawX, drawY, drawWidth, drawHeight);
+
+        // Fill inner area (light blue)
+        g.setColor(new Color(161, 251, 166, 60));
+        g.fillRect(drawX, drawY, drawWidth, drawHeight);
+        
     }
 }

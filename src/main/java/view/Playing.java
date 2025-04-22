@@ -64,6 +64,7 @@ public class Playing extends javax.swing.JFrame {
     private boolean buyingLion = false;
     private boolean buyingGepard = false;
 
+    private boolean hiringStaff = false;
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
     public GameMap gameMap;
@@ -1016,6 +1017,12 @@ public class Playing extends javax.swing.JFrame {
     private void shopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shopButtonActionPerformed
         // TODO add your handling code here:
         System.out.println("Hiring staff...");
+        resetAllBools();
+        if (hiringStaff) {
+            hiringStaff = false;
+        } else {
+            hiringStaff = true;
+        }
     }//GEN-LAST:event_shopButtonActionPerformed
 
     /**
@@ -1152,6 +1159,10 @@ public class Playing extends javax.swing.JFrame {
         return buyingGepard;
     }
 
+    public boolean isHiringStaff() {
+        return hiringStaff;
+    }
+
     public void resetAllBools() {
         inSecurityShop = false;
         inAnimalShop = false;
@@ -1172,5 +1183,7 @@ public class Playing extends javax.swing.JFrame {
         buyingElephant = false;
         buyingLion = false;
         buyingGepard = false;
+
+        hiringStaff = false;
     }
 }
