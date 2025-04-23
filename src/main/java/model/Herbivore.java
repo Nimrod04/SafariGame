@@ -38,31 +38,31 @@ public class Herbivore extends Animal {
     public void moveTo() {
 
         if (isInGroup()) {
-        // Ha csoportban van, kövesse a csoport vezetőjét
-        Animal leader = group.get(0);
-        if (leader != this) {
-            // Véletlenszerű eltolás a vezető körül
-            int offsetX = (int) (Math.random() * 20 - 10); // -10 és 10 között
-            int offsetY = (int) (Math.random() * 20 - 10); // -10 és 10 között
-            Coordinate targetWithOffset = new Coordinate(
-                leader.targetCoordinate.getPosX() + offsetX,
-                leader.targetCoordinate.getPosY() + offsetY
-            );
-            moveTo(targetWithOffset);
-            return;
+            Animal leader = group.get(0);
+            if (leader != this) {
+                int offsetX = (int) (Math.random() * 40 - 20); // -10 és 10 között
+                int offsetY = (int) (Math.random() * 40 - 20);
+                Coordinate targetWithOffset = new Coordinate(
+                        leader.targetCoordinate.getPosX() + offsetX,
+                        leader.targetCoordinate.getPosY() + offsetY
+                );
+                moveTo(targetWithOffset);
+                return;
+            }
         }
-    }
 
-    // Ha nincs célkoordináta, vagy elérte a célját, generáljon újat
-    if (targetCoordinate == null || hasReachedTarget()) {
-        generateRandomTarget();
-    }
-    moveTo(targetCoordinate);
+        // Ha nincs célkoordináta, vagy elérte a célját, generáljon újat
+        if (targetCoordinate == null || hasReachedTarget()) {
+            generateRandomTarget();
+        }
+        moveTo(targetCoordinate);
     }
 
     @Override
     public boolean hasReachedTarget() {
-        return actualCoordinate.getPosX() == targetCoordinate.getPosX() && actualCoordinate.getPosY() == targetCoordinate.getPosY();
+        int dx = targetCoordinate.getPosX() - actualCoordinate.getPosX();
+        int dy = targetCoordinate.getPosY() - actualCoordinate.getPosY();
+        return Math.sqrt(dx * dx + dy * dy) < 5;
     }
 
     @Override
@@ -74,8 +74,8 @@ public class Herbivore extends Animal {
 
     @Override
     public void moveTo(Coordinate target) {
-
-        int speedInPx = 5;
+        int speedInPx = 3; // Alap sebesség pixelben
+        //int speedInPx = (int) (baseSpeed * Game.getGameSpeed().getMulti()); // Sebesség a játék sebességéhez igazítva
 
         int deltaX = target.getPosX() - actualCoordinate.getPosX();
         int deltaY = target.getPosY() - actualCoordinate.getPosY();
@@ -94,6 +94,21 @@ public class Herbivore extends Animal {
         }
 
         actualCoordinate = new Coordinate(nextX, nextY);
+
+        int actTileX = nextX/TILE_SIZE;
+        int actTileY = nextY/TILE_SIZE ;
+        addVisitedLocation(actTileX, actTileY);
+        System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
+    }
+
+    @Override
+    public boolean hasVisited(int x, int y) {
+        for (int[] location : visitedLocations) {
+            if (location[0] == x && location[1] == y) {
+                return true; // Már járt itt
+            }
+        }
+        return false; // Még nem járt itt
     }
 
 }
