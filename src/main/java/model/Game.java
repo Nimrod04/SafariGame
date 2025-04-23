@@ -1,14 +1,13 @@
 package model;
 
-import view.GamePanel;
 import view.Playing;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Game implements Runnable {
 
@@ -25,6 +24,9 @@ public class Game implements Runnable {
     private final int UPS_SET = 200;
 
     private GameSpeed gameSpeed; // Új GameSpeed példány
+
+    private List<Tourist> visitors; // Látogatók listája
+    private long lastVisitorAddedTime; // Az utolsó látogató hozzáadásának ideje játékbeli időben
 
     public final static int TILES_DEFAULT_SIZE = 16;
     public final static float SCALE = 4.0f;
@@ -84,7 +86,8 @@ public class Game implements Runnable {
                 gamePanel.repaint();
             }
         });
-
+        this.visitors = new ArrayList<>(); // Látogatók listájának inicializálása
+        this.lastVisitorAddedTime = 0; // Kezdőérték
         startGameLoop();
     }
 
@@ -96,10 +99,22 @@ public class Game implements Runnable {
 
     public void update() {
         //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
+
+        long currentGameTime = gameSpeed.getElapsedTimeInSeconds(); // Játékbeli idő másodpercben
+        if (currentGameTime - lastVisitorAddedTime >= 5) { // 5 másodperc eltelt
+            visitors.add(new Tourist()); // Új látogató hozzáadása
+            lastVisitorAddedTime = currentGameTime; // Idő frissítése
+            System.out.println("New visitor added! Total visitors: " + visitors.size());
+        }
+
         playing.gameMap.updateAnimals();
         playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
         //gamePanel.repaint();
 
+    }
+
+    public List<Tourist> getVisitors() {
+        return visitors;
     }
 
     public GameSpeed getGameSpeed() {
