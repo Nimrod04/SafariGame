@@ -546,6 +546,7 @@ public class GamePanel extends JPanel implements KeyListener {
     public Map<Tile.TileType, Image> getTileImages() {
         return tileImages;
     }
+    
 
     public void renderMap() {
         mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE,

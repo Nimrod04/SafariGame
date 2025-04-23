@@ -294,6 +294,7 @@ public class Playing extends javax.swing.JFrame {
         this.balance = new Finance();
         this.game = game;
         initComponents();
+        this.gameMap = ((GamePanel)gamePanel).getGameMap();
         refreshBalance();
 
         timeIntensity = TimeIntensity.NORMAL;
@@ -345,6 +346,7 @@ public class Playing extends javax.swing.JFrame {
         shopLabel3.setText("Állatok");
         shopLabel4.setText("Környezet");
         miniMap = new MiniMap(this.getGamePanel());
+        this.gameMap = ((GamePanel)gamePanel).getGameMap();
     }
 
     public GamePanel getGamePanel() {
