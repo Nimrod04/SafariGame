@@ -98,7 +98,7 @@ public class Herbivore extends Animal {
         int actTileX = nextX/TILE_SIZE;
         int actTileY = nextY/TILE_SIZE ;
         addVisitedLocation(actTileX, actTileY);
-        System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
+        //System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
     }
 
     @Override

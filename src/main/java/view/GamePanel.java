@@ -775,6 +775,6 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     public GameMap getGameMap() {
-        return this.gameMap;
+        return gameMap;
     }
 }

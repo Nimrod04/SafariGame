@@ -323,6 +323,8 @@ public class GameMap {
         }
     
         jeeps.add(jeep); // Jeep hozzáadása a listához
+        
+        System.out.println("this.hashCode(): "+this.hashCode());
         System.out.println("Jeep hozzáadva: " + jeep.getPosition());
     }
     public List<Jeep> getJeeps() {
@@ -330,12 +332,13 @@ public class GameMap {
     }
     public void updateJeeps() {
         for (Jeep jeep : jeeps) {
-            if (!jeep.hasReachedEnd()) {
+            if (jeep.isReadyToMove() && !jeep.hasReachedEnd()) { // Csak akkor mozog, ha készen áll
                 jeep.move(); // Jeep következő pozícióra lép
                 System.out.println("Jeep moved to: " + jeep.getPosition());
-            } else {
+            } else if (jeep.hasReachedEnd()) {
                 System.out.println("Jeep reached the end.");
             }
         }
     }
+
 }
