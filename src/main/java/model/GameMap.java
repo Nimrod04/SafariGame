@@ -30,6 +30,7 @@ public class GameMap {
 
     private ArrayList<Coordinate> roads; // Az utak pozícióinak tárolása
     private ArrayList<Jeep> jeeps;
+    private Queue<Jeep> jeepQueue; // Jeepek várólistája
 
     public GameMap(int width, int height, GameSpeed gs) {
         this.gameSpeed = gs;
@@ -49,6 +50,7 @@ public class GameMap {
         this.airships = new ArrayList<>();
 
         jeeps = new ArrayList<>();
+        jeepQueue = new LinkedList<>(); // Várólista inicializálása
         roads = new ArrayList<>();
 
         generateRandomMap();
@@ -312,6 +314,7 @@ public class GameMap {
 
         return path; // Ha nincs út, üres lista
     }
+
     public void addJeep(Jeep jeep) {
         if (jeep == null) {
             System.out.println("A Jeep nem lehet null!");
@@ -325,22 +328,32 @@ public class GameMap {
         }
     
         jeeps.add(jeep); // Jeep hozzáadása a listához
+        jeepQueue.add(jeep); // Jeep hozzáadása a várólistához
         
         System.out.println("this.hashCode(): "+this.hashCode());
         System.out.println("Jeep hozzáadva: " + jeep.getPosition());
     }
+
     public List<Jeep> getJeeps() {
         return jeeps;
     }
+
+    public Queue<Jeep> getJeepQueue() {
+        return jeepQueue;
+    }
+
     public void updateJeeps() {
-        for (Jeep jeep : jeeps) {
-            if (jeep.isReadyToMove() && !jeep.hasReachedEnd()) { // Csak akkor mozog, ha készen áll
-                jeep.move(); // Jeep következő pozícióra lép
-                System.out.println("Jeep moved to: " + jeep.getPosition());
-            } else if (jeep.hasReachedEnd()) {
-                System.out.println("Jeep reached the end.");
+        if (!jeepQueue.isEmpty()) {
+            Jeep jeep = jeepQueue.peek(); // Az első Jeep a sorban
+            if (jeep.isReadyToMove()) {
+                jeep.move(); // Jeep mozgatása
+                if (jeep.hasReachedEnd()) { // Ha elérte az útvonal végét
+                    jeep.clearPassengers(); // Látogatók eltávolítása a Jeep-ből
+                    jeepQueue.poll(); // Jeep eltávolítása a várólistából
+                    jeeps.remove(jeep); // Jeep eltávolítása a jeeps listából
+                    System.out.println("Jeep reached the exit and was removed.");
+                }
             }
         }
     }
-
 }
