@@ -43,8 +43,8 @@ public class Carnivore extends Animal {
                 int offsetX = (int) (Math.random() * 40 - 20); //eltolás  -20 és 20 között
                 int offsetY = (int) (Math.random() * 40 - 20);
                 Coordinate targetWithOffset = new Coordinate(
-                        leader.targetCoordinate.getPosX() + offsetX,
-                        leader.targetCoordinate.getPosY() + offsetY
+                        leader.actualCoordinate.getPosX() + offsetX,
+                        leader.actualCoordinate.getPosY() + offsetY
                 );
                 moveTo(targetWithOffset,gs);
                 updateHitbox();

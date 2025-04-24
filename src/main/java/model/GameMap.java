@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import view.Playing;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -31,8 +34,10 @@ public class GameMap {
     private ArrayList<Coordinate> roads; // Az utak pozícióinak tárolása
     private ArrayList<Jeep> jeeps;
     private Queue<Jeep> jeepQueue; // Jeepek várólistája
+    private Playing playing; // Hozzáférés a Playing osztályhoz
 
-    public GameMap(int width, int height, GameSpeed gs) {
+    public GameMap(int width, int height, GameSpeed gs, Playing playing) {
+        this.playing = playing;
         this.gameSpeed = gs;
         this.data = new ArrayList<>();
         this.width = width;
@@ -320,17 +325,17 @@ public class GameMap {
             System.out.println("A Jeep nem lehet null!");
             return;
         }
-    
+
         // Ellenőrizzük, hogy a Jeep-nek van-e érvényes útvonala
         if (jeep.getPosition() == null || jeep.hasReachedEnd()) {
             System.out.println("A Jeep-nek érvényes útvonallal kell rendelkeznie!");
             return;
         }
-    
+
         jeeps.add(jeep); // Jeep hozzáadása a listához
         jeepQueue.add(jeep); // Jeep hozzáadása a várólistához
-        
-        System.out.println("this.hashCode(): "+this.hashCode());
+
+        System.out.println("this.hashCode(): " + this.hashCode());
         System.out.println("Jeep hozzáadva: " + jeep.getPosition());
     }
 
@@ -343,17 +348,49 @@ public class GameMap {
     }
 
     public void updateJeeps() {
-        if (!jeepQueue.isEmpty()) {
-            Jeep jeep = jeepQueue.peek(); // Az első Jeep a sorban
+        List<Jeep> finishedJeeps = new ArrayList<>(); // Azok a Jeepek, amelyek elérték az útvonal végét
+
+        for (Jeep jeep : jeeps) {
             if (jeep.isReadyToMove()) {
-                jeep.move(); // Jeep mozgatása
+                jeep.move(gameSpeed); // Jeep mozgatása
+
+                // Állatok érzékelése a Jeep közelében
+                for (Animal animal : getAllAnimals()) {
+                    if (jeep.getHitbox().intersects(animal.getHitbox())) {
+                        jeep.recordAnimal(animal.getClass().getSimpleName());
+                    }
+                }
+
                 if (jeep.hasReachedEnd()) { // Ha elérte az útvonal végét
-                    jeep.clearPassengers(); // Látogatók eltávolítása a Jeep-ből
-                    jeepQueue.poll(); // Jeep eltávolítása a várólistából
-                    jeeps.remove(jeep); // Jeep eltávolítása a jeeps listából
-                    System.out.println("Jeep reached the exit and was removed.");
+                    finishedJeeps.add(jeep); // Hozzáadjuk a befejezett Jeepek listájához
                 }
             }
         }
+
+        // Az útvonal végét elért Jeepek kezelése
+        for (Jeep finishedJeep : finishedJeeps) {
+            int adjustedSatisfaction = (int) (finishedJeep.tourLength + (int) (finishedJeep.satisfactionPoint / Math.max(1, finishedJeep.updateCount))); // Pénz
+            System.out.println(Math.max(1, finishedJeep.updateCount));                                                                                                           // számítása
+            System.out.println("Bevétel: " + adjustedSatisfaction); // Jeep jövedelme
+            playing.getFinance().increase(adjustedSatisfaction); // Jövedelem növelése
+            playing.refreshBalance();
+            finishedJeep.printSeenAnimals(); // Látott állatok kiírása
+            finishedJeep.clearPassengers(); // Utasok eltávolítása
+            finishedJeep.clearSeenAnimals(); // Látott állatok törlése
+            finishedJeep.resetPosition(); // Jeep visszaállítása az út elejére
+            jeepQueue.remove(finishedJeep); // Jeep eltávolítása a várólistából
+            jeeps.remove(finishedJeep); // Jeep eltávolítása a listából
+            addJeep(new Jeep(new Coordinate(0, 10), getPathBetweenGates()));
+            System.out.println("Jeep reached the exit and returned to the start.");
+        }
+    }
+
+    public List<Animal> getAllAnimals() {
+        List<Animal> allAnimals = new ArrayList<>();
+        allAnimals.addAll(elephants);
+        allAnimals.addAll(gazelles);
+        allAnimals.addAll(lions);
+        allAnimals.addAll(cheetahs);
+        return allAnimals;
     }
 }
