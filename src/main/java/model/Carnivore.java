@@ -47,8 +47,10 @@ public class Carnivore extends Animal {
                         leader.targetCoordinate.getPosY() + offsetY
                 );
                 moveTo(targetWithOffset,gs);
+                updateHitbox();
                 return;
             }
+        
         }
 
         // Ha nincs célkoordináta, vagy elérte a célját, generáljon újat
@@ -94,6 +96,7 @@ public class Carnivore extends Animal {
         }
 
         actualCoordinate = new Coordinate(nextX, nextY);
+        updateHitbox();
 
         int actTileX = nextX/TILE_SIZE;
         int actTileY = nextY/TILE_SIZE ;
@@ -111,5 +114,6 @@ public class Carnivore extends Animal {
         return false; // Még nem járt itt
 
     }
+    
 
 }

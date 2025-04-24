@@ -94,7 +94,7 @@ public class Herbivore extends Animal {
         }
 
         actualCoordinate = new Coordinate(nextX, nextY);
-
+        updateHitbox();
         int actTileX = nextX/TILE_SIZE;
         int actTileY = nextY/TILE_SIZE ;
         addVisitedLocation(actTileX, actTileY);

@@ -8,6 +8,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Game implements Runnable {
 
@@ -25,7 +27,7 @@ public class Game implements Runnable {
 
     private GameSpeed gameSpeed; // Új GameSpeed példány
 
-    private List<Tourist> visitors; // Látogatók listája
+    private Queue<Tourist> visitorQueue;
     private long lastVisitorAddedTime; // Az utolsó látogató hozzáadásának ideje játékbeli időben
 
     public final static int TILES_DEFAULT_SIZE = 16;
@@ -77,16 +79,18 @@ public class Game implements Runnable {
                     case KeyEvent.VK_A ->
                         playing.getGamePanel().setCameraX(Math.max(0, playing.getGamePanel().getCameraX() - 1));
                     case KeyEvent.VK_D ->
-                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getWidth() - 20, playing.getGamePanel().getCameraX() + 1));
+                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getWidth() - 20,
+                                playing.getGamePanel().getCameraX() + 1));
                     case KeyEvent.VK_W ->
                         playing.getGamePanel().setCameraY(Math.max(0, playing.getGamePanel().getCameraY() - 1));
                     case KeyEvent.VK_S ->
-                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getHeight() - 15, playing.getGamePanel().getCameraY() + 1));
+                        playing.getGamePanel().setCameraX(Math.max(playing.getGamePanel().getGameMap().getHeight() - 15,
+                                playing.getGamePanel().getCameraY() + 1));
                 }
                 gamePanel.repaint();
             }
         });
-        this.visitors = new ArrayList<>(); // Látogatók listájának inicializálása
+        this.visitorQueue = new LinkedList<>(); // Várólista inicializálása
         this.lastVisitorAddedTime = 0; // Kezdőérték
         startGameLoop();
     }
@@ -98,30 +102,48 @@ public class Game implements Runnable {
     }
 
     public void update() {
-        //gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
-
+        // gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
         long currentGameTime = gameSpeed.getElapsedTimeInSeconds(); // Játékbeli idő másodpercben
         if (currentGameTime - lastVisitorAddedTime >= 5) { // 5 másodperc eltelt
-            visitors.add(new Tourist()); // Új látogató hozzáadása
-            System.out.println("playing.gameMap.hashCode(): "+ playing.gameMap.hashCode());
-            playing.changeVisitorCount(playing.gameMap.getJeeps().size(), visitors.size());
+            Tourist newVisitor = new Tourist();
+            visitorQueue.add(newVisitor); // Új látogató hozzáadása a várólistához
+            playing.changeVisitorCount(playing.gameMap.getJeeps().size(), visitorQueue.size());
+            System.out.println("New visitor added! Total visitors in queue: " + visitorQueue.size());
             lastVisitorAddedTime = currentGameTime; // Idő frissítése
-            System.out.println("New visitor added! Total visitors: " + visitors.size());
         }
 
-        playing.gameMap.updateAnimals();
+        // Jeepek indítása, ha van legalább 4 látogató
+        if (visitorQueue.size() >= 4) {
+            Queue<Jeep> jeepQueue = playing.gameMap.getJeepQueue();
+            if (!jeepQueue.isEmpty()) {
+                Jeep nextJeep = jeepQueue.peek(); // Következő Jeep a sorban
+                if (!nextJeep.isReadyToMove()) {
+                    // Az első 4 látogató beültetése a Jeep-be
+                    for (int i = 0; i < 4; i++) {
+                        Tourist visitor = visitorQueue.poll(); // Látogató eltávolítása a várólistából
+                        nextJeep.pickUpTourist(visitor); // Látogató hozzáadása a Jeep-hez
+                    }
+                    nextJeep.startMoving(); // Jeep elindítása
+                    System.out.println("Jeep started moving with 4 visitors.");
+                }
+            }
+        }
+
+        // playing.gameMap.updateAnimals();
+        // playing.gameMap.updateJeeps(); // Jeepek frissítése
         playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
-        //gamePanel.repaint();
+        // gamePanel.repaint();
 
     }
 
-    public List<Tourist> getVisitors() {
-        return visitors;
+    public Queue<Tourist> getVisitors() {
+        return visitorQueue;
     }
 
     public GameSpeed getGameSpeed() {
         return this.gameSpeed;
     }
+
     public void startJeep(Jeep jeep) {
         if (jeep != null) {
             jeep.startMoving(); // Jeep elindítása
@@ -172,11 +194,11 @@ public class Game implements Runnable {
 
             // Alvás a pontos FPS érdekében
             /*
-        try {
-            Thread.sleep((long) (timePerFrame / 1000000)); // Alvás milliszekundumban
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+             * try {
+             * Thread.sleep((long) (timePerFrame / 1000000)); // Alvás milliszekundumban
+             * } catch (InterruptedException e) {
+             * e.printStackTrace();
+             * }
              */
         }
     }
