@@ -21,7 +21,7 @@ public class Game implements Runnable {
 
     private Thread gameThread;
     private final int FPS_SET = 60; // 60 FPS-re állítva
-    private final int UPS_SET = 200;
+    private final int UPS_SET = 60;
 
     private GameSpeed gameSpeed; // Új GameSpeed példány
 
@@ -103,6 +103,8 @@ public class Game implements Runnable {
         long currentGameTime = gameSpeed.getElapsedTimeInSeconds(); // Játékbeli idő másodpercben
         if (currentGameTime - lastVisitorAddedTime >= 5) { // 5 másodperc eltelt
             visitors.add(new Tourist()); // Új látogató hozzáadása
+            System.out.println("playing.gameMap.hashCode(): "+ playing.gameMap.hashCode());
+            playing.changeVisitorCount(playing.gameMap.getJeeps().size(), visitors.size());
             lastVisitorAddedTime = currentGameTime; // Idő frissítése
             System.out.println("New visitor added! Total visitors: " + visitors.size());
         }
@@ -119,6 +121,12 @@ public class Game implements Runnable {
 
     public GameSpeed getGameSpeed() {
         return this.gameSpeed;
+    }
+    public void startJeep(Jeep jeep) {
+        if (jeep != null) {
+            jeep.startMoving(); // Jeep elindítása
+            System.out.println("Jeep is now moving: " + jeep.getPosition());
+        }
     }
 
     @Override

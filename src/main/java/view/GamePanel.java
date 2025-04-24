@@ -534,7 +534,7 @@ public class GamePanel extends JPanel implements KeyListener {
         renderMap(); // Térkép előzetes renderelése
 
         // Időzítő a játék frissítéséhez
-        gameTimer = new Timer(100, e -> {
+        gameTimer = new Timer(60, e -> {
             gameMap.updateAnimals(); // Állatok frissítése
             gameMap.updateJeeps(); // Jeepek frissítése
             repaint(); // Képernyő újrarajzolása
@@ -775,6 +775,6 @@ public class GamePanel extends JPanel implements KeyListener {
     }
 
     public GameMap getGameMap() {
-        return this.gameMap;
+        return gameMap;
     }
 }

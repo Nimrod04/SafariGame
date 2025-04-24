@@ -35,7 +35,7 @@ public class Herbivore extends Animal {
     }
 
     @Override
-    public void moveTo() {
+    public void moveTo(GameSpeed gs) {
 
         if (isInGroup()) {
             Animal leader = group.get(0);
@@ -46,7 +46,7 @@ public class Herbivore extends Animal {
                         leader.targetCoordinate.getPosX() + offsetX,
                         leader.targetCoordinate.getPosY() + offsetY
                 );
-                moveTo(targetWithOffset);
+                moveTo(targetWithOffset,gs);
                 return;
             }
         }
@@ -55,7 +55,7 @@ public class Herbivore extends Animal {
         if (targetCoordinate == null || hasReachedTarget()) {
             generateRandomTarget();
         }
-        moveTo(targetCoordinate);
+        moveTo(targetCoordinate,gs);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class Herbivore extends Animal {
     }
 
     @Override
-    public void moveTo(Coordinate target) {
-        int speedInPx = 3; // Alap sebesség pixelben
+    public void moveTo(Coordinate target, GameSpeed gs) {
+        int speedInPx = (int) (gs.getMulti() * 1); // A játék sebességéhez igazítva
         //int speedInPx = (int) (baseSpeed * Game.getGameSpeed().getMulti()); // Sebesség a játék sebességéhez igazítva
 
         int deltaX = target.getPosX() - actualCoordinate.getPosX();
@@ -98,7 +98,7 @@ public class Herbivore extends Animal {
         int actTileX = nextX/TILE_SIZE;
         int actTileY = nextY/TILE_SIZE ;
         addVisitedLocation(actTileX, actTileY);
-        System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
+        //System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
     }
 
     @Override
