@@ -362,7 +362,7 @@ public class Playing extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gamePanel = new GamePanel(new GameMap(40, 20,game.getGameSpeed()),this);
+        gamePanel = new GamePanel(new GameMap(40, 20,game.getGameSpeed(),this),this);
         roundIconPanel2 = new view.RoundIconPanel();
         roundIconPanel3 = new view.RoundIconPanel();
         roundIconPanel4 = new view.RoundIconPanel();

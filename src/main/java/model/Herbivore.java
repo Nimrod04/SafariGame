@@ -43,8 +43,8 @@ public class Herbivore extends Animal {
                 int offsetX = (int) (Math.random() * 40 - 20); // -10 és 10 között
                 int offsetY = (int) (Math.random() * 40 - 20);
                 Coordinate targetWithOffset = new Coordinate(
-                        leader.targetCoordinate.getPosX() + offsetX,
-                        leader.targetCoordinate.getPosY() + offsetY
+                        leader.actualCoordinate.getPosX() + offsetX,
+                        leader.actualCoordinate.getPosY() + offsetY
                 );
                 moveTo(targetWithOffset,gs);
                 return;

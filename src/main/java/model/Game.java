@@ -1,5 +1,6 @@
 package model;
 
+import view.GamePanel;
 import view.Playing;
 
 import javax.swing.*;
@@ -107,27 +108,73 @@ public class Game implements Runnable {
         if (currentGameTime - lastVisitorAddedTime >= 5) { // 5 másodperc eltelt
             Tourist newVisitor = new Tourist();
             visitorQueue.add(newVisitor); // Új látogató hozzáadása a várólistához
+
             playing.changeVisitorCount(playing.gameMap.getJeeps().size(), visitorQueue.size());
             System.out.println("New visitor added! Total visitors in queue: " + visitorQueue.size());
             lastVisitorAddedTime = currentGameTime; // Idő frissítése
         }
 
         // Jeepek indítása, ha van legalább 4 látogató
-        if (visitorQueue.size() >= 4) {
-            Queue<Jeep> jeepQueue = playing.gameMap.getJeepQueue();
-            if (!jeepQueue.isEmpty()) {
-                Jeep nextJeep = jeepQueue.peek(); // Következő Jeep a sorban
-                if (!nextJeep.isReadyToMove()) {
-                    // Az első 4 látogató beültetése a Jeep-be
-                    for (int i = 0; i < 4; i++) {
-                        Tourist visitor = visitorQueue.poll(); // Látogató eltávolítása a várólistából
-                        nextJeep.pickUpTourist(visitor); // Látogató hozzáadása a Jeep-hez
+        Queue<Jeep> jeepQueue = playing.gameMap.getJeepQueue();
+        List<Jeep> readyToStart = new ArrayList<>(); // Azok a Jeepek, amelyek elindulnak
+
+        for (Jeep jeep : jeepQueue) {
+            if (visitorQueue.size() >= 4 && !jeep.isReadyToMove()) {
+                for (int j = 0; j < 4; j++) {
+                    Tourist visitor = visitorQueue.poll(); // Látogató eltávolítása a várólistából
+                    jeep.pickUpTourist(visitor); // Látogató hozzáadása a Jeep-hez
+                }
+                jeep.startMoving(); // Jeep elindítása
+                readyToStart.add(jeep); // Hozzáadjuk az elindult Jeepek listájához
+                System.out.println("Jeep started moving with 4 visitors.");
+            }
+        }
+
+        // Távolítsuk el az elindult Jeepeket a várólistából
+        jeepQueue.removeAll(readyToStart);
+
+        /*
+         * for (Animal animal : playing.gameMap.getAllAnimals()) {
+         * //System.out.println(animal.getClass().getSimpleName());
+         * for (Jeep jeep : playing.gameMap.getJeeps()) {
+         * //System.out.println("Jeep");
+         * if (jeep.getHitbox().intersects(animal.getHitbox())) {
+         * jeep.recordAnimal(animal.getClass().getSimpleName());
+         * db++;
+         * System.out.println(db);
+         * }
+         * if (animal.getHitbox().intersects(jeep.getHitbox())) {
+         * System.out.println("Animal hitbox intersects with Jeep hitbox!");
+         * }
+         * }
+         * }
+         */
+        for (Animal animal : playing.gameMap.getAllAnimals()) {
+            // System.out.println("X:"+animal.getCoordinate().getPosX()+",
+            // Y:"+animal.getCoordinate().getPosY());
+
+            for (Jeep jeep : playing.gameMap.getJeeps()) {
+                int animalTileX = animal.getCoordinate().getPosX() / GamePanel.TILE_SIZE;
+                int animalTileY = animal.getCoordinate().getPosY() / GamePanel.TILE_SIZE;
+
+                // Debug üzenetek
+                // System.out.println("Jeep hitbox: " + ani.getHitbox());
+                // System.out.println("Animal tile position: (" + animalTileX + ", " +
+                // animalTileY + ")");
+
+                if (jeep.getHitbox().contains(animalTileX, animalTileY)) {
+                    // System.out.println("Jeep hitbox intersects with Animal hitbox!");
+                    if (animal instanceof Herbivore) {
+                        // Lát egy növényevő állatot
+                        jeep.satisfaction(1);
+                    } else if (animal instanceof Carnivore) {
+                        // Lát egy ragadozó állatot
+                        jeep.satisfaction(5);
                     }
-                    nextJeep.startMoving(); // Jeep elindítása
-                    System.out.println("Jeep started moving with 4 visitors.");
                 }
             }
         }
+        // System.out.println(db);
 
         // playing.gameMap.updateAnimals();
         // playing.gameMap.updateJeeps(); // Jeepek frissítése
