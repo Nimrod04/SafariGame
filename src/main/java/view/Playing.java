@@ -1033,6 +1033,7 @@ public class Playing extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
+        resetAllBools();
         if (canBuyJeeps) {
             System.out.println("Buying jeep...");
             if (buyingJeeps) {
