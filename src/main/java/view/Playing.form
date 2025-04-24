@@ -62,7 +62,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new GamePanel(new GameMap(40, 20),this)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new GamePanel(new GameMap(40, 20,game.getGameSpeed()),this)"/>
       </AuxValues>
 
       <Layout>

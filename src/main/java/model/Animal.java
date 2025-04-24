@@ -130,13 +130,13 @@ public abstract class Animal {
     public abstract void drink();
     public abstract void nap();  // esetleg true/false értékkel
 
-    public abstract void moveTo();
+    public abstract void moveTo(GameSpeed gs);
 
     public abstract boolean hasReachedTarget();
 
     public abstract void generateRandomTarget();
 
-    public abstract void moveTo(Coordinate target);
+    public abstract void moveTo(Coordinate target, GameSpeed gs);
 
     public abstract boolean hasVisited(int x, int y);
 }

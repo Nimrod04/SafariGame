@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class GameMap {
+    private GameSpeed gameSpeed;
 
     private final int width;
     private final int height;
@@ -30,7 +31,8 @@ public class GameMap {
     private ArrayList<Coordinate> roads; // Az utak pozícióinak tárolása
     private ArrayList<Jeep> jeeps;
 
-    public GameMap(int width, int height) {
+    public GameMap(int width, int height, GameSpeed gs) {
+        this.gameSpeed = gs;
         this.data = new ArrayList<>();
         this.width = width;
         this.height = height;
@@ -134,7 +136,7 @@ public class GameMap {
                     }
                 }
             }
-            animal.moveTo();
+            animal.moveTo(gameSpeed);
         }
     }
 

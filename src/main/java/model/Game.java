@@ -21,7 +21,7 @@ public class Game implements Runnable {
 
     private Thread gameThread;
     private final int FPS_SET = 60; // 60 FPS-re állítva
-    private final int UPS_SET = 200;
+    private final int UPS_SET = 60;
 
     private GameSpeed gameSpeed; // Új GameSpeed példány
 
@@ -104,7 +104,7 @@ public class Game implements Runnable {
         if (currentGameTime - lastVisitorAddedTime >= 5) { // 5 másodperc eltelt
             visitors.add(new Tourist()); // Új látogató hozzáadása
             System.out.println("playing.gameMap.hashCode(): "+ playing.gameMap.hashCode());
-            
+            playing.changeVisitorCount(playing.gameMap.getJeeps().size(), visitors.size());
             lastVisitorAddedTime = currentGameTime; // Idő frissítése
             System.out.println("New visitor added! Total visitors: " + visitors.size());
         }

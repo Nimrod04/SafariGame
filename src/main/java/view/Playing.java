@@ -300,7 +300,7 @@ public class Playing extends javax.swing.JFrame {
         timeIntensity = TimeIntensity.NORMAL;
 
         // Egyetlen GameMap példány létrehozása
-        gameMap = new GameMap(40, 20);
+        //gameMap = new GameMap(40, 20);
 
         // Ugyanazt a GameMap példányt adjuk át mindkét komponensnek
         gamePanel = new GamePanel(gameMap, this);
@@ -362,7 +362,7 @@ public class Playing extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        gamePanel = new GamePanel(new GameMap(40, 20),this);
+        gamePanel = new GamePanel(new GameMap(40, 20,game.getGameSpeed()),this);
         roundIconPanel2 = new view.RoundIconPanel();
         roundIconPanel3 = new view.RoundIconPanel();
         roundIconPanel4 = new view.RoundIconPanel();
