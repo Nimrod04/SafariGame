@@ -1,5 +1,7 @@
 package model;
 
+import static view.GamePanel.TILE_SIZE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,7 +133,6 @@ public class GameMap {
         groupAnimals(cheetahs);
     }
 
-    // Általános csoportosítási logika
     private void groupAnimals(List<? extends Animal> animals) {
         for (Animal animal : animals) {
             if (!animal.isInGroup()) {
@@ -144,6 +145,15 @@ public class GameMap {
                 }
             }
             animal.moveTo(gameSpeed);
+            
+            int actTileX = animal.actualCoordinate.getPosX()/TILE_SIZE;
+            int actTileY = animal.actualCoordinate.getPosY()/TILE_SIZE;
+            animal.addVisitedWater(getTile(actTileX, actTileY),actTileX,actTileY);
+            animal.addFoodIfEdible(getTile(actTileX, actTileY),actTileX,actTileY);
+
+            if (animal.drink.size() != 0 || animal.food.size() != 0) {
+                System.out.println(animal.food.size() + " " + animal.drink.size());
+            }
         }
     }
 

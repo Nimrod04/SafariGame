@@ -105,8 +105,6 @@ public class Carnivore extends Animal {
 
         int actTileX = nextX/TILE_SIZE;
         int actTileY = nextY/TILE_SIZE;
-        addVisitedWater(actTileX, actTileY);
-        addVisitedFood(actTileX, actTileY);
         if ( food.size() != 0 || drink.size() != 0) {
             System.out.println(food.size() + " " + drink.size());
         }

@@ -37,7 +37,7 @@ public class Herbivore extends Animal {
     @Override
     public void moveTo(GameSpeed gs) {
 
-        if (isInGroup()) {
+        if (isInGroup() && ( !isHungry() || !isThirsty())) {
             Animal leader = group.get(0);
             if (leader != this) {
                 int offsetX = (int) (Math.random() * 40 - 20); // -10 és 10 között
@@ -50,6 +50,7 @@ public class Herbivore extends Animal {
                 return;
             }
         }
+        System.out.println(isThirsty());
 
         // Ha nincs célkoordináta, vagy elérte a célját, generáljon újat
         if (targetCoordinate == null || hasReachedTarget()) {
@@ -100,9 +101,7 @@ public class Herbivore extends Animal {
         actualCoordinate = new Coordinate(nextX, nextY);
         updateHitbox();
         int actTileX = nextX/TILE_SIZE;
-        int actTileY = nextY/TILE_SIZE ;
-        addVisitedWater(actTileX, actTileY);
-        addVisitedFood(actTileX, actTileY);
+        int actTileY = nextY/TILE_SIZE;
         if ( food.size() != 0 || drink.size() != 0) {
             System.out.println(food.size() + " " + drink.size());
         }

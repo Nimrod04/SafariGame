@@ -129,46 +129,45 @@ public abstract class Animal {
     }
 
     public void decreaseHunger(double multiplier) {
-        foodLevel -= 0.05 * multiplier; // Csökkentjük az éhségszintet a sebességszorzó alapján
+        foodLevel -= 0.05 * multiplier;
         if (foodLevel < 0) {
-            foodLevel = 0; // Az éhségszint nem mehet 0 alá
+            foodLevel = 0;
         }
-        System.out.println(this.getClass().getSimpleName() + " éhségszintje: " + foodLevel);
+        //System.out.println(this.getClass().getSimpleName() + " éhségszintje: " + foodLevel);
     }
 
     public void decreaseThirst(double multiplier) {
-        waterLevel -= 0.05 * multiplier; // Csökkentjük a szomjúságszintet a sebességszorzó alapján
+        waterLevel -= 1 * multiplier; 
         if (waterLevel < 0) {
-            waterLevel = 0; // A szomjúságszint nem mehet 0 alá
+            waterLevel = 0; 
         }
-        //System.out.println(this.getClass().getSimpleName() + " szomjúságszintje: " + waterLevel);
+        System.out.println(this.getClass().getSimpleName() + " szomjúságszintje: " + waterLevel);
     }
 
-    public void addVisitedWater(int x, int y) {
-        // Ellenőrizzük, hogy a pozíció már szerepel-e a listában
+    public void addVisitedWater(Tile tile, int x, int y) {
         for (int[] location : drink) {
             if (location[0] == x && location[1] == y) {
-                return; // Már szerepel, nem kell hozzáadni
+                return;
             }
         }
-        // Ha nem szerepel, hozzáadjuk
-        drink.add(new int[]{x, y});
+        addDrinkIfWater(tile, x, y);
     }
 
-    public void addVisitedFood(int x, int y) {
-        // Ellenőrizzük, hogy a pozíció már szerepel-e a listában
+    public void addVisitedFood(Tile tile, int x, int y) {
         for (int[] location : food) {
             if (location[0] == x && location[1] == y) {
-                return; // Már szerepel, nem kell hozzáadni
+                return; 
             }
         }
-        // Ha nem szerepel, hozzáadjuk
         food.add(new int[]{x, y});
     }
 
     public void addDrinkIfWater(Tile tile, int x, int y) {
         if (tile.getType() == Tile.TileType.WATER) {
             drink.add(new int[]{x, y});
+        }
+        if (drink.size() != 0) {
+            //System.out.println(drink.size());
         }
     }
     public void addFoodIfEdible(Tile tile, int x, int y) {
