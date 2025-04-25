@@ -95,25 +95,24 @@ public class Carnivore extends Animal {
             nextY = target.getPosY();
         }
 
+        decreaseHunger(gs.getMulti());
+        decreaseThirst(gs.getMulti());
+
+        
+
         actualCoordinate = new Coordinate(nextX, nextY);
         updateHitbox();
 
         int actTileX = nextX/TILE_SIZE;
-        int actTileY = nextY/TILE_SIZE ;
-        addVisitedLocation(actTileX, actTileY);
+        int actTileY = nextY/TILE_SIZE;
+        addVisitedWater(actTileX, actTileY);
+        addVisitedFood(actTileX, actTileY);
+        if ( food.size() != 0 || drink.size() != 0) {
+            System.out.println(food.size() + " " + drink.size());
+        }
         //System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
     }
-
-    @Override
-    public boolean hasVisited(int x, int y) {
-        for (int[] location : visitedLocations) {
-            if (location[0] == x && location[1] == y) {
-                return true; // Már járt itt
-            }
-        }
-        return false; // Még nem járt itt
-
-    }
+    
     
 
 }

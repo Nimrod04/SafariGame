@@ -24,8 +24,8 @@ public abstract class Animal {
     protected double waterLevel;
     protected int maxWater;
 
-    ArrayList<Integer[]> food;
-    ArrayList<Integer[]> drink;
+    ArrayList<int[]> food = new ArrayList<>();;
+    ArrayList<int[]> drink = new ArrayList<>();;
     protected List<Animal> group;
     Random random = new Random();
 
@@ -33,9 +33,9 @@ public abstract class Animal {
 
     public List<int[]> visitedLocations = new ArrayList<>();
 
-    private static final int HITBOX_RADIUS = 1; // 3x3 hitbox (radius of 1)
-    private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1); // Teljes hitbox méret (3x3)
-    public Rectangle hitbox; // Hitbox az állathoz
+    private static final int HITBOX_RADIUS = 1;
+    private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1);
+    public Rectangle hitbox;
 
     public Animal() {
         this.lifetime = (int) (Math.random() * 7) + 5;
@@ -68,28 +68,32 @@ public abstract class Animal {
 
     public void findWater() {
         if (!drink.isEmpty()) {
-            targetCoordinate = new Coordinate(drink.getLast()[0], drink.getLast()[1]);
+            int[] lastDrink = drink.get(drink.size() - 1); // Az utolsó elem a drink listában
+            targetCoordinate = new Coordinate(lastDrink[0], lastDrink[1]); // Állítsuk be a célkoordinátát
+        } else {
+            System.out.println(this.getClass().getSimpleName() + " nem talált vizet.");
         }
     }
 
-    ;
     public void findFood() {
         if (!food.isEmpty()) {
-            targetCoordinate = new Coordinate(food.getLast()[0], food.getLast()[1]);
+            int[] lastfood = food.get(food.size() - 1); // Az utolsó elem a drink listában
+            targetCoordinate = new Coordinate(lastfood[0], lastfood[1]); // Állítsuk be a célkoordinátát
+        } else {
+            System.out.println(this.getClass().getSimpleName() + " nem talált élelmet.");
         }
     }
 
-    ;
 
     private void addFood() {
         //ha van a környéken víz vagy étel
 
     }
+    
 
     public void setActualCoordinate(Coordinate c) {
         actualCoordinate = c;
     }
-
     ;
     public void setTargetCoordinate(Coordinate c) {
         targetCoordinate = c;
@@ -125,30 +129,52 @@ public abstract class Animal {
     }
 
     public void decreaseHunger(double multiplier) {
-        foodLevel -= 0.2 * multiplier; // Csökkentjük az éhségszintet a sebességszorzó alapján
+        foodLevel -= 0.05 * multiplier; // Csökkentjük az éhségszintet a sebességszorzó alapján
         if (foodLevel < 0) {
             foodLevel = 0; // Az éhségszint nem mehet 0 alá
         }
-        //System.out.println(this.getClass().getSimpleName() + " éhségszintje: " + foodLevel);
+        System.out.println(this.getClass().getSimpleName() + " éhségszintje: " + foodLevel);
     }
 
     public void decreaseThirst(double multiplier) {
-        waterLevel -= 0.2 * multiplier; // Csökkentjük a szomjúságszintet a sebességszorzó alapján
+        waterLevel -= 0.05 * multiplier; // Csökkentjük a szomjúságszintet a sebességszorzó alapján
         if (waterLevel < 0) {
             waterLevel = 0; // A szomjúságszint nem mehet 0 alá
         }
         //System.out.println(this.getClass().getSimpleName() + " szomjúságszintje: " + waterLevel);
     }
 
-    public void addVisitedLocation(int x, int y) {
+    public void addVisitedWater(int x, int y) {
         // Ellenőrizzük, hogy a pozíció már szerepel-e a listában
-        for (int[] location : visitedLocations) {
+        for (int[] location : drink) {
             if (location[0] == x && location[1] == y) {
                 return; // Már szerepel, nem kell hozzáadni
             }
         }
         // Ha nem szerepel, hozzáadjuk
-        visitedLocations.add(new int[]{x, y});
+        drink.add(new int[]{x, y});
+    }
+
+    public void addVisitedFood(int x, int y) {
+        // Ellenőrizzük, hogy a pozíció már szerepel-e a listában
+        for (int[] location : food) {
+            if (location[0] == x && location[1] == y) {
+                return; // Már szerepel, nem kell hozzáadni
+            }
+        }
+        // Ha nem szerepel, hozzáadjuk
+        food.add(new int[]{x, y});
+    }
+
+    public void addDrinkIfWater(Tile tile, int x, int y) {
+        if (tile.getType() == Tile.TileType.WATER) {
+            drink.add(new int[]{x, y});
+        }
+    }
+    public void addFoodIfEdible(Tile tile, int x, int y) {
+        if (tile.getType() == Tile.TileType.TREE || tile.getType() == Tile.TileType.GRASS || tile.getType() == Tile.TileType.BUSH) {
+            food.add(new int[]{x, y});
+        }
     }
 
     public Rectangle getHitbox() {
@@ -184,18 +210,29 @@ public abstract class Animal {
     }
 
     public abstract void eat();
-
     public abstract void drink();
-
     public abstract void nap();  // esetleg true/false értékkel
-
     public abstract void moveTo(GameSpeed gs);
-
     public abstract boolean hasReachedTarget();
-
     public abstract void generateRandomTarget();
-
     public abstract void moveTo(Coordinate target, GameSpeed gs);
 
-    public abstract boolean hasVisited(int x, int y);
+    public boolean hasVisited(int x, int y) {
+        for (int[] location : visitedLocations) {
+            if (location[0] == x && location[1] == y) {
+                return true; // Már járt itt
+            }
+        }
+        return false; // Még nem járt itt
+
+    }
+    
+
+    public boolean isThirsty() {
+        return waterLevel < 30;
+    }
+    public boolean isHungry() {
+        return foodLevel < 30;
+    }
+
 }
