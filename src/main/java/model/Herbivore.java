@@ -4,7 +4,7 @@ import java.util.List;
 
 import static view.GamePanel.TILE_SIZE;
 
-public class Herbivore extends Animal {
+public abstract class Herbivore extends Animal {
     private List<Plant> preferredPlants;
 
     public void graze() {
@@ -104,7 +104,7 @@ public class Herbivore extends Animal {
         addVisitedWater(actTileX, actTileY);
         addVisitedFood(actTileX, actTileY);
         if ( food.size() != 0 || drink.size() != 0) {
-            System.out.println(food.size() + " " + drink.size());
+            //System.out.println(food.size() + " " + drink.size());
         }
         //System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
     }
