@@ -4,7 +4,7 @@ import java.util.List;
 
 import static view.GamePanel.TILE_SIZE;
 
-public class Carnivore extends Animal {
+public abstract class Carnivore extends Animal {
     private List<String> preySpecies;
 
 

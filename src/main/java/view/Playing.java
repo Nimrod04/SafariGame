@@ -1203,6 +1203,7 @@ public class Playing extends javax.swing.JFrame {
         visitorCount.setText(String.format("Jeep: %d/?? Visitor : %d/??", jeepCnt,cnt));
     }
 
+
     public void resetAllBools() {
         inSecurityShop = false;
         inAnimalShop = false;

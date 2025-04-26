@@ -124,15 +124,50 @@ public class GameMap {
         groupAnimals(gazelles);
         groupAnimals(lions);
         groupAnimals(cheetahs);
-        deleteAnimals(elephants);
-        deleteAnimals(gazelles);
-        deleteAnimals(lions);
-        deleteAnimals(cheetahs);
+        elephants = deleteElephants(elephants);
+        gazelles = deleteGazelles(gazelles);
+        lions = deleteLions(lions);
+        cheetahs = deleteCheetahs(cheetahs);
     }
 
-    public void deleteAnimals(List<? extends Animal> animals) {
-        animals.removeIf(animal -> !animal.isAlive); // Töröljük a halott állatokat
+    public ArrayList<Elephant> deleteElephants(ArrayList<Elephant> animals) {
+        ArrayList<Elephant> out = new ArrayList<>();
+        for(Elephant animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
     }
+    public ArrayList<Gazelle> deleteGazelles(ArrayList<Gazelle> animals) {
+        ArrayList<Gazelle> out = new ArrayList<>();
+        for(Gazelle animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
+    }
+
+    public ArrayList<Lion> deleteLions(ArrayList<Lion> animals) {
+        ArrayList<Lion> out = new ArrayList<>();
+        for(Lion animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
+    }
+    public ArrayList<Cheetah> deleteCheetahs(ArrayList<Cheetah> animals) {
+        ArrayList<Cheetah> out = new ArrayList<>();
+        for(Cheetah animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
+    }
+
 
     private void groupAnimals(List<? extends Animal> animals) {
         for (Animal animal : animals) {
@@ -165,6 +200,7 @@ public class GameMap {
                 }
 
                 // Állat mozgása
+                // Állat mozgása
                 animal.moveTo(gameSpeed);
 
                 // Aktuális csempe koordináták
@@ -177,7 +213,7 @@ public class GameMap {
 
                 if (animal.waterLevel == 0 || animal.foodLevel == 0) {
                     // Debug üzenet
-                    System.out.println(animal.food.size() + " " + animal.drink.size());
+                    //System.out.println(animal.waterLevel + " " + animal.foodLevel);
                 }
             }
         }
@@ -185,9 +221,6 @@ public class GameMap {
         System.out.println(animals.size());
     }
 
-    public void updateAnimals(List<Animal> animals) {
-        animals.removeIf(animal -> !animal.isAlive); // Töröljük a halott állatokat
-    }    
 
 
     public Tile getTile(int x, int y) {

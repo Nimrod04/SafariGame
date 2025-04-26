@@ -24,20 +24,55 @@ public abstract class Animal {
     protected double waterLevel;
     protected int maxWater;
 
-    ArrayList<int[]> food = new ArrayList<>();;
-    ArrayList<int[]> drink = new ArrayList<>();;
+    ArrayList<int[]> food;;
+    ArrayList<int[]> drink;;
     protected List<Animal> group;
     Random random = new Random();
 
     protected static final int GROUP_RADIUS = 200;
 
-    public List<int[]> visitedLocations = new ArrayList<>();
+    //public List<int[]> visitedLocations = new ArrayList<>();
 
     private static final int HITBOX_RADIUS = 1;
     private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1);
     public Rectangle hitbox;
 
-    public boolean isAlive = true;
+    public boolean isAlive;
+    public boolean nap;
+    public int napTime;
+
+    public Animal() {
+        this.lifetime = (int) (Math.random() * 7) + 5;
+        age = 0;
+        targetCoordinate = null;
+        int posX = (int) (Math.random() * 40 * TILE_SIZE);
+        int posY = (int) (Math.random() * 20 * TILE_SIZE);
+        actualCoordinate = new Coordinate(posX, posY);
+        foodLevel = 100.0;
+        waterLevel = 100.0;
+        food = new ArrayList<>();
+        drink = new ArrayList<>();
+        isAlive = true;
+        nap = false;
+        napTime = 0;
+        this.hitbox = calculateHitbox(); // Hitbox inicializálása
+    }
+
+    public Animal(int x, int y) {
+        this.lifetime = (int) (Math.random() * 7) + 5;
+        age = 0;
+        targetCoordinate = null;
+        actualCoordinate = new Coordinate(x, y);
+        foodLevel = 100.0;
+        waterLevel = 100.0;
+        food = new ArrayList<>();
+        drink = new ArrayList<>();
+        isAlive = true;
+        nap = false;
+        napTime = 0;
+        this.hitbox = calculateHitbox(); // Hitbox inicializálása
+    }
+
 
 
 
@@ -81,9 +116,9 @@ public abstract class Animal {
         foodLevel -= 0.05 * multiplier;
         if (foodLevel < 0) {
             foodLevel = 0;
-            this.isAlive = false; // Az állat meghal, ha az éhségszint 0
+            //this.isAlive = false; // Az állat meghal, ha az éhségszint 0
         }
-            }
+    }
     public void decreaseThirst(double multiplier) {
         waterLevel -= 0.05 * multiplier;
         if (waterLevel < 0) {
@@ -131,9 +166,7 @@ public abstract class Animal {
     }
 
     public void drawHitbox(Graphics g, int cameraX, int cameraY, int tileSize) {
-        if (!this.isAlive) {
-            return; // Ne rajzoljuk ki, ha az állat halott
-        }
+        
     
         int drawX = (hitbox.x - cameraX * tileSize);
         int drawY = (hitbox.y - cameraY * tileSize);
@@ -219,7 +252,6 @@ public abstract class Animal {
         decreaseHunger(gs.getMulti());
         decreaseThirst(gs.getMulti());
 
-
         actualCoordinate = new Coordinate(nextX, nextY);
         updateHitbox();
         int actTileX = nextX/TILE_SIZE;
@@ -238,11 +270,11 @@ public abstract class Animal {
     }
 
     public void generateRandomTarget() {
-        int randomX = (int) (Math.random() * 40 * TILE_SIZE); // Adjust map size as needed
-        int randomY = (int) (Math.random() * 20 * TILE_SIZE);
+        int randomX = (int) (Math.random() * 39 * TILE_SIZE); // Adjust map size as needed
+        int randomY = (int) (Math.random() * 19 * TILE_SIZE);
         targetCoordinate = new Coordinate(randomX, randomY);
     }
-
+    /*
     public boolean hasVisited(int x, int y) {
         for (int[] location : visitedLocations) {
             if (location[0] == x && location[1] == y) {
@@ -251,7 +283,7 @@ public abstract class Animal {
         }
         return false; // Még nem járt itt
 
-    }
+    }*/
 
     public void joinGroup(List<Animal> group) {
         this.group = group;
