@@ -7,6 +7,8 @@ import static view.GamePanel.TILE_SIZE;
 public class Carnivore extends Animal {
     private List<String> preySpecies;
 
+
+
     public void hunt() {
         // Vadászat logika
     }
@@ -15,102 +17,13 @@ public class Carnivore extends Animal {
     public void eat() {
     }
 
-    @Override
-    public void drink() {
-    }
+
 
     @Override
-    public void findWater() {
-
+    public boolean nap() {
+        return false;
     }
 
-    @Override
-    public void findFood() {
 
-    }
-
-    @Override
-    public void nap() {
-
-    }
-
-    @Override
-    public void moveTo(GameSpeed gs) {
-
-        if (isInGroup()) {
-            Animal leader = group.get(0);
-            if (leader != this) {
-                int offsetX = (int) (Math.random() * 40 - 20); //eltolás  -20 és 20 között
-                int offsetY = (int) (Math.random() * 40 - 20);
-                Coordinate targetWithOffset = new Coordinate(
-                        leader.actualCoordinate.getPosX() + offsetX,
-                        leader.actualCoordinate.getPosY() + offsetY
-                );
-                moveTo(targetWithOffset,gs);
-                updateHitbox();
-                return;
-            }
-        
-        }
-
-        // Ha nincs célkoordináta, vagy elérte a célját, generáljon újat
-        if (targetCoordinate == null || hasReachedTarget()) {
-            generateRandomTarget();
-        }
-        moveTo(targetCoordinate,gs);
-    }
-
-    @Override
-    public boolean hasReachedTarget() {
-        int dx = targetCoordinate.getPosX() - actualCoordinate.getPosX();
-        int dy = targetCoordinate.getPosY() - actualCoordinate.getPosY();
-        return Math.sqrt(dx * dx + dy * dy) < 25;
-    }
-
-    @Override
-    public void generateRandomTarget() {
-        int randomX = (int) (Math.random() * 40 * TILE_SIZE); // Adjust map size as needed
-        int randomY = (int) (Math.random() * 20 * TILE_SIZE);
-        targetCoordinate = new Coordinate(randomX, randomY);
-    }
-
-    @Override
-    public void moveTo(Coordinate target, GameSpeed gs) {
-
-        int speedInPx = (int) (gs.getMulti() * 1); // A játék sebességéhez igazítva
-
-        int deltaX = target.getPosX() - actualCoordinate.getPosX();
-        int deltaY = target.getPosY() - actualCoordinate.getPosY();
-
-        int stepX = (int) Math.signum(deltaX); // -1, 0 vagy 1
-        int stepY = (int) Math.signum(deltaY); // -1, 0 vagy 1
-
-        int nextX = actualCoordinate.getPosX() + stepX * speedInPx;
-        int nextY = actualCoordinate.getPosY() + stepY * speedInPx;
-
-        if (Math.abs(deltaX) <= Math.abs(stepX * speedInPx)) {
-            nextX = target.getPosX();
-        }
-        if (Math.abs(deltaY) <= Math.abs(stepY * speedInPx)) {
-            nextY = target.getPosY();
-        }
-
-        decreaseHunger(gs.getMulti());
-        decreaseThirst(gs.getMulti());
-
-        
-
-        actualCoordinate = new Coordinate(nextX, nextY);
-        updateHitbox();
-
-        int actTileX = nextX/TILE_SIZE;
-        int actTileY = nextY/TILE_SIZE;
-        if ( food.size() != 0 || drink.size() != 0) {
-            System.out.println(food.size() + " " + drink.size());
-        }
-        //System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
-    }
-    
-    
 
 }

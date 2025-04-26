@@ -120,42 +120,75 @@ public class GameMap {
     }
 
     public void updateAnimals() {
-        // Elefántok csoportosítása és mozgatása
         groupAnimals(elephants);
-
-        // Gazellák csoportosítása és mozgatása
         groupAnimals(gazelles);
-
-        // Oroszlánok csoportosítása és mozgatása
         groupAnimals(lions);
-
-        // Gepárdok csoportosítása és mozgatása
         groupAnimals(cheetahs);
+        deleteAnimals(elephants);
+        deleteAnimals(gazelles);
+        deleteAnimals(lions);
+        deleteAnimals(cheetahs);
+    }
+
+    public void deleteAnimals(List<? extends Animal> animals) {
+        animals.removeIf(animal -> !animal.isAlive); // Töröljük a halott állatokat
     }
 
     private void groupAnimals(List<? extends Animal> animals) {
         for (Animal animal : animals) {
-            if (!animal.isInGroup()) {
-                List<Animal> newGroup = new ArrayList<>();
-                newGroup.add(animal);
-                for (Animal other : animals) {
-                    if (animal != other && !other.isInGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
-                        other.joinGroup(newGroup);
+            if (true) {
+                // Ha az állat nincs csoportban, hozzunk létre egy új csoportot
+                if (!animal.isInGroup()) {
+                    List<Animal> newGroup = new ArrayList<>();
+                    newGroup.add(animal);
+                    for (Animal other : animals) {
+                        if (animal != other && !other.isInGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
+                            other.joinGroup(newGroup);
+                        }
                     }
                 }
-            }
-            animal.moveTo(gameSpeed);
-            
-            int actTileX = animal.actualCoordinate.getPosX()/TILE_SIZE;
-            int actTileY = animal.actualCoordinate.getPosY()/TILE_SIZE;
-            animal.addVisitedWater(getTile(actTileX, actTileY),actTileX,actTileY);
-            animal.addFoodIfEdible(getTile(actTileX, actTileY),actTileX,actTileY);
 
-            if (animal.drink.size() != 0 || animal.food.size() != 0) {
-                System.out.println(animal.food.size() + " " + animal.drink.size());
+                // Ellenőrizzük, hogy két csoport találkozik-e
+                for (Animal other : animals) {
+                    if (animal != other && animal.isInGroup() && other.isInGroup() &&
+                        animal.getGroup() != other.getGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
+                        
+                        // Egyesítsük a két csoportot
+                        List<Animal> group1 = animal.getGroup();
+                        List<Animal> group2 = other.getGroup();
+                        group1.addAll(group2);
+                        for (Animal member : group2) {
+                            member.joinGroup(group1);
+                        }
+                        group2.clear(); // A második csoportot kiürítjük
+                    }
+                }
+
+                // Állat mozgása
+                animal.moveTo(gameSpeed);
+
+                // Aktuális csempe koordináták
+                int actTileX = animal.actualCoordinate.getPosX() / TILE_SIZE;
+                int actTileY = animal.actualCoordinate.getPosY() / TILE_SIZE;
+
+                // Étel és víz hozzáadása
+                animal.addVisitedWater(getTile(actTileX, actTileY), actTileX, actTileY);
+                animal.addFoodIfEdible(getTile(actTileX, actTileY), actTileX, actTileY);
+
+                if (animal.waterLevel == 0 || animal.foodLevel == 0) {
+                    // Debug üzenet
+                    System.out.println(animal.food.size() + " " + animal.drink.size());
+                }
             }
         }
+
+        System.out.println(animals.size());
     }
+
+    public void updateAnimals(List<Animal> animals) {
+        animals.removeIf(animal -> !animal.isAlive); // Töröljük a halott állatokat
+    }    
+
 
     public Tile getTile(int x, int y) {
         return map[x][y];
@@ -207,22 +240,18 @@ public class GameMap {
 
     public void addGazelle(Gazelle g) {
         gazelles.add(g);
-        System.out.println(gazelles.size());
     }
 
     public void addElephant(Elephant elephant) {
         elephants.add(elephant);
-        System.out.println(elephants.size());
     }
 
     public void addLion(Lion lion) {
         lions.add(lion);
-        System.out.println(lions.size());
     }
 
     public void addCheetah(Cheetah cheetah) {
         cheetahs.add(cheetah);
-        System.out.println(cheetahs.size());
     }
 
     public void addRanger(Ranger ranger) {
