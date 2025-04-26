@@ -3,11 +3,14 @@ image: maven:latest
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
 
-# Cache and keep downloaded dependencies between CI pipelines
 cache:
   key: maven-build
   paths:
     - .m2/repository
+
+stages:
+  - build
+  - test
 
 build:
   stage: build
@@ -17,7 +20,12 @@ build:
 test:
   stage: test
   script:
-    - mvn test
+    - mvn verify
+  artifacts:
+    paths:
+      - target/site/jacoco
+    expire_in: 1 week
+  coverage: '/Total.*?(\d+)%/'
 
 # Documentation
 #pages:
