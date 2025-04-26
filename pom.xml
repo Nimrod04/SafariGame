@@ -53,6 +53,11 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <includes>
+                                <include>model/*</include>
+                            </includes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
