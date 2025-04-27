@@ -17,5 +17,10 @@ public class Cheetah extends Carnivore {
     public void sprint() {
         // Gepárd gyors mozgás
     }
+
+    @Override
+    public int getPrice() {
+        return PRICE;
+    }
     
 }

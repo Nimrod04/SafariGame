@@ -469,4 +469,16 @@ public class GameMap {
         allAnimals.addAll(cheetahs);
         return allAnimals;
     }
+
+    public void removeAnimal(Animal animal) {
+        if (animal instanceof Gazelle) {
+            gazelles.remove(animal);
+        } else if (animal instanceof Elephant) {
+            elephants.remove(animal);
+        } else if (animal instanceof Lion) {
+            lions.remove(animal);
+        } else if (animal instanceof Cheetah) {
+            cheetahs.remove(animal);
+        }
+    }
 }

@@ -9,4 +9,8 @@ public class Gazelle extends Herbivore {
     public void flee() {
         // Gazella menekülés
     }
+        @Override
+    public int getPrice() {
+        return PRICE;
+    }
 }

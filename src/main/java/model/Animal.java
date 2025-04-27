@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import static view.GamePanel.*;
 
 public abstract class Animal {
+    public abstract int getPrice(); // Példa érték, állítsd be a megfelelő getter metódust
 
     protected String species;
 
@@ -186,6 +187,15 @@ public abstract class Animal {
         g.setColor(new Color(173, 216, 230, 60));
         g.fillRect(drawX, drawY, drawWidth, drawHeight);
     }
+
+    public double getFoodLevel() {
+        return foodLevel;
+    }
+
+    public double getWaterLevel() {
+        return waterLevel;
+    }
+    
 
     public abstract void eat();
     public void drink(){

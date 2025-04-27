@@ -74,6 +74,105 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
+                // Állatok
+                // Ellenőrizzük, hogy kattintott-e egy állatra
+                int mouseX = e.getX() + cameraX * TILE_SIZE;
+                int mouseY = e.getY() + cameraY * TILE_SIZE;
+
+                int mouseTileX = mouseX / TILE_SIZE;
+                int mouseTileY = mouseY / TILE_SIZE;
+
+                // Ranger kiválasztása
+                for (Ranger ranger : gameMap.getRangers()) {
+                    if (ranger.getPosition().getPosX() == mouseTileX && ranger.getPosition().getPosY() == mouseTileY) {
+                        System.out.println("Ranger clixked");
+                        selectedRanger = ranger;
+                        System.out.println("Ranger selected at: " + ranger.getPosition().getPosX() + ", "
+                                + ranger.getPosition().getPosY());
+                        return; // Ha kiválasztottunk egy Rangert, nem vizsgáljuk tovább
+                    }
+                    /*
+                     * if (ranger.getHitbox().contains(mouseTileX, mouseTileY)) {
+                     * 
+                     * }
+                     */
+                }
+
+                for (Animal animal : gameMap.getAllAnimals()) {
+                    // System.out.println("Hitbox: " + animal.getHitbox());
+                    // Hitbox középső csempéjének kiszámítása
+                    int centerTileX = (animal.getHitbox().x + TILE_SIZE) / TILE_SIZE; // Középső csempe X koordinátája
+                    int centerTileY = (animal.getHitbox().y + TILE_SIZE) / TILE_SIZE; // Középső csempe Y koordinátája
+
+                    // System.out.println("Center Tile: " + centerTileX + ", " + centerTileY);
+                    // System.out.println("Mouse Tile: " + mouseTileX + ", " + mouseTileY);
+
+                    // Csak akkor érzékeljük a kattintást, ha az a középső csempére esik
+                    int tolerance = 1; // Tolerancia csempe egységekben
+                    if (Math.abs(centerTileX - mouseTileX) <= tolerance
+                            && Math.abs(centerTileY - mouseTileY) <= tolerance) {
+                        System.out.println(selectedRanger);
+                        if (selectedRanger != null) {
+                            // Ha van kiválasztott Ranger, az állatot eladjuk
+                            System.out.println("Animal sold: " + animal.getClass().getSimpleName());
+                            playing.getFinance().increase(animal.getPrice()); // Pénz hozzáadása
+                            playing.refreshBalance(); // Pénz frissítése a UI-n
+                            gameMap.removeAnimal(animal); // Állat eltávolítása a térképről
+                            selectedRanger = null; // Ranger deselect
+                            renderMap();
+                            repaint();
+                        } else {
+                            System.out.println("Animal clicked: " + animal.getClass().getSimpleName());
+
+                            // Egyedi panel létrehozása az éhség és szomjúság csíkokhoz
+                            JPanel panel = new JPanel() {
+                                @Override
+                                protected void paintComponent(Graphics g) {
+                                    super.paintComponent(g);
+
+                                    // Éhség szöveg
+                                    g.setColor(Color.BLACK);
+                                    g.drawString("Éhség:", 10, 25);
+
+                                    // Éhség csík (zöld)
+                                    int hungerWidth = (int) (animal.getFoodLevel() / 100.0 * 200); // 200px széles csík
+                                    g.setColor(Color.GREEN);
+                                    g.fillRect(60, 10, hungerWidth, 20);
+                                    g.setColor(Color.BLACK);
+                                    g.drawRect(60, 10, 200, 20); // Keret
+
+                                    // Szomjúság szöveg
+                                    g.setColor(Color.BLACK);
+                                    g.drawString("Víz:", 10, 55);
+
+                                    // Szomjúság csík (kék)
+                                    int thirstWidth = (int) (animal.getWaterLevel() / 100.0 * 200); // 200px széles csík
+                                    g.setColor(Color.BLUE);
+                                    g.fillRect(60, 40, thirstWidth, 20);
+                                    g.setColor(Color.BLACK);
+                                    g.drawRect(60, 40, 200, 20); // Keret
+                                }
+
+                                @Override
+                                public Dimension getPreferredSize() {
+                                    return new Dimension(280, 80); // Panel mérete
+                                }
+                            };
+
+                            // Állat információinak megjelenítése
+                            String message = String.format(
+                                    "Faj: %s\nÉrték: %d$",
+                                    animal.getClass().getSimpleName(),
+                                    animal.getPrice());
+
+                            JOptionPane.showMessageDialog(GamePanel.this, new Object[] { message, panel },
+                                    "Állat Információ",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            return;
+                        }
+
+                    }
+                }
                 // Airship
 
                 if (playing != null && playing.isBuildingAirship()) {
