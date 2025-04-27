@@ -1,5 +1,7 @@
 package model;
 
+import static view.GamePanel.TILE_SIZE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,34 +120,112 @@ public class GameMap {
     }
 
     public void updateAnimals() {
-        // Elefántok csoportosítása és mozgatása
         groupAnimals(elephants);
-
-        // Gazellák csoportosítása és mozgatása
         groupAnimals(gazelles);
-
-        // Oroszlánok csoportosítása és mozgatása
         groupAnimals(lions);
-
-        // Gepárdok csoportosítása és mozgatása
         groupAnimals(cheetahs);
+        elephants = deleteElephants(elephants);
+        gazelles = deleteGazelles(gazelles);
+        lions = deleteLions(lions);
+        cheetahs = deleteCheetahs(cheetahs);
     }
 
-    // Általános csoportosítási logika
+    public ArrayList<Elephant> deleteElephants(ArrayList<Elephant> animals) {
+        ArrayList<Elephant> out = new ArrayList<>();
+        for(Elephant animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
+    }
+    public ArrayList<Gazelle> deleteGazelles(ArrayList<Gazelle> animals) {
+        ArrayList<Gazelle> out = new ArrayList<>();
+        for(Gazelle animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
+    }
+
+    public ArrayList<Lion> deleteLions(ArrayList<Lion> animals) {
+        ArrayList<Lion> out = new ArrayList<>();
+        for(Lion animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
+    }
+    public ArrayList<Cheetah> deleteCheetahs(ArrayList<Cheetah> animals) {
+        ArrayList<Cheetah> out = new ArrayList<>();
+        for(Cheetah animal : animals){
+            if (animal.isAlive){
+                out.add(animal);
+            }
+        }
+        return out;
+    }
+
+
     private void groupAnimals(List<? extends Animal> animals) {
         for (Animal animal : animals) {
-            if (!animal.isInGroup()) {
-                List<Animal> newGroup = new ArrayList<>();
-                newGroup.add(animal);
-                for (Animal other : animals) {
-                    if (animal != other && !other.isInGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
-                        other.joinGroup(newGroup);
+            if (true) {
+                // Ha az állat nincs csoportban, hozzunk létre egy új csoportot
+                if (!animal.isInGroup()) {
+                    List<Animal> newGroup = new ArrayList<>();
+                    newGroup.add(animal);
+                    for (Animal other : animals) {
+                        if (animal != other && !other.isInGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
+                            other.joinGroup(newGroup);
+                        }
                     }
                 }
+
+                // Ellenőrizzük, hogy két csoport találkozik-e
+                for (Animal other : animals) {
+                    if (animal != other && animal.isInGroup() && other.isInGroup() &&
+                        animal.getGroup() != other.getGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
+                        
+                        // Egyesítsük a két csoportot
+                        List<Animal> group1 = animal.getGroup();
+                        List<Animal> group2 = other.getGroup();
+                        group1.addAll(group2);
+                        for (Animal member : group2) {
+                            member.joinGroup(group1);
+                        }
+                        group2.clear(); // A második csoportot kiürítjük
+                    }
+                }
+
+                // Állat mozgása
+                // Állat mozgása
+                ArrayList<Animal> novenyevok = new ArrayList<>();
+                novenyevok.addAll(elephants);
+                novenyevok.addAll(gazelles);
+                System.out.println("Növényevők száma: "+ novenyevok.size());
+                animal.moveTo(gameSpeed, novenyevok);
+
+                // Aktuális csempe koordináták
+                int actTileX = animal.actualCoordinate.getPosX() / TILE_SIZE;
+                int actTileY = animal.actualCoordinate.getPosY() / TILE_SIZE;
+
+                // Étel és víz hozzáadása
+                animal.addVisitedWater(getTile(actTileX, actTileY), actTileX, actTileY);
+                animal.addFoodIfEdible(getTile(actTileX, actTileY), actTileX, actTileY);
+
+                if (animal.waterLevel == 0 || animal.foodLevel == 0) {
+                    // Debug üzenet
+                    //System.out.println(animal.waterLevel + " " + animal.foodLevel);
+                }
             }
-            animal.moveTo(gameSpeed);
         }
+
+        System.out.println(animals.size());
     }
+
+
 
     public Tile getTile(int x, int y) {
         return map[x][y];
@@ -197,22 +277,18 @@ public class GameMap {
 
     public void addGazelle(Gazelle g) {
         gazelles.add(g);
-        System.out.println(gazelles.size());
     }
 
     public void addElephant(Elephant elephant) {
         elephants.add(elephant);
-        System.out.println(elephants.size());
     }
 
     public void addLion(Lion lion) {
         lions.add(lion);
-        System.out.println(lions.size());
     }
 
     public void addCheetah(Cheetah cheetah) {
         cheetahs.add(cheetah);
-        System.out.println(cheetahs.size());
     }
 
     public void addRanger(Ranger ranger) {

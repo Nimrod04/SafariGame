@@ -13,101 +13,37 @@ public abstract class Herbivore extends Animal {
 
     @Override
     public void eat() {
+        foodLevel = 100.0;
+        isEating = true;
+        lastEatTime = System.currentTimeMillis();
+        System.out.println(this.getClass().getSimpleName() + " evett és most pihen.");
     }
 
     @Override
-    public void drink() {
-    }
-
-    @Override
-    public void findWater() {
-
-    }
-
-    @Override
-    public void findFood() {
-
-    }
-
-    @Override
-    public void nap() {
-
-    }
-
-    @Override
-    public void moveTo(GameSpeed gs) {
-
-        if (isInGroup()) {
-            Animal leader = group.get(0);
-            if (leader != this) {
-                int offsetX = (int) (Math.random() * 40 - 20); // -10 és 10 között
-                int offsetY = (int) (Math.random() * 40 - 20);
-                Coordinate targetWithOffset = new Coordinate(
-                        leader.actualCoordinate.getPosX() + offsetX,
-                        leader.actualCoordinate.getPosY() + offsetY
-                );
-                moveTo(targetWithOffset,gs);
-                return;
+    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
+        if (isEating) {
+            // Ellenőrizzük, hogy eltelt-e 20 másodperc
+            if (System.currentTimeMillis() - lastEatTime >= 20000) {
+                isEating = false; // Pihenés vége
+                System.out.println(this.getClass().getSimpleName() + " újra elindul.");
+                foodLevel = 100.0;
+            } else {
+                return; // Az állat nem mozog, amíg pihen
             }
         }
 
-        // Ha nincs célkoordináta, vagy elérte a célját, generáljon újat
-        if (targetCoordinate == null || hasReachedTarget()) {
+        // Normál mozgási logika
+        if (isHungry() && targetCoordinate != null && hasReachedTarget()) {
+            eat();
+        } else if (isThirsty() && targetCoordinate != null && hasReachedTarget()) {
+            drink();
+            System.out.println(this.getClass().getSimpleName() + " ivott és most pihen.");
+        } else if (isThirsty()) {
+            findWater();
+        } else if (targetCoordinate == null || hasReachedTarget()) {
             generateRandomTarget();
         }
-        moveTo(targetCoordinate,gs);
+        moveTo(targetCoordinate, gs);
     }
-
-    @Override
-    public boolean hasReachedTarget() {
-        int dx = targetCoordinate.getPosX() - actualCoordinate.getPosX();
-        int dy = targetCoordinate.getPosY() - actualCoordinate.getPosY();
-        return Math.sqrt(dx * dx + dy * dy) < 5;
-    }
-
-    @Override
-    public void generateRandomTarget() {
-        int randomX = (int) (Math.random() * 40 * TILE_SIZE); // Adjust map size as needed
-        int randomY = (int) (Math.random() * 20 * TILE_SIZE);
-        targetCoordinate = new Coordinate(randomX, randomY);
-    }
-
-    @Override
-    public void moveTo(Coordinate target, GameSpeed gs) {
-        int speedInPx = (int) (gs.getMulti() * 1); // A játék sebességéhez igazítva
-        //int speedInPx = (int) (baseSpeed * Game.getGameSpeed().getMulti()); // Sebesség a játék sebességéhez igazítva
-
-        int deltaX = target.getPosX() - actualCoordinate.getPosX();
-        int deltaY = target.getPosY() - actualCoordinate.getPosY();
-
-        int stepX = (int) Math.signum(deltaX); // -1, 0 vagy 1
-        int stepY = (int) Math.signum(deltaY); // -1, 0 vagy 1
-
-        int nextX = actualCoordinate.getPosX() + stepX * speedInPx;
-        int nextY = actualCoordinate.getPosY() + stepY * speedInPx;
-
-        if (Math.abs(deltaX) <= Math.abs(stepX * speedInPx)) {
-            nextX = target.getPosX();
-        }
-        if (Math.abs(deltaY) <= Math.abs(stepY * speedInPx)) {
-            nextY = target.getPosY();
-        }
-
-        decreaseHunger(gs.getMulti());
-        decreaseThirst(gs.getMulti());
-        
-
-        actualCoordinate = new Coordinate(nextX, nextY);
-        updateHitbox();
-        int actTileX = nextX/TILE_SIZE;
-        int actTileY = nextY/TILE_SIZE ;
-        addVisitedWater(actTileX, actTileY);
-        addVisitedFood(actTileX, actTileY);
-        if ( food.size() != 0 || drink.size() != 0) {
-            //System.out.println(food.size() + " " + drink.size());
-        }
-        //System.out.println(this.getClass().getSimpleName() + " aktuális pozíciója: (" + actTileX + ", " + actTileY + ")");
-    }
-
 
 }

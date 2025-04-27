@@ -180,6 +180,7 @@ public class Game implements Runnable {
         // playing.gameMap.updateJeeps(); // Jeepek frissítése
         playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
         // gamePanel.repaint();
+    
 
     }
 
