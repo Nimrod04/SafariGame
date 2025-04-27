@@ -23,7 +23,9 @@ public abstract class Herbivore extends Animal {
     }
 
     @Override
-    public void moveTo(GameSpeed gs) {
+    public void moveTo(GameSpeed gs,List<Animal> herbivores) {
+        waterLevel = 100.0;
+        foodLevel = 100.0;
         if(isHungry() && targetCoordinate != null && hasReachedTarget()){
             nap = false;
             eat();

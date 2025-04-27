@@ -201,7 +201,10 @@ public class GameMap {
 
                 // Állat mozgása
                 // Állat mozgása
-                animal.moveTo(gameSpeed);
+                ArrayList<Animal> novenyevok = new ArrayList<>();
+                novenyevok.addAll(elephants);
+                novenyevok.addAll(gazelles);
+                animal.moveTo(gameSpeed, novenyevok);
 
                 // Aktuális csempe koordináták
                 int actTileX = animal.actualCoordinate.getPosX() / TILE_SIZE;

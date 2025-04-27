@@ -57,7 +57,7 @@ public abstract class Animal {
         napTime = 0;
         this.hitbox = calculateHitbox(); // Hitbox inicializálása
     }
-
+    /*
     public Animal(int x, int y) {
         this.lifetime = (int) (Math.random() * 7) + 5;
         age = 0;
@@ -71,7 +71,7 @@ public abstract class Animal {
         nap = false;
         napTime = 0;
         this.hitbox = calculateHitbox(); // Hitbox inicializálása
-    }
+    }*/
 
 
 
@@ -113,7 +113,7 @@ public abstract class Animal {
     }
 
     public void decreaseHunger(double multiplier) {
-        foodLevel -= 0.05 * multiplier;
+        foodLevel -= 5 * multiplier;
         if (foodLevel < 0) {
             foodLevel = 0;
             //this.isAlive = false; // Az állat meghal, ha az éhségszint 0
@@ -194,7 +194,7 @@ public abstract class Animal {
         return false;
     };// esetleg true/false értékkel
 
-    public void moveTo(GameSpeed gs) {
+    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
         //System.out.println("kaja szint: "+foodLevel);
         if (/*isHungry()*/false){
             findFood();
@@ -204,7 +204,7 @@ public abstract class Animal {
             if (!isHungry()){
 
             }
-            System.out.println("ragadozo ivott--------------------------------------" + waterLevel);
+            System.out.println("RAGADOZO IVOTT--------------------------------------" + waterLevel);
         }
         else if(isThirsty()){
             findWater();
