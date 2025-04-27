@@ -13,7 +13,39 @@ public abstract class Carnivore extends Animal {
     @Override
     public void eat() {
         foodLevel = 100.0;
-        System.out.println("Ragadozó evett------------------------------------");
+        isEating = true;
+        lastEatTime = System.currentTimeMillis();
+        System.out.println(this.getClass().getSimpleName() + " evett és most pihen.");
+    }
+
+    @Override
+    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
+        if (isEating) {
+            // Ellenőrizzük, hogy eltelt-e 20 másodperc
+            if (System.currentTimeMillis() - lastEatTime >= 20000) {
+                isEating = false; // Pihenés vége
+                System.out.println(this.getClass().getSimpleName() + " újra elindul.");
+            } else {
+                return; // Az állat nem mozog, amíg pihen
+            }
+        }
+
+        // Normál mozgási logika
+        if (isHungry()) {
+            hunt(herbivores, gs); // Vadászat logika
+        } else if (isThirsty()) {
+            findWater(); // Vízkeresés logika
+        } else if (targetCoordinate == null || hasReachedTarget()) {
+            generateRandomTarget(); // Véletlenszerű cél generálása
+        }
+        moveTo(targetCoordinate, gs); // Mozgás a cél felé
+    }
+
+    private void eatHerbivore(Animal herbivore) {
+        herbivore.isAlive = false; // A növényevő meghal
+        this.eat(); // A ragadozó evés logikája
+        System.out.println(
+                this.getClass().getSimpleName() + " megette a(z) " + herbivore.getClass().getSimpleName() + "-t.");
     }
 
     @Override
@@ -48,41 +80,6 @@ public abstract class Carnivore extends Animal {
         if (hasReachedTarget()) {
             eatHerbivore(closestHerbivore);
         }
-    }
-
-    private void eatHerbivore(Animal herbivore) {
-        herbivore.isAlive = false; // A növényevő meghal
-        this.foodLevel = 100.0; // A ragadozó éhségszintje feltöltődik
-        System.out.println(
-                this.getClass().getSimpleName() + " megette a(z) " + herbivore.getClass().getSimpleName() + "-t.");
-    }
-
-    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
-        waterLevel = 100.0;
-        if (isHungry()) {
-            System.out.println("ÉHEEES-----");
-            hunt(herbivores, gs);
-            System.out.println("Cél: " + targetCoordinate.getPosY() + " " + targetCoordinate.getPosY());
-        } else if (isThirsty()) {
-            findWater();
-        } else if (isInGroup()) {
-            // Csoportkövetési logika
-            Animal leader = group.get(0);
-            if (leader != this) {
-                int offsetX = (int) (Math.random() * 40 - 20);
-                int offsetY = (int) (Math.random() * 40 - 20);
-                Coordinate targetWithOffset = new Coordinate(
-                    leader.actualCoordinate.getPosX() + offsetX,
-                    leader.actualCoordinate.getPosY() + offsetY
-                );
-                moveTo(targetWithOffset, gs);
-                return;
-            }
-        }
-        if (targetCoordinate == null || hasReachedTarget()) {
-            generateRandomTarget();
-        }
-        moveTo(targetCoordinate, gs);
     }
 
 }

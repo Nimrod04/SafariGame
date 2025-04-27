@@ -24,6 +24,9 @@ public abstract class Animal {
     protected double waterLevel;
     protected int maxWater;
 
+    protected boolean isEating = false;
+    protected long lastEatTime = 0;
+
     ArrayList<int[]> food;;
     ArrayList<int[]> drink;;
     protected List<Animal> group;
