@@ -20,11 +20,17 @@ public abstract class Carnivore extends Animal {
 
     @Override
     public void moveTo(GameSpeed gs, List<Animal> herbivores) {
+        if (isThirsty() || isHungry()){
+            isEating = false;
+        }
         if (isEating) {
             // Ellenőrizzük, hogy eltelt-e 20 másodperc
             if (System.currentTimeMillis() - lastEatTime >= 20000) {
                 isEating = false; // Pihenés vége
                 System.out.println(this.getClass().getSimpleName() + " újra elindul.");
+                closestHerbivore = null;
+                closestDistance = Double.MAX_VALUE;
+                foodLevel = 100.0;
             } else {
                 return; // Az állat nem mozog, amíg pihen
             }
@@ -44,8 +50,7 @@ public abstract class Carnivore extends Animal {
     private void eatHerbivore(Animal herbivore) {
         herbivore.isAlive = false; // A növényevő meghal
         this.eat(); // A ragadozó evés logikája
-        System.out.println(
-                this.getClass().getSimpleName() + " megette a(z) " + herbivore.getClass().getSimpleName() + "-t.");
+        System.out.println(this.getClass().getSimpleName() + " megette a(z) " + herbivore.getClass().getSimpleName() + "-t.");
     }
 
     @Override
@@ -58,7 +63,8 @@ public abstract class Carnivore extends Animal {
             generateRandomTarget(); // Ha nincs növényevő, mozogjon véletlenszerűen
             return;
         }
-
+        closestHerbivore = null;
+        closestDistance = Double.MAX_VALUE;
         for (Animal herbivore : herbivores) {
             if (!herbivore.isAlive)
                 continue; // Csak az élő növényevők számítanak

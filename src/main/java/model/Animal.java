@@ -116,7 +116,7 @@ public abstract class Animal {
     }
 
     public void decreaseHunger(double multiplier) {
-        foodLevel -= 5 * multiplier;
+        foodLevel -= 0.05 * multiplier;
         if (foodLevel < 0) {
             foodLevel = 0;
             //this.isAlive = false; // Az állat meghal, ha az éhségszint 0

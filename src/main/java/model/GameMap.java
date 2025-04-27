@@ -204,6 +204,7 @@ public class GameMap {
                 ArrayList<Animal> novenyevok = new ArrayList<>();
                 novenyevok.addAll(elephants);
                 novenyevok.addAll(gazelles);
+                System.out.println("Növényevők száma: "+ novenyevok.size());
                 animal.moveTo(gameSpeed, novenyevok);
 
                 // Aktuális csempe koordináták

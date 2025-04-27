@@ -26,6 +26,7 @@ public abstract class Herbivore extends Animal {
             if (System.currentTimeMillis() - lastEatTime >= 20000) {
                 isEating = false; // Pihenés vége
                 System.out.println(this.getClass().getSimpleName() + " újra elindul.");
+                foodLevel = 100.0;
             } else {
                 return; // Az állat nem mozog, amíg pihen
             }
