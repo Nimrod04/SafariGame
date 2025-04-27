@@ -187,9 +187,7 @@ public abstract class Animal {
         g.fillRect(drawX, drawY, drawWidth, drawHeight);
     }
 
-    public void eat(){
-
-    };
+    public abstract void eat();
     public void drink(){
         waterLevel = 100.0;
     };
