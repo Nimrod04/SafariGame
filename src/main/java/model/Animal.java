@@ -35,6 +35,7 @@ public abstract class Animal {
 
     protected static final int GROUP_RADIUS = 200;
 
+
     //public List<int[]> visitedLocations = new ArrayList<>();
 
     private static final int HITBOX_RADIUS = 1;
@@ -45,8 +46,9 @@ public abstract class Animal {
     public boolean nap;
     public int napTime;
 
+
     public Animal() {
-        this.lifetime = (int) (Math.random() * 7) + 5;
+        this.lifetime = 30*60*20;
         age = 0;
         targetCoordinate = null;
         int posX = (int) (Math.random() * 40 * TILE_SIZE);
@@ -117,10 +119,16 @@ public abstract class Animal {
     }
 
     public void decreaseHunger(double multiplier) {
-        foodLevel -= 0.05 * multiplier;
+        int ageMul = 1;
+        if (12000<age && age <= 24000){
+            ageMul = 2;
+        } else if(24000<age){
+            ageMul = 3;
+        }
+        foodLevel -= 0.05 * multiplier * ageMul;
         if (foodLevel < 0) {
             foodLevel = 0;
-            //this.isAlive = false; // Az állat meghal, ha az éhségszint 0
+            this.isAlive = false;
         }
     }
     public void decreaseThirst(double multiplier) {
@@ -205,40 +213,15 @@ public abstract class Animal {
         return false;
     };// esetleg true/false értékkel
 
-    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
-        //System.out.println("kaja szint: "+foodLevel);
-        if (/*isHungry()*/false){
-            findFood();
-        }
-        else if(isThirsty() && targetCoordinate != null && hasReachedTarget()){
-            drink();
-            if (!isHungry()){
+    public abstract void update(GameSpeed gs, List<Animal> herbivores);
 
-            }
-            System.out.println("RAGADOZO IVOTT--------------------------------------" + waterLevel);
+    public void gettingOld(GameSpeed gs){
+        age += gs.getMulti();
+        if(age >= lifetime){
+            isAlive = false;
         }
-        else if(isThirsty()){
-            findWater();
-        }
-        else if (isInGroup()) {
-            Animal leader = group.get(0);
-            if (leader != this) {
-                int offsetX = (int) (Math.random() * 40 - 20); //eltolás  -20 és 20 között
-                int offsetY = (int) (Math.random() * 40 - 20);
-                Coordinate targetWithOffset = new Coordinate(
-                        leader.actualCoordinate.getPosX() + offsetX,
-                        leader.actualCoordinate.getPosY() + offsetY
-                );
-                moveTo(targetWithOffset, gs);
-                return;
-            }
-        }
-        if (targetCoordinate == null || hasReachedTarget()) {
-            generateRandomTarget();
-        }
-        moveTo(targetCoordinate,gs);
+        //System.out.println(age);
     }
-
 
     public void moveTo(Coordinate target, GameSpeed gs) {
         int speedInPx = (int) (gs.getMulti() * 1); // A játék sebességéhez igazítva
@@ -275,6 +258,7 @@ public abstract class Animal {
 
 
     public boolean hasReachedTarget() {
+
         int dx = targetCoordinate.getPosX() - actualCoordinate.getPosX();
         int dy = targetCoordinate.getPosY() - actualCoordinate.getPosY();
         return Math.sqrt(dx * dx + dy * dy) < 5;
@@ -327,6 +311,15 @@ public abstract class Animal {
     public boolean isInGroup() {
         return group != null && !group.isEmpty();
     }
+
+    public boolean isAdult(){
+        if (age >=10000){
+            return true;
+        }
+        return false;
+    }
+
+
 
 
 }

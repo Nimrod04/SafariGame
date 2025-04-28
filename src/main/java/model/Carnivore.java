@@ -2,8 +2,6 @@ package model;
 
 import java.util.List;
 
-import static view.GamePanel.TILE_SIZE;
-
 public abstract class Carnivore extends Animal {
     private List<String> preySpecies;
 
@@ -19,7 +17,7 @@ public abstract class Carnivore extends Animal {
     }
 
     @Override
-    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
+    public void update(GameSpeed gs, List<Animal> herbivores) {
         if (isThirsty() || isHungry()){
             isEating = false;
         }
@@ -35,16 +33,37 @@ public abstract class Carnivore extends Animal {
                 return; // Az állat nem mozog, amíg pihen
             }
         }
+        if (isThirsty() && hasReachedTarget()){
+            drink();
+        }
 
         // Normál mozgási logika
         if (isHungry()) {
             hunt(herbivores, gs); // Vadászat logika
         } else if (isThirsty()) {
             findWater(); // Vízkeresés logika
-        } else if (targetCoordinate == null || hasReachedTarget()) {
+        } else if (isInGroup()) {
+            Animal leader = group.get(0);
+            if (leader != this) {
+                int offsetX = (int) (Math.random() * 40 - 20); //eltolás  -20 és 20 között
+                int offsetY = (int) (Math.random() * 40 - 20);
+                Coordinate targetWithOffset = new Coordinate(
+                        leader.targetCoordinate.getPosX() + offsetX,
+                        leader.targetCoordinate.getPosY() + offsetY
+                );
+                moveTo(targetWithOffset,gs);
+                return;
+            }
+        }
+
+
+
+        if (targetCoordinate == null || hasReachedTarget()) {
             generateRandomTarget(); // Véletlenszerű cél generálása
         }
         moveTo(targetCoordinate, gs); // Mozgás a cél felé
+
+        gettingOld(gs);
     }
 
     private void eatHerbivore(Animal herbivore) {

@@ -174,11 +174,15 @@ public class GameMap {
             if (true) {
                 // Ha az állat nincs csoportban, hozzunk létre egy új csoportot
                 if (!animal.isInGroup()) {
+
                     List<Animal> newGroup = new ArrayList<>();
                     newGroup.add(animal);
                     for (Animal other : animals) {
                         if (animal != other && !other.isInGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
                             other.joinGroup(newGroup);
+                            System.out.println("BELÉP----------------------------------");
+                            System.out.println(newGroup.size());
+
                         }
                     }
                 }
@@ -187,7 +191,7 @@ public class GameMap {
                 for (Animal other : animals) {
                     if (animal != other && animal.isInGroup() && other.isInGroup() &&
                         animal.getGroup() != other.getGroup() && animal.distanceTo(other) <= Animal.GROUP_RADIUS) {
-                        
+
                         // Egyesítsük a két csoportot
                         List<Animal> group1 = animal.getGroup();
                         List<Animal> group2 = other.getGroup();
@@ -199,33 +203,35 @@ public class GameMap {
                     }
                 }
 
-                // Állat mozgása
-                // Állat mozgása
-                ArrayList<Animal> novenyevok = new ArrayList<>();
-                novenyevok.addAll(elephants);
-                novenyevok.addAll(gazelles);
-                System.out.println("Növényevők száma: "+ novenyevok.size());
-                animal.moveTo(gameSpeed, novenyevok);
-
-                // Aktuális csempe koordináták
-                int actTileX = animal.actualCoordinate.getPosX() / TILE_SIZE;
-                int actTileY = animal.actualCoordinate.getPosY() / TILE_SIZE;
-
-                // Étel és víz hozzáadása
-                animal.addVisitedWater(getTile(actTileX, actTileY), actTileX, actTileY);
-                animal.addFoodIfEdible(getTile(actTileX, actTileY), actTileX, actTileY);
-
-                if (animal.waterLevel == 0 || animal.foodLevel == 0) {
-                    // Debug üzenet
-                    //System.out.println(animal.waterLevel + " " + animal.foodLevel);
-                }
             }
         }
-
-        System.out.println(animals.size());
+        moveAnimals(animals);
+        //System.out.println(animals.size());
     }
 
+public void moveAnimals(List<? extends Animal> animals)
+{
+    for (Animal animal : animals){
+        ArrayList<Animal> novenyevok = new ArrayList<>();
+        novenyevok.addAll(elephants);
+        novenyevok.addAll(gazelles);
+        //System.out.println("Növényevők száma: "+ novenyevok.size());
+        animal.update(gameSpeed, novenyevok);
 
+        // Aktuális csempe koordináták
+        int actTileX = animal.actualCoordinate.getPosX() / TILE_SIZE;
+        int actTileY = animal.actualCoordinate.getPosY() / TILE_SIZE;
+
+        // Étel és víz hozzáadása
+        animal.addVisitedWater(getTile(actTileX, actTileY), actTileX, actTileY);
+        animal.addFoodIfEdible(getTile(actTileX, actTileY), actTileX, actTileY);
+
+        if (animal.waterLevel == 0 || animal.foodLevel == 0) {
+            // Debug üzenet
+            //System.out.println(animal.waterLevel + " " + animal.foodLevel);
+        }
+    }
+}
 
     public Tile getTile(int x, int y) {
         return map[x][y];

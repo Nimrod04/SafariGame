@@ -722,7 +722,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
-            e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
         }
         for (Gazelle e : gameMap.gazelles) {
             g.drawImage(tileImages.get(Tile.TileType.GAZELLE),
@@ -730,7 +730,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
             // Hitbox kirajzolása
-            e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
 
         }
         for (Lion e : gameMap.lions) {
@@ -739,7 +739,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
             // Hitbox kirajzolása
-            e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
 
         }
         for (Cheetah e : gameMap.cheetahs) {
@@ -752,7 +752,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     TILE_SIZE, TILE_SIZE, this);
 
             // Hitbox kirajzolása
-            e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
         }
 
         for (Camera camera : gameMap.getCameras()) {
