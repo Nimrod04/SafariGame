@@ -38,10 +38,24 @@ public abstract class Herbivore extends Animal {
             System.out.println(this.getClass().getSimpleName() + " ivott és most pihen.");
         } else if (isThirsty()) {
             findWater();
-        } else if (targetCoordinate == null || hasReachedTarget()) {
+        }else if (isInGroup()) {
+            Animal leader = group.get(0);
+            if (leader != this) {
+                int offsetX = (int) (Math.random() * 40 - 20); //eltolás  -20 és 20 között
+                int offsetY = (int) (Math.random() * 40 - 20);
+                Coordinate targetWithOffset = new Coordinate(
+                        leader.targetCoordinate.getPosX() + offsetX,
+                        leader.targetCoordinate.getPosY() + offsetY
+                );
+                moveTo(targetWithOffset,gs);
+                return;
+            }
+        }
+
+        if (targetCoordinate == null || hasReachedTarget()) {
             generateRandomTarget();
         }
-        moveTO(targetCoordinate, gs);
+        moveTo(targetCoordinate, gs);
         gettingOld(gs);
     }
 

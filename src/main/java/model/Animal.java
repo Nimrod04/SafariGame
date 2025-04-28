@@ -213,51 +213,17 @@ public abstract class Animal {
         return false;
     };// esetleg true/false értékkel
 
-    public void update(GameSpeed gs, List<Animal> herbivores) {
-        //System.out.println("kaja szint: "+foodLevel);
-        if (/*isHungry()*/false){
-            findFood();
-        }
-        else if(isThirsty() && targetCoordinate != null && hasReachedTarget()){
-            drink();
-            if (!isHungry()){
-
-            }
-            System.out.println("RAGADOZO IVOTT--------------------------------------" + waterLevel);
-        }
-        else if(isThirsty()){
-            findWater();
-        }
-        else if (isInGroup()) {
-            Animal leader = group.get(0);
-            if (leader != this) {
-                int offsetX = (int) (Math.random() * 40 - 20); //eltolás  -20 és 20 között
-                int offsetY = (int) (Math.random() * 40 - 20);
-                Coordinate targetWithOffset = new Coordinate(
-                        leader.actualCoordinate.getPosX() + offsetX,
-                        leader.actualCoordinate.getPosY() + offsetY
-                );
-                moveTO(targetWithOffset, gs);
-                return;
-            }
-        }
-        if (targetCoordinate == null || hasReachedTarget()) {
-            generateRandomTarget();
-        }
-        moveTO(targetCoordinate,gs);
-
-
-    }
+    public abstract void update(GameSpeed gs, List<Animal> herbivores);
 
     public void gettingOld(GameSpeed gs){
         age += gs.getMulti();
         if(age >= lifetime){
             isAlive = false;
         }
-        System.out.println(age);
+        //System.out.println(age);
     }
 
-    public void moveTO(Coordinate target, GameSpeed gs) {
+    public void moveTo(Coordinate target, GameSpeed gs) {
         int speedInPx = (int) (gs.getMulti() * 1); // A játék sebességéhez igazítva
         //int speedInPx = (int) (baseSpeed * Game.getGameSpeed().getMulti()); // Sebesség a játék sebességéhez igazítva
 
@@ -292,6 +258,7 @@ public abstract class Animal {
 
 
     public boolean hasReachedTarget() {
+
         int dx = targetCoordinate.getPosX() - actualCoordinate.getPosX();
         int dy = targetCoordinate.getPosY() - actualCoordinate.getPosY();
         return Math.sqrt(dx * dx + dy * dy) < 5;
@@ -346,7 +313,7 @@ public abstract class Animal {
     }
 
     public boolean isAdult(){
-        if (age >=800){
+        if (age >=10000){
             return true;
         }
         return false;
