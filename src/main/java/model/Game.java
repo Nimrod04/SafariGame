@@ -17,7 +17,6 @@ public class Game implements Runnable {
     private DifficultyLevel difficulty;
     private SafariPark park;
     private Finance finance;
-    private GameState state;
 
     private JPanel gamePanel;
     private Playing playing;
@@ -43,7 +42,6 @@ public class Game implements Runnable {
         this.difficulty = level;
         this.park = new SafariPark();
         this.finance = new Finance();
-        this.state = GameState.READY;
 
         this.gameSpeed = new GameSpeed(); // GameSpeed inicializálása
         this.gameSpeed.startTimer(); // Időzítő indítása

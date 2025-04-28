@@ -26,7 +26,7 @@ public class Jeep {
     private Map<String, Integer> seenAnimals; // Állatok nyilvántartása
     private Coordinate startPosition; // Jeep aktuális pozíciója
 
-
+    
     private long lastMoveTime = 0; // Az utolsó mozgás ideje
     public Jeep(Coordinate startPosition, List<Coordinate> path) {
         this.road = path; // Az útvonal, amin halad
@@ -45,6 +45,11 @@ public class Jeep {
     public void satisfaction(int n){
         satisfactionPoint += n;
     }
+
+    public Map<String, Integer> getSeenAnimals() {
+        return seenAnimals;
+    }
+    
     private void tourLengthInc(){
         tourLength++;
     }
