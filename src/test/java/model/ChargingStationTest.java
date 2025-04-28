@@ -49,6 +49,20 @@ public class ChargingStationTest {
         assertEquals(5, hitbox.width); // HITBOX_SIZE
         assertEquals(5, hitbox.height); // HITBOX_SIZE
     }
+    @Test
+    void testSetPosition2() {
+        // Arrange
+        Coordinate initialPosition = new Coordinate(5, 10);
+        ChargingStation chargingStation = new ChargingStation(initialPosition);
+
+        Coordinate newPosition = new Coordinate(15, 20);
+
+        // Act
+        chargingStation.setPosition(newPosition);
+
+        // Assert
+        assertEquals(newPosition, chargingStation.getPosition());
+    }
 
     @Test
     void testDrawHitbox() {

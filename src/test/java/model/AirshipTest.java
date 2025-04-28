@@ -4,11 +4,15 @@
  */
 package model;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  *
@@ -148,5 +152,263 @@ public class AirshipTest {
         airship.moveToNextWaypoint();
 
         assertEquals(initialPos, airship.getPosition());
+    }
+
+    @Test
+    void testIsClickedOnTile2() {
+        assertTrue(airship.isClickedOnTile(5, 5)); // Matches the initial position
+        assertFalse(airship.isClickedOnTile(6, 6)); // Does not match the initial position
+    }
+
+    @Test
+    void testDrawHitbox() {
+        // Arrange
+        Graphics mockGraphics = mock(Graphics.class);
+        int cameraX = 2;
+        int cameraY = 2;
+        int tileSize = 10;
+
+        // Act
+        airship.drawHitbox(mockGraphics, cameraX, cameraY, tileSize);
+
+        // Assert
+        int drawX = (airship.getHitbox().x - cameraX) * tileSize;
+        int drawY = (airship.getHitbox().y - cameraY) * tileSize;
+        int drawWidth = airship.getHitbox().width * tileSize;
+        int drawHeight = airship.getHitbox().height * tileSize;
+
+        // Verify border color and rectangle drawing
+        verify(mockGraphics).setColor(new Color(0, 0, 128, 120));
+        verify(mockGraphics).drawRect(drawX, drawY, drawWidth, drawHeight);
+
+        // Verify fill color and rectangle filling
+        verify(mockGraphics).setColor(new Color(173, 216, 230, 60));
+        verify(mockGraphics).fillRect(drawX, drawY, drawWidth, drawHeight);
+    }
+
+    @Test
+    void testGetBoundingBox() {
+        // Act
+        Rectangle boundingBox = airship.getBoundingBox();
+
+        // Assert
+        assertNotNull(boundingBox);
+        assertEquals(3, boundingBox.x); // 5 - 2 (position.x - 2)
+        assertEquals(3, boundingBox.y); // 5 - 2 (position.y - 2)
+        assertEquals(5, boundingBox.width); // Fixed width of 5
+        assertEquals(5, boundingBox.height); // Fixed height of 5
+    }
+
+    @Test
+    void testMoveToNextWaypoint() {
+        airship.addWaypoint(new Coordinate(6, 5));
+        airship.setMoving(true);
+
+        long initialTime = System.currentTimeMillis();
+        airship.moveToNextWaypoint(); // Simulate movement
+        Coordinate newPosition = airship.getPosition();
+
+        assertEquals(6, newPosition.getPosX());
+        assertEquals(5, newPosition.getPosY());
+        assertTrue(System.currentTimeMillis() >= initialTime); // Ensure delay logic is respected
+    }
+
+    @Test
+    void testIsClickedOnTile() {
+        assertTrue(airship.isClickedOnTile(5, 5));
+        assertFalse(airship.isClickedOnTile(6, 6));
+    }
+
+    @Test
+    void testMoveToNextWaypoint_NoWaypoints() {
+        // Arrange
+        airship.setMoving(true);
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(initialPosition, airship.getPosition()); // No movement should occur
+    }
+
+    @Test
+    void testMoveToNextWaypoint_NotMoving() {
+        // Arrange
+        airship.setMoving(false);
+        airship.addWaypoint(new Coordinate(6, 5));
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(initialPosition, airship.getPosition()); // No movement should occur
+    }
+
+    @Test
+    void testMoveToNextWaypoint_ReachesWaypoint() {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(6, 5));
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(6, airship.getPosition().getPosX());
+        assertEquals(5, airship.getPosition().getPosY());
+        assertTrue(airship.getWaypoints().contains(new Coordinate(6, 5))); // Waypoint should be re-added
+    }
+
+    @Test
+    void testMoveToNextWaypoint_MovesTowardsWaypoint() {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(7, 7));
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(6, airship.getPosition().getPosX()); // Moves one step towards X
+        assertEquals(6, airship.getPosition().getPosY()); // Moves one step towards Y
+    }
+
+    @Test
+    void testMoveToNextWaypoint_WithDelay() throws InterruptedException {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(6, 5));
+
+        // Act
+        airship.moveToNextWaypoint(); // First move
+        Thread.sleep(334); // Wait for move delay
+        airship.moveToNextWaypoint(); // Second move
+
+        // Assert
+        assertEquals(6, airship.getPosition().getPosX());
+        assertEquals(5, airship.getPosition().getPosY());
+    }
+
+    @Test
+    void testMoveToNextWaypoint_NoWaypoints2() {
+        // Arrange
+        airship.setMoving(true);
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(initialPosition, airship.getPosition()); // No movement should occur
+    }
+
+    @Test
+    void testMoveToNextWaypoint_NotMoving2() {
+        // Arrange
+        airship.setMoving(false);
+        airship.addWaypoint(new Coordinate(6, 5));
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(initialPosition, airship.getPosition()); // No movement should occur
+    }
+    @Test
+void testIsWaypoint_True() {
+    // Arrange
+    Coordinate waypoint = new Coordinate(5, 5);
+    airship.addWaypoint(waypoint);
+
+    // Act
+    boolean result = airship.isWaypoint(5, 5);
+
+    // Assert
+    assertTrue(result); // Az eredménynek igaznak kell lennie
+}
+
+@Test
+void testIsWaypoint_False() {
+    // Arrange
+    Coordinate waypoint = new Coordinate(5, 5);
+    airship.addWaypoint(waypoint);
+
+    // Act
+    boolean result = airship.isWaypoint(6, 6);
+
+    // Assert
+    assertFalse(result); // Az eredménynek hamisnak kell lennie
+}
+
+    @Test
+    void testMoveToNextWaypoint_ReachesWaypoint2() {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(5, 5)); // Same as initial position
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(5, airship.getPosition().getPosX());
+        assertEquals(5, airship.getPosition().getPosY());
+        assertTrue(airship.getWaypoints().contains(new Coordinate(5, 5))); // Waypoint should be re-added
+    }
+
+    @Test
+    void testMoveToNextWaypoint_MovesTowardsWaypoint_XDirection() {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(7, 5)); // Target is to the right
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(6, airship.getPosition().getPosX()); // Moves one step towards X
+        assertEquals(5, airship.getPosition().getPosY()); // Y remains the same
+    }
+
+    @Test
+    void testMoveToNextWaypoint_MovesTowardsWaypoint_YDirection() {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(5, 7)); // Target is below
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(5, airship.getPosition().getPosX()); // X remains the same
+        assertEquals(6, airship.getPosition().getPosY()); // Moves one step towards Y
+    }
+
+    @Test
+    void testMoveToNextWaypoint_WithDelay2() throws InterruptedException {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(6, 5));
+
+        // Act
+        airship.moveToNextWaypoint(); // First move
+        Thread.sleep(334); // Wait for move delay
+        airship.moveToNextWaypoint(); // Second move
+
+        // Assert
+        assertEquals(6, airship.getPosition().getPosX());
+        assertEquals(5, airship.getPosition().getPosY());
+    }
+
+    @Test
+    void testMoveToNextWaypoint_DiagonalMovement() {
+        // Arrange
+        airship.setMoving(true);
+        airship.addWaypoint(new Coordinate(7, 7)); // Target is diagonally up-right
+
+        // Act
+        airship.moveToNextWaypoint();
+
+        // Assert
+        assertEquals(6, airship.getPosition().getPosX()); // Moves one step towards X
+        assertEquals(6, airship.getPosition().getPosY()); // Moves one step towards Y
     }
 }
