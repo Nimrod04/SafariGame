@@ -35,6 +35,7 @@ public abstract class Animal {
 
     protected static final int GROUP_RADIUS = 200;
 
+
     //public List<int[]> visitedLocations = new ArrayList<>();
 
     private static final int HITBOX_RADIUS = 1;
@@ -45,8 +46,9 @@ public abstract class Animal {
     public boolean nap;
     public int napTime;
 
+
     public Animal() {
-        this.lifetime = (int) (Math.random() * 7) + 5;
+        this.lifetime = 30*60*20;
         age = 0;
         targetCoordinate = null;
         int posX = (int) (Math.random() * 40 * TILE_SIZE);
@@ -117,10 +119,16 @@ public abstract class Animal {
     }
 
     public void decreaseHunger(double multiplier) {
-        foodLevel -= 0.05 * multiplier;
+        int ageMul = 1;
+        if (12000<age && age <= 24000){
+            ageMul = 2;
+        } else if(24000<age){
+            ageMul = 3;
+        }
+        foodLevel -= 0.05 * multiplier * ageMul;
         if (foodLevel < 0) {
             foodLevel = 0;
-            //this.isAlive = false; // Az állat meghal, ha az éhségszint 0
+            this.isAlive = false;
         }
     }
     public void decreaseThirst(double multiplier) {
@@ -205,7 +213,7 @@ public abstract class Animal {
         return false;
     };// esetleg true/false értékkel
 
-    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
+    public void update(GameSpeed gs, List<Animal> herbivores) {
         //System.out.println("kaja szint: "+foodLevel);
         if (/*isHungry()*/false){
             findFood();
@@ -229,18 +237,27 @@ public abstract class Animal {
                         leader.actualCoordinate.getPosX() + offsetX,
                         leader.actualCoordinate.getPosY() + offsetY
                 );
-                moveTo(targetWithOffset, gs);
+                moveTO(targetWithOffset, gs);
                 return;
             }
         }
         if (targetCoordinate == null || hasReachedTarget()) {
             generateRandomTarget();
         }
-        moveTo(targetCoordinate,gs);
+        moveTO(targetCoordinate,gs);
+
+
     }
 
+    public void gettingOld(GameSpeed gs){
+        age += gs.getMulti();
+        if(age >= lifetime){
+            isAlive = false;
+        }
+        System.out.println(age);
+    }
 
-    public void moveTo(Coordinate target, GameSpeed gs) {
+    public void moveTO(Coordinate target, GameSpeed gs) {
         int speedInPx = (int) (gs.getMulti() * 1); // A játék sebességéhez igazítva
         //int speedInPx = (int) (baseSpeed * Game.getGameSpeed().getMulti()); // Sebesség a játék sebességéhez igazítva
 
@@ -327,6 +344,15 @@ public abstract class Animal {
     public boolean isInGroup() {
         return group != null && !group.isEmpty();
     }
+
+    public boolean isAdult(){
+        if (age >=800){
+            return true;
+        }
+        return false;
+    }
+
+
 
 
 }

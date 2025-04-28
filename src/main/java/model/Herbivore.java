@@ -2,8 +2,6 @@ package model;
 
 import java.util.List;
 
-import static view.GamePanel.TILE_SIZE;
-
 public abstract class Herbivore extends Animal {
     private List<Plant> preferredPlants;
 
@@ -20,7 +18,7 @@ public abstract class Herbivore extends Animal {
     }
 
     @Override
-    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
+    public void update(GameSpeed gs, List<Animal> herbivores) {
         if (isEating) {
             // Ellenőrizzük, hogy eltelt-e 20 másodperc
             if (System.currentTimeMillis() - lastEatTime >= 20000) {
@@ -43,7 +41,8 @@ public abstract class Herbivore extends Animal {
         } else if (targetCoordinate == null || hasReachedTarget()) {
             generateRandomTarget();
         }
-        moveTo(targetCoordinate, gs);
+        moveTO(targetCoordinate, gs);
+        gettingOld(gs);
     }
 
 }

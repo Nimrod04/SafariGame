@@ -2,8 +2,6 @@ package model;
 
 import java.util.List;
 
-import static view.GamePanel.TILE_SIZE;
-
 public abstract class Carnivore extends Animal {
     private List<String> preySpecies;
 
@@ -19,7 +17,7 @@ public abstract class Carnivore extends Animal {
     }
 
     @Override
-    public void moveTo(GameSpeed gs, List<Animal> herbivores) {
+    public void update(GameSpeed gs, List<Animal> herbivores) {
         if (isThirsty() || isHungry()){
             isEating = false;
         }
@@ -44,7 +42,9 @@ public abstract class Carnivore extends Animal {
         } else if (targetCoordinate == null || hasReachedTarget()) {
             generateRandomTarget(); // Véletlenszerű cél generálása
         }
-        moveTo(targetCoordinate, gs); // Mozgás a cél felé
+        moveTO(targetCoordinate, gs); // Mozgás a cél felé
+
+        gettingOld(gs);
     }
 
     private void eatHerbivore(Animal herbivore) {
@@ -81,7 +81,7 @@ public abstract class Carnivore extends Animal {
         }
 
         targetCoordinate = closestHerbivore.getCoordinate();
-        moveTo(targetCoordinate, gs);
+        moveTO(targetCoordinate, gs);
 
         if (hasReachedTarget()) {
             eatHerbivore(closestHerbivore);

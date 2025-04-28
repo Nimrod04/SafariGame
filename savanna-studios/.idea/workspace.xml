@@ -4,18 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8af74687-0ba7-4cb2-b3ba-7d994c868b1a" name="Changes" comment="" />
+    <list default="true" id="8af74687-0ba7-4cb2-b3ba-7d994c868b1a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../src/main/java/model/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/model/Animal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/model/Carnivore.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/model/Carnivore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/model/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/model/GameMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/model/Herbivore.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/model/Herbivore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/view/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/java/view/GamePanel.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2ugZgdKP9zKvcFCLnDIKDZ66442" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -26,9 +32,9 @@
     "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "animalFinish",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/User/Desktop/Egyetem/Tanulas/4. Félév/SzoftTech/savanna-studios"
+    "last_opened_file_path": "D:/Iskola/Tanulas/4. Félév/SzoftTech/fejlesztes/savanna-studios"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
