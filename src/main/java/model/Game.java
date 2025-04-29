@@ -108,6 +108,11 @@ public class Game implements Runnable {
             visitorQueue.add(newVisitor); // Új látogató hozzáadása a várólistához
 
             playing.changeVisitorCount(playing.gameMap.getJeeps().size(), visitorQueue.size());
+            int herb = playing.gameMap.elephants.size()+playing.gameMap.gazelles.size();
+            playing.changeHerbivoreCount(herb);
+            int carni = playing.gameMap.lions.size()+playing.gameMap.cheetahs.size();
+            playing.changeCarnivoreCount(carni);
+
             System.out.println("New visitor added! Total visitors in queue: " + visitorQueue.size());
             lastVisitorAddedTime = currentGameTime; // Idő frissítése
         }
