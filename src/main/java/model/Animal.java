@@ -258,10 +258,12 @@ public abstract class Animal {
 
 
     public boolean hasReachedTarget() {
-
-        int dx = targetCoordinate.getPosX() - actualCoordinate.getPosX();
-        int dy = targetCoordinate.getPosY() - actualCoordinate.getPosY();
-        return Math.sqrt(dx * dx + dy * dy) < 5;
+        if (targetCoordinate != null){
+            int dx = targetCoordinate.getPosX() - actualCoordinate.getPosX();
+            int dy = targetCoordinate.getPosY() - actualCoordinate.getPosY();
+            return Math.sqrt(dx * dx + dy * dy) < 5;
+        }
+        return true;
     }
 
     public void generateRandomTarget() {
