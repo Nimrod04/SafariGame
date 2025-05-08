@@ -99,78 +99,85 @@ public class GamePanel extends JPanel implements KeyListener {
                 }
 
                 for (Animal animal : gameMap.getAllAnimals()) {
-                    // System.out.println("Hitbox: " + animal.getHitbox());
-                    // Hitbox középső csempéjének kiszámítása
-                    int centerTileX = (animal.getHitbox().x + TILE_SIZE) / TILE_SIZE; // Középső csempe X koordinátája
-                    int centerTileY = (animal.getHitbox().y + TILE_SIZE) / TILE_SIZE; // Középső csempe Y koordinátája
+                    if (!playing.isBuilding()) {
 
-                    // System.out.println("Center Tile: " + centerTileX + ", " + centerTileY);
-                    // System.out.println("Mouse Tile: " + mouseTileX + ", " + mouseTileY);
+                        // System.out.println("Hitbox: " + animal.getHitbox());
+                        // Hitbox középső csempéjének kiszámítása
+                        int centerTileX = (animal.getHitbox().x + TILE_SIZE) / TILE_SIZE; // Középső csempe X
+                                                                                          // koordinátája
+                        int centerTileY = (animal.getHitbox().y + TILE_SIZE) / TILE_SIZE; // Középső csempe Y
+                                                                                          // koordinátája
 
-                    // Csak akkor érzékeljük a kattintást, ha az a középső csempére esik
-                    int tolerance = 1; // Tolerancia csempe egységekben
-                    if (Math.abs(centerTileX - mouseTileX) <= tolerance
-                            && Math.abs(centerTileY - mouseTileY) <= tolerance) {
-                        System.out.println(selectedRanger);
-                        if (selectedRanger != null) {
-                            // Ha van kiválasztott Ranger, az állatot eladjuk
-                            System.out.println("Animal sold: " + animal.getClass().getSimpleName());
-                            playing.getFinance().increase(animal.getPrice()); // Pénz hozzáadása
-                            playing.refreshBalance(); // Pénz frissítése a UI-n
-                            gameMap.removeAnimal(animal); // Állat eltávolítása a térképről
-                            selectedRanger = null; // Ranger deselect
-                            renderMap();
-                            repaint();
-                        } else {
-                            System.out.println("Animal clicked: " + animal.getClass().getSimpleName());
+                        // System.out.println("Center Tile: " + centerTileX + ", " + centerTileY);
+                        // System.out.println("Mouse Tile: " + mouseTileX + ", " + mouseTileY);
 
-                            // Egyedi panel létrehozása az éhség és szomjúság csíkokhoz
-                            JPanel panel = new JPanel() {
-                                @Override
-                                protected void paintComponent(Graphics g) {
-                                    super.paintComponent(g);
+                        // Csak akkor érzékeljük a kattintást, ha az a középső csempére esik
+                        int tolerance = 1; // Tolerancia csempe egységekben
+                        if (Math.abs(centerTileX - mouseTileX) <= tolerance
+                                && Math.abs(centerTileY - mouseTileY) <= tolerance) {
+                            System.out.println(selectedRanger);
+                            if (selectedRanger != null) {
+                                // Ha van kiválasztott Ranger, az állatot eladjuk
+                                System.out.println("Animal sold: " + animal.getClass().getSimpleName());
+                                playing.getFinance().increase(animal.getPrice()); // Pénz hozzáadása
+                                playing.refreshBalance(); // Pénz frissítése a UI-n
+                                gameMap.removeAnimal(animal); // Állat eltávolítása a térképről
+                                selectedRanger = null; // Ranger deselect
+                                renderMap();
+                                repaint();
+                            } else {
+                                System.out.println("Animal clicked: " + animal.getClass().getSimpleName());
 
-                                    // Éhség szöveg
-                                    g.setColor(Color.BLACK);
-                                    g.drawString("Éhség:", 10, 25);
+                                // Egyedi panel létrehozása az éhség és szomjúság csíkokhoz
+                                JPanel panel = new JPanel() {
+                                    @Override
+                                    protected void paintComponent(Graphics g) {
+                                        super.paintComponent(g);
 
-                                    // Éhség csík (zöld)
-                                    int hungerWidth = (int) (animal.getFoodLevel() / 100.0 * 200); // 200px széles csík
-                                    g.setColor(Color.GREEN);
-                                    g.fillRect(60, 10, hungerWidth, 20);
-                                    g.setColor(Color.BLACK);
-                                    g.drawRect(60, 10, 200, 20); // Keret
+                                        // Éhség szöveg
+                                        g.setColor(Color.BLACK);
+                                        g.drawString("Éhség:", 10, 25);
 
-                                    // Szomjúság szöveg
-                                    g.setColor(Color.BLACK);
-                                    g.drawString("Víz:", 10, 55);
+                                        // Éhség csík (zöld)
+                                        int hungerWidth = (int) (animal.getFoodLevel() / 100.0 * 200); // 200px széles
+                                                                                                       // csík
+                                        g.setColor(Color.GREEN);
+                                        g.fillRect(60, 10, hungerWidth, 20);
+                                        g.setColor(Color.BLACK);
+                                        g.drawRect(60, 10, 200, 20); // Keret
 
-                                    // Szomjúság csík (kék)
-                                    int thirstWidth = (int) (animal.getWaterLevel() / 100.0 * 200); // 200px széles csík
-                                    g.setColor(Color.BLUE);
-                                    g.fillRect(60, 40, thirstWidth, 20);
-                                    g.setColor(Color.BLACK);
-                                    g.drawRect(60, 40, 200, 20); // Keret
-                                }
+                                        // Szomjúság szöveg
+                                        g.setColor(Color.BLACK);
+                                        g.drawString("Víz:", 10, 55);
 
-                                @Override
-                                public Dimension getPreferredSize() {
-                                    return new Dimension(280, 80); // Panel mérete
-                                }
-                            };
+                                        // Szomjúság csík (kék)
+                                        int thirstWidth = (int) (animal.getWaterLevel() / 100.0 * 200); // 200px széles
+                                                                                                        // csík
+                                        g.setColor(Color.BLUE);
+                                        g.fillRect(60, 40, thirstWidth, 20);
+                                        g.setColor(Color.BLACK);
+                                        g.drawRect(60, 40, 200, 20); // Keret
+                                    }
 
-                            // Állat információinak megjelenítése
-                            String message = String.format(
-                                    "Faj: %s\nÉrték: %d$",
-                                    animal.getClass().getSimpleName(),
-                                    animal.getPrice());
+                                    @Override
+                                    public Dimension getPreferredSize() {
+                                        return new Dimension(280, 80); // Panel mérete
+                                    }
+                                };
 
-                            JOptionPane.showMessageDialog(GamePanel.this, new Object[] { message, panel },
-                                    "Állat Információ",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            return;
+                                // Állat információinak megjelenítése
+                                String message = String.format(
+                                        "Faj: %s\nÉrték: %d$",
+                                        animal.getClass().getSimpleName(),
+                                        animal.getPrice());
+
+                                JOptionPane.showMessageDialog(GamePanel.this, new Object[] { message, panel },
+                                        "Állat Információ",
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                return;
+                            }
+
                         }
-
                     }
                 }
                 // Airship
@@ -423,7 +430,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                // Gazella
+                //Gazella
                 if (playing != null && playing.isBuyingGazelle()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -431,8 +438,12 @@ public class GamePanel extends JPanel implements KeyListener {
                     if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
                             if (playing.getFinance().getBalance() >= Gazelle.PRICE) {
-                                // Gazella hozzáadása a játéktérhez
-                                gameMap.addGazelle(new Gazelle());
+                                //Gazella hozzáadása a játéktérhez
+                                Gazelle g = new Gazelle();
+                                int posX = tileX * TILE_SIZE;
+                                int posY = tileY * TILE_SIZE;
+                                g.setActualCoordinate(new Coordinate(posX, posY));
+                                gameMap.addGazelle(g);
                                 playing.getFinance().decrease(Gazelle.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
@@ -445,7 +456,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     }
                 }
 
-                // Elefánt
+                //Elefánt
                 if (playing != null && playing.isBuyingElephant()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -453,8 +464,12 @@ public class GamePanel extends JPanel implements KeyListener {
                     if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
                             if (playing.getFinance().getBalance() >= Elephant.PRICE) {
-                                // Gazella hozzáadása a játéktérhez
-                                gameMap.addElephant(new Elephant());
+                                //Elefánt hozzáadása a játéktérhez
+                                Elephant g = new Elephant();
+                                int posX = tileX * TILE_SIZE;
+                                int posY = tileY * TILE_SIZE;
+                                g.setActualCoordinate(new Coordinate(posX, posY));
+                                gameMap.addElephant(g);
                                 playing.getFinance().decrease(Elephant.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
@@ -466,7 +481,7 @@ public class GamePanel extends JPanel implements KeyListener {
                         }
                     }
                 }
-                // Oroszlán
+                //Oroszlán
                 if (playing != null && playing.isBuyingLion()) {
                     int tileX = (e.getX() / TILE_SIZE) + cameraX;
                     int tileY = (e.getY() / TILE_SIZE) + cameraY;
@@ -474,8 +489,12 @@ public class GamePanel extends JPanel implements KeyListener {
                     if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
                             if (playing.getFinance().getBalance() >= Lion.PRICE) {
-                                // Gazella hozzáadása a játéktérhez
-                                gameMap.addLion(new Lion());
+                                //Oroszlán hozzáadása a játéktérhez
+                                Lion g = new Lion();
+                                int posX = tileX * TILE_SIZE;
+                                int posY = tileY * TILE_SIZE;
+                                g.setActualCoordinate(new Coordinate(posX, posY));
+                                gameMap.addLion(g);
                                 playing.getFinance().decrease(Lion.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
@@ -496,8 +515,12 @@ public class GamePanel extends JPanel implements KeyListener {
                     if (tileX >= 0 && tileX < gameMap.getWidth() && tileY >= 0 && tileY < gameMap.getHeight()) {
                         if (gameMap.getTile(tileX, tileY).getType() == Tile.TileType.SAND) {
                             if (playing.getFinance().getBalance() >= Cheetah.PRICE) {
-                                // Gazella hozzáadása a játéktérhez
-                                gameMap.addCheetah(new Cheetah());
+                                //Gepárd hozzáadása a játéktérhez
+                                Cheetah g = new Cheetah();
+                                int posX = tileX * TILE_SIZE;
+                                int posY = tileY * TILE_SIZE;
+                                g.setActualCoordinate(new Coordinate(posX, posY));
+                                gameMap.addCheetah(g);
                                 playing.getFinance().decrease(Cheetah.PRICE);
                                 playing.refreshBalance();
                                 renderMap();
@@ -722,7 +745,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosX() - cameraX * TILE_SIZE,
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
-            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            // e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
         }
         for (Gazelle e : gameMap.gazelles) {
             g.drawImage(tileImages.get(Tile.TileType.GAZELLE),
@@ -730,7 +753,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
             // Hitbox kirajzolása
-            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            // e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
 
         }
         for (Lion e : gameMap.lions) {
@@ -739,7 +762,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     e.getCoordinate().getPosY() - cameraY * TILE_SIZE,
                     TILE_SIZE, TILE_SIZE, this);
             // Hitbox kirajzolása
-            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            // e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
 
         }
         for (Cheetah e : gameMap.cheetahs) {
@@ -752,7 +775,7 @@ public class GamePanel extends JPanel implements KeyListener {
                     TILE_SIZE, TILE_SIZE, this);
 
             // Hitbox kirajzolása
-            //e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
+            // e.drawHitbox(g, cameraX, cameraY, TILE_SIZE);
         }
 
         for (Camera camera : gameMap.getCameras()) {
