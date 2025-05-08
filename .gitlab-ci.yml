@@ -20,8 +20,6 @@ build:
 test:
   stage: test
   script:
-    - export JAVA_TOOL_OPTIONS="-Djava.awt.headless=true"
-    - mvn test
     - mvn verify
   artifacts:
     paths:
