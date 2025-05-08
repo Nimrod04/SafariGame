@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class GameTest {
     
+    
     @Test
     public void testConstructorAndGetters() {
         Game game = new Game(DifficultyLevel.EASY, "TestSafari");
