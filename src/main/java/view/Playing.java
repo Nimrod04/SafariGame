@@ -1202,6 +1202,22 @@ public class Playing extends javax.swing.JFrame {
     public void changeVisitorCount(int jeepCnt,int cnt){
         visitorCount.setText(String.format("Jeep: %d/?? Visitor : %d/??", jeepCnt,cnt));
     }
+    public boolean isBuilding(){
+        return buildingChargingStation ||
+           buildingCamera ||
+           buildingDrone ||
+           buildingRoad ||
+           buildingAirship ||
+           buildingGrass ||
+           buildingTree ||
+           buildingLake ||
+           buyingGazelle ||
+           buyingElephant ||
+           buyingLion ||
+           buyingGepard ||
+           hiringStaff ||
+           buyingJeeps;
+    }
 
 
     public void resetAllBools() {

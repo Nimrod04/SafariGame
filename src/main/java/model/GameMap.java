@@ -30,7 +30,7 @@ public class GameMap {
     private ArrayList<Camera> cameras;
     private ArrayList<ChargingStation> chargingStations;
     private ArrayList<Drone> drones;
-    private List<Airship> airships; // Airship-ek tárolása
+    private List<Airship> airships;
     private ArrayList<Ranger> rangers;
 
     private ArrayList<Coordinate> roads; // Az utak pozícióinak tárolása
