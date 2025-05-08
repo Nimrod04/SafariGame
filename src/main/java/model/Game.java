@@ -248,4 +248,7 @@ public class Game implements Runnable {
              */
         }
     }
+    public Playing getPlaying() {
+        return playing;
+    }
 }
