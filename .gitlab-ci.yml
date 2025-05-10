@@ -85,5 +85,5 @@ pages:
     expire_in: 1 day
   only:
     - master
-    - Dokumentáció
+    #- Dokumentáció
 
