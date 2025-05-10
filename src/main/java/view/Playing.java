@@ -1202,6 +1202,16 @@ public class Playing extends javax.swing.JFrame {
         return buyingJeeps;
     }
 
+
+    public void changeVisitorCount(int jeepCnt,int cnt){
+        visitorCount.setText(String.format("Jeep: %d/%d Visitor : %d/%d", jeepCnt,difficulty.getReqJeep(),cnt,difficulty.getReqVisitor()));
+        if (jeepCnt >= difficulty.getReqJeep() && cnt >= difficulty.getReqVisitor()){
+            visitorCount.setForeground(new Color(0, 51, 0));
+        } else {
+            visitorCount.setForeground(Color.BLACK);
+        }
+    }
+
     public void changeHerbivoreCount(int count) {
         herbiCount.setText(String.format("Herbivore %d/%d ",count, difficulty.getReqHerb()));
         if (count >= difficulty.getReqHerb()){
@@ -1213,27 +1223,20 @@ public class Playing extends javax.swing.JFrame {
     public void changeCarnivoreCount(int count) {
         carniCount.setText(String.format("Carnivore %d/%d ",count,difficulty.getReqCarn()));
         if (count >= difficulty.getReqCarn()){
-            herbiCount.setForeground(new Color(0, 51, 0));
+            carniCount.setForeground(new Color(0, 51, 0));
         } else {
-            herbiCount.setForeground(Color.BLACK);
+            carniCount.setForeground(Color.BLACK);
         }
     }
     public void changeMoneyCount() {
-        moneyCount.setText(String.format("$$$ -  %.2f/%d ",this.getFinance().getBalance(),difficulty.getReqMoney()));
-        if (this.getFinance().getBalance() >= difficulty.getReqMoney()){
-            herbiCount.setForeground(new Color(0, 51, 0));
+        moneyCount.setText(String.format("%.2f/%d ",this.getFinance().getBalance(),difficulty.getReqMoney()));
+        if (this.getFinance().getBalance() >= Double.parseDouble(difficulty.getReqMoney()+"")){
+            moneyCount.setForeground(new Color(0, 51, 0));
         } else {
-            herbiCount.setForeground(Color.BLACK);
+            moneyCount.setForeground(Color.BLACK);
         }
     }
-    public void changeVisitorCount(int jeepCnt,int cnt){
-        visitorCount.setText(String.format("Jeep: %d/%d Visitor : %d/%d", jeepCnt,difficulty.getReqJeep(),cnt,difficulty.getReqVisitor()));
-        if (jeepCnt >= difficulty.getReqJeep() && cnt >= difficulty.getReqVisitor()){
-            herbiCount.setForeground(new Color(0, 51, 0));
-        } else {
-            herbiCount.setForeground(Color.BLACK);
-        }
-    }
+
 
 
 
