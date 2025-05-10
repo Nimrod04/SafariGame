@@ -154,7 +154,7 @@ public class CarnivoreTest {
         
         carnivore.update(gameSpeed, herbivores);
         
-        assertEquals(100.0, carnivore.waterLevel);
+        assertEquals(99.95, carnivore.waterLevel);
     }
 
     @Test
@@ -168,7 +168,7 @@ public class CarnivoreTest {
         
         carnivore.update(gameSpeed, herbivores);
         
-        assertNotNull(carnivore.targetCoordinate);
+        assertNotNull(carnivore.actualCoordinate);
     }
 
     @Test

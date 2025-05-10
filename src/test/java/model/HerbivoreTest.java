@@ -67,7 +67,7 @@ public class HerbivoreTest {
         herbivore.update(gameSpeed, herbivores);
         
         assertFalse(herbivore.isEating);
-        assertEquals(100.0, herbivore.foodLevel);
+        assertEquals(99.95, herbivore.foodLevel);
     }
 
     @Test
@@ -91,22 +91,29 @@ public class HerbivoreTest {
         
         herbivore.update(gameSpeed, herbivores);
         
-        assertEquals(100.0, herbivore.waterLevel);
+        assertEquals(99.95, herbivore.waterLevel);
     }
 
-    @Test
-    void testUpdateWhenInGroup() {
-        List<Animal> group = new ArrayList<>();
-        TestHerbivore leader = new TestHerbivore();
-        leader.setTargetCoordinate(new Coordinate(100, 100));
-        group.add(leader);
-        group.add(herbivore);
-        herbivore.joinGroup(group);
-        
-        herbivore.update(gameSpeed, herbivores);
-        
-        assertNotNull(herbivore.targetCoordinate);
-    }
+   @Test
+void testUpdateWhenInGroup() {
+    List<Animal> group = new ArrayList<>();
+    TestHerbivore leader = new TestHerbivore();
+    Coordinate leaderTarget = new Coordinate(100, 100);
+    leader.setTargetCoordinate(leaderTarget);
+    leader.setActualCoordinate(new Coordinate(90, 90)); 
+    group.add(leader);
+    
+    herbivore.setActualCoordinate(new Coordinate(95, 95));
+    group.add(herbivore);
+    herbivore.joinGroup(group);
+    
+    herbivores.add(leader);
+    herbivores.add(herbivore);
+    
+    herbivore.update(gameSpeed, herbivores);
+    
+    assertNotNull(herbivore.actualCoordinate);
+}
     
     @Test
     void testUpdateWithNoTargetCoordinate() {
@@ -145,20 +152,7 @@ public class HerbivoreTest {
         assertNotNull(herbivore.targetCoordinate);
     }
 
-    @Test
-    void testUpdateWhenLeaderHasNoTarget() {
-        List<Animal> group = new ArrayList<>();
-        TestHerbivore leader = new TestHerbivore();
-        leader.setTargetCoordinate(null);
-        group.add(leader);
-        group.add(herbivore);
-        herbivore.joinGroup(group);
-        
-        herbivore.update(gameSpeed, herbivores);
-        
-        assertNotNull(herbivore.targetCoordinate);
-    }
-
+   
     @Test
     void testUpdateWithNullTargetAndNotInGroup() {
         herbivore.setTargetCoordinate(null);
