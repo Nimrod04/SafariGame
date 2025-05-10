@@ -30,6 +30,7 @@ import model.Lion;
 import model.TimeIntensity;
 import model.Tree;
 import model.WaterBody;
+import model.DifficultyLevel;
 
 /**
  *
@@ -67,6 +68,8 @@ public class Playing extends javax.swing.JFrame {
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
     public GameMap gameMap;
+
+    public DifficultyLevel difficulty;
 
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
@@ -290,12 +293,13 @@ public class Playing extends javax.swing.JFrame {
         this.inRoadShop = inRoadShop;
     }
 
-    public Playing(Game game) {
+    public Playing(Game game,DifficultyLevel difficulty) {
         this.balance = new Finance();
         this.game = game;
         initComponents();
         this.gameMap = ((GamePanel)gamePanel).getGameMap();
         refreshBalance();
+        this.difficulty = difficulty;
 
         timeIntensity = TimeIntensity.NORMAL;
 
@@ -1197,16 +1201,40 @@ public class Playing extends javax.swing.JFrame {
     public boolean isBuyingJeeps() {
         return buyingJeeps;
     }
-    public void changeVisitorCount(int jeepCnt,int cnt){
-        visitorCount.setText(String.format("Jeep: %d/?? Visitor : %d/??", jeepCnt,cnt));
-    }
+
     public void changeHerbivoreCount(int count) {
-        herbiCount.setText(String.format("Herbivore %d/?? ",count));
+        herbiCount.setText(String.format("Herbivore %d/%d ",count, difficulty.getReqHerb()));
+        if (count >= difficulty.getReqHerb()){
+            herbiCount.setForeground(new Color(0, 51, 0));
+        } else {
+            herbiCount.setForeground(Color.BLACK);
+        }
+    }
+    public void changeCarnivoreCount(int count) {
+        carniCount.setText(String.format("Carnivore %d/%d ",count,difficulty.getReqCarn()));
+        if (count >= difficulty.getReqCarn()){
+            herbiCount.setForeground(new Color(0, 51, 0));
+        } else {
+            herbiCount.setForeground(Color.BLACK);
+        }
+    }
+    public void changeMoneyCount() {
+        moneyCount.setText(String.format("$$$ -  %.2f/%d ",this.getFinance().getBalance(),difficulty.getReqMoney()));
+        if (this.getFinance().getBalance() >= difficulty.getReqMoney()){
+            herbiCount.setForeground(new Color(0, 51, 0));
+        } else {
+            herbiCount.setForeground(Color.BLACK);
+        }
+    }
+    public void changeVisitorCount(int jeepCnt,int cnt){
+        visitorCount.setText(String.format("Jeep: %d/%d Visitor : %d/%d", jeepCnt,difficulty.getReqJeep(),cnt,difficulty.getReqVisitor()));
+        if (jeepCnt >= difficulty.getReqJeep() && cnt >= difficulty.getReqVisitor()){
+            herbiCount.setForeground(new Color(0, 51, 0));
+        } else {
+            herbiCount.setForeground(Color.BLACK);
+        }
     }
 
-    public void changeCarnivoreCount(int count) {
-        carniCount.setText(String.format("Carnivore %d/?? ",count));
-    }
 
 
     public void resetAllBools() {
