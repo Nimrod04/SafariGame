@@ -30,6 +30,7 @@ import model.Lion;
 import model.TimeIntensity;
 import model.Tree;
 import model.WaterBody;
+import model.DifficultyLevel;
 
 /**
  *
@@ -67,6 +68,8 @@ public class Playing extends javax.swing.JFrame {
     private TimeIntensity timeIntensity;
     private Game game; // A Game példány tárolása
     public GameMap gameMap;
+
+    public DifficultyLevel difficulty;
 
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
@@ -290,12 +293,13 @@ public class Playing extends javax.swing.JFrame {
         this.inRoadShop = inRoadShop;
     }
 
-    public Playing(Game game) {
+    public Playing(Game game,DifficultyLevel difficulty) {
         this.balance = new Finance();
         this.game = game;
         initComponents();
         this.gameMap = ((GamePanel)gamePanel).getGameMap();
         refreshBalance();
+        this.difficulty = difficulty;
 
         timeIntensity = TimeIntensity.NORMAL;
 
@@ -640,14 +644,12 @@ public class Playing extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        shopButton.setBackground(new java.awt.Color(255, 255, 255));
         shopButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 shopButtonActionPerformed(evt);
             }
         });
 
-        hireButton.setBackground(new java.awt.Color(255, 255, 255));
         hireButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 hireButtonActionPerformed(evt);
@@ -662,21 +664,18 @@ public class Playing extends javax.swing.JFrame {
         dateLabel.setText("2025.03.19");
         dateLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        roundButton2.setBackground(new java.awt.Color(255, 255, 255));
         roundButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roundButton2ActionPerformed(evt);
             }
         });
 
-        roundButton3.setBackground(new java.awt.Color(255, 255, 255));
         roundButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roundButton3ActionPerformed(evt);
             }
         });
 
-        roundButton4.setBackground(new java.awt.Color(255, 255, 255));
         roundButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roundButton4ActionPerformed(evt);
@@ -800,8 +799,8 @@ public class Playing extends javax.swing.JFrame {
                     .addGroup(gamePanelLayout.createSequentialGroup()
                         .addComponent(roundIconPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(moneyCount, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(256, 256, 256))
+                        .addComponent(moneyCount, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(gamePanelLayout.createSequentialGroup()
                         .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -809,20 +808,23 @@ public class Playing extends javax.swing.JFrame {
                                 .addComponent(roundIconPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE))
                             .addComponent(roundIconPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(gamePanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(carniCount, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(herbiCount)
-                                    .addGroup(gamePanelLayout.createSequentialGroup()
-                                        .addComponent(visitorCount)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(264, 264, 264))))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gamePanelLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(275, 275, 275)))))
+                                .addGap(275, 275, 275))
+                            .addGroup(gamePanelLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(gamePanelLayout.createSequentialGroup()
+                                        .addComponent(carniCount, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(gamePanelLayout.createSequentialGroup()
+                                        .addGroup(gamePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(herbiCount, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                                            .addComponent(visitorCount, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(264, 264, 264)))))))
                 .addComponent(miniMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(91, 91, 91))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gamePanelLayout.createSequentialGroup()
@@ -1199,8 +1201,15 @@ public class Playing extends javax.swing.JFrame {
     public boolean isBuyingJeeps() {
         return buyingJeeps;
     }
+
+
     public void changeVisitorCount(int jeepCnt,int cnt){
-        visitorCount.setText(String.format("Jeep: %d/?? Visitor : %d/??", jeepCnt,cnt));
+        visitorCount.setText(String.format("Jeep: %d/%d Visitor : %d/%d", jeepCnt,difficulty.getReqJeep(),cnt,difficulty.getReqVisitor()));
+        if (jeepCnt >= difficulty.getReqJeep() && cnt >= difficulty.getReqVisitor()){
+            visitorCount.setForeground(new Color(0, 51, 0));
+        } else {
+            visitorCount.setForeground(Color.BLACK);
+        }
     }
     public boolean isBuilding(){
         return buildingChargingStation ||
@@ -1218,6 +1227,33 @@ public class Playing extends javax.swing.JFrame {
            hiringStaff ||
            buyingJeeps;
     }
+
+    public void changeHerbivoreCount(int count) {
+        herbiCount.setText(String.format("Herbivore %d/%d ",count, difficulty.getReqHerb()));
+        if (count >= difficulty.getReqHerb()){
+            herbiCount.setForeground(new Color(0, 51, 0));
+        } else {
+            herbiCount.setForeground(Color.BLACK);
+        }
+    }
+    public void changeCarnivoreCount(int count) {
+        carniCount.setText(String.format("Carnivore %d/%d ",count,difficulty.getReqCarn()));
+        if (count >= difficulty.getReqCarn()){
+            carniCount.setForeground(new Color(0, 51, 0));
+        } else {
+            carniCount.setForeground(Color.BLACK);
+        }
+    }
+    public void changeMoneyCount() {
+        moneyCount.setText(String.format("%.2f/%d ",this.getFinance().getBalance(),difficulty.getReqMoney()));
+        if (this.getFinance().getBalance() >= Double.parseDouble(difficulty.getReqMoney()+"")){
+            moneyCount.setForeground(new Color(0, 51, 0));
+        } else {
+            moneyCount.setForeground(Color.BLACK);
+        }
+    }
+
+
 
 
     public void resetAllBools() {

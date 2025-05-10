@@ -46,7 +46,7 @@ public class Game implements Runnable {
         this.gameSpeed = new GameSpeed(); // GameSpeed inicializálása
         this.gameSpeed.startTimer(); // Időzítő indítása
 
-        playing = new Playing(this);
+        playing = new Playing(this,difficulty);
         playing.setSafariName(safariName);
         playing.setVisible(true);
         gamePanel = playing.getJPanel();
@@ -108,6 +108,12 @@ public class Game implements Runnable {
             visitorQueue.add(newVisitor); // Új látogató hozzáadása a várólistához
 
             playing.changeVisitorCount(playing.gameMap.getJeeps().size(), visitorQueue.size());
+            int herb = playing.gameMap.elephants.size()+playing.gameMap.gazelles.size();
+            playing.changeHerbivoreCount(herb);
+            int carni = playing.gameMap.lions.size()+playing.gameMap.cheetahs.size();
+            playing.changeCarnivoreCount(carni);
+            playing.changeMoneyCount();
+
             System.out.println("New visitor added! Total visitors in queue: " + visitorQueue.size());
             lastVisitorAddedTime = currentGameTime; // Idő frissítése
         }
