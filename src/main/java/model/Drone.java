@@ -4,12 +4,18 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Drone osztály egy drónt reprezentál a játékban, amely képes mozogni, waypointokat követni,
+ * visszatérni a töltőállomásra, és körözni a töltőállomás körül. Minden drónnak van pozíciója,
+ * hitboxa, töltőállomása, valamint útvonalpontjai.
+ */
 public class Drone {
 
     private Coordinate position;
     private Rectangle hitbox;
     private static final int HITBOX_RADIUS = 1; // 3x3 hitbox (radius of 1)
     private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1);
+    /** A drón ára. */
     public static final int PRICE = 1500;
 
     private ChargingStation chargingStation;
@@ -25,6 +31,12 @@ public class Drone {
 
     private GameSpeed gameSpeed;
 
+    /**
+     * Létrehoz egy új Drone példányt a megadott pozícióval, töltőállomással és játéksebességgel.
+     * @param position a drón kezdőpozíciója
+     * @param chargingStation a drónhoz tartozó töltőállomás
+     * @param gameSpeed a játék sebessége
+     */
     public Drone(Coordinate position, ChargingStation chargingStation, GameSpeed gameSpeed) {
         this.position = position;
         this.chargingStation = chargingStation;
@@ -32,40 +44,74 @@ public class Drone {
         this.hitbox = calculateHitbox();
     }
 
+    /**
+     * Visszaadja a drón aktuális pozícióját.
+     * @return a drón pozíciója
+     */
     public Coordinate getPosition() {
         return position;
     }
 
+    /**
+     * Beállítja a drón pozícióját, és újraszámolja a hitboxot.
+     * @param position az új pozíció
+     */
     public void setPosition(Coordinate position) {
         this.position = position;
         this.hitbox = calculateHitbox();
     }
 
+    /**
+     * Visszaadja a drón hitboxát.
+     * @return a hitboxot reprezentáló Rectangle
+     */
     public Rectangle getHitbox() {
         return hitbox;
     }
 
+    /**
+     * Visszaadja a drónhoz tartozó töltőállomást.
+     * @return a töltőállomás
+     */
     public ChargingStation getChargingStation() {
         return chargingStation;
     }
 
+    /**
+     * Beállítja a drónhoz tartozó töltőállomást.
+     * @param chargingStation az új töltőállomás
+     */
     public void setChargingStation(ChargingStation chargingStation) {
         this.chargingStation = chargingStation;
     }
 
+    /**
+     * Visszaadja a drón útvonalpontjainak listáját.
+     * @return a waypointok listája
+     */
     public List<Coordinate> getWaypoints() {
         return waypoints;
     }
 
+    /**
+     * Hozzáad egy waypointot a drón útvonalához.
+     * @param waypoint a hozzáadandó waypoint
+     */
     public void addWaypoint(Coordinate waypoint) {
         waypoints.add(waypoint);
     }
 
+    /**
+     * Törli az összes waypointot.
+     */
     public void clearWaypoints() {
         waypoints.clear();
     }
 
-    // Körbe mozgatás a charging station körül egy 5x5 négyzeten
+    /**
+     * Körbe mozgatja a drónt a töltőállomás körül egy 5x5-ös négyzet külső kerületén.
+     * A mozgás sebessége a játék sebességétől függ.
+     */
     public void orbitChargingStation() {
         if (chargingStation == null) {
             return;
@@ -111,6 +157,13 @@ public class Drone {
         return new Rectangle(x, y, size, size);
     }
 
+    /**
+     * Kirajzolja a drón hitboxát a megadott grafikus kontextusra.
+     * @param g grafikus kontextus
+     * @param cameraX kamera X pozíciója
+     * @param cameraY kamera Y pozíciója
+     * @param tileSize tile mérete pixelben
+     */
     public void drawHitbox(Graphics g, int cameraX, int cameraY, int tileSize) {
         int drawX = (hitbox.x - cameraX) * tileSize;
         int drawY = (hitbox.y - cameraY) * tileSize;

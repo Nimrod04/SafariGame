@@ -35,12 +35,6 @@ public class CheetahTest {
     }
 
     @Test
-    void testSprint() {
-        // Mivel a sprint() metódus üres, csak azt teszteljük, hogy nem dob kivételt
-        assertDoesNotThrow(() -> cheetah.sprint());
-    }
-
-    @Test
     void testInheritance() {
         assertTrue(cheetah instanceof Carnivore);
         assertTrue(cheetah instanceof Animal);

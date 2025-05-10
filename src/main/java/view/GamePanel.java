@@ -11,23 +11,51 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A GamePanel osztály a játék fő grafikus panelje.
+ * Kezeli a térkép, állatok, járművek, ranger-ek, kamerák, drónok, léghajók és egyéb objektumok kirajzolását,
+ * valamint az egér- és billentyűzeteseményeket, a kamera mozgatását és a játék logikájának egy részét.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető, például a főablakból.
+ */
 public class GamePanel extends JPanel implements KeyListener {
 
+    /** A játék térképét tároló GameMap példány. */
     private final GameMap gameMap;
+
+    /** A játék logikáját kezelő Playing példány. */
     private Playing playing;
+
+    /** A csempe típusokhoz tartozó képek map-je. */
     private final Map<Tile.TileType, Image> tileImages = new HashMap<>();
 
+    /** A csempe mérete pixelben. Ez a mező public static final, így más osztályokból is elérhető. */
     public static final int TILE_SIZE = 64;
+
+    /** A nézet szélessége csempékben. Ez a mező public static final, így más osztályokból is elérhető. */
     public static final int VIEWPORT_WIDTH = 20, VIEWPORT_HEIGHT = 10;
+
+    /** A kamera X pozíciója a térképen. */
     private int cameraX = 0, cameraY = 0;
 
-    private BufferedImage mapImage; // Gyorsítótárazott térkép kép
+    /** Gyorsítótárazott térkép kép. */
+    private BufferedImage mapImage;
+
+    /** A játék frissítéséhez használt időzítő. */
     private Timer gameTimer;
 
-    private Ranger selectedRanger = null; // Kiválasztott ranger
+    /** Az aktuálisan kiválasztott ranger. */
+    private Ranger selectedRanger = null;
 
+    /** Az utak koordinátáit tároló HashMap. */
     private HashMap<Integer, Coordinate> roads = new HashMap<>();
 
+    /**
+     * Létrehoz egy új GamePanel példányt a megadott GameMap és Playing objektummal.
+     * Ez a konstruktor public, így más osztályokból is példányosítható.
+     * @param gameMap a játék térképe
+     * @param p a Playing példány
+     */
     public GamePanel(GameMap gameMap, Playing p) {
         this.playing = p;
         this.gameMap = gameMap;
@@ -665,10 +693,19 @@ public class GamePanel extends JPanel implements KeyListener {
         gameTimer.start();
     }
 
+    /**
+     * Visszaadja a csempe típusokhoz tartozó képek map-jét.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a képeket, például a grafikus felület.
+     * @return a tileImages map
+     */
     public Map<Tile.TileType, Image> getTileImages() {
         return tileImages;
     }
 
+    /**
+     * Kirendereli a térképet egy gyorsítótárazott képre.
+     * Ez a metódus public lehet, hogy más osztályokból is meghívható legyen, például teszteléshez vagy újrarajzoláshoz.
+     */
     public void renderMap() {
         mapImage = new BufferedImage(gameMap.getWidth() * TILE_SIZE, gameMap.getHeight() * TILE_SIZE,
                 BufferedImage.TYPE_INT_ARGB);
@@ -686,6 +723,10 @@ public class GamePanel extends JPanel implements KeyListener {
         g.dispose();
     }
 
+    /**
+     * Betölti a csempe típusokhoz tartozó képeket.
+     * Ez a metódus private, mert csak az osztályon belül használatos.
+     */
     private void loadImages() {
         try {
             tileImages.put(Tile.TileType.ROAD, new ImageIcon(getClass().getResource("/images/dirt.png")).getImage());
@@ -724,6 +765,11 @@ public class GamePanel extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * A panel kirajzolását végzi.
+     * Ez a metódus protected, mert a Swing komponensek így használják a felüldefiniált paintComponent-et.
+     * @param g a grafikus kontextus
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // Vászon törlése
@@ -848,6 +894,11 @@ public class GamePanel extends JPanel implements KeyListener {
 
     }
 
+    /**
+     * A billentyű lenyomásának eseményét kezeli, mozgatja a kamerát.
+     * Ez a metódus public, mert a KeyListener interfész része, így a rendszer hívja meg.
+     * @param e a billentyű esemény
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         boolean moved = false;
@@ -884,30 +935,65 @@ public class GamePanel extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * A billentyű felengedésének eseményét kezeli.
+     * Ez a metódus public, mert a KeyListener interfész része, így a rendszer hívja meg.
+     * @param e a billentyű esemény
+     */
     @Override
     public void keyReleased(KeyEvent e) {
     }
 
+    /**
+     * A billentyű leütésének eseményét kezeli.
+     * Ez a metódus public, mert a KeyListener interfész része, így a rendszer hívja meg.
+     * @param e a billentyű esemény
+     */
     @Override
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * Visszaadja a kamera X pozícióját.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a kamera pozícióját.
+     * @return a kamera X pozíciója
+     */
     public int getCameraX() {
         return cameraX;
     }
 
+    /**
+     * Beállítja a kamera X pozícióját.
+     * Ez a metódus public, hogy más osztályok is módosíthassák a kamera pozícióját.
+     * @param cameraX az új X pozíció
+     */
     public void setCameraX(int cameraX) {
         this.cameraX = cameraX;
     }
 
+    /**
+     * Visszaadja a kamera Y pozícióját.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a kamera pozícióját.
+     * @return a kamera Y pozíciója
+     */
     public int getCameraY() {
         return cameraY;
     }
 
+    /**
+     * Beállítja a kamera Y pozícióját.
+     * Ez a metódus public, hogy más osztályok is módosíthassák a kamera pozícióját.
+     * @param cameraY az új Y pozíció
+     */
     public void setCameraY(int cameraY) {
         this.cameraY = cameraY;
     }
 
+    /**
+     * Visszaadja a GameMap példányt.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a játék térképét.
+     * @return a GameMap példány
+     */
     public GameMap getGameMap() {
         return gameMap;
     }

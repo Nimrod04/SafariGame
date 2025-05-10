@@ -33,44 +33,75 @@ import model.WaterBody;
 import model.DifficultyLevel;
 
 /**
- *
+ * A Playing osztály a játék főablakát és logikáját reprezentálja.
+ * Kezeli a játékpanelt, a minitérképet, a bolt funkciókat, a vásárlásokat, az állapotokat és a játék fő eseményeit.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető.
  * @author nimro
  */
 public class Playing extends javax.swing.JFrame {
 
+    /** A játékos pénzügyi egyenlegét kezelő Finance példány. */
     private Finance balance;
 
+    /** Igaz, ha a biztonsági bolt aktív. */
     public boolean inSecurityShop = false;
+    /** Igaz, ha az állatbolt aktív. */
     public boolean inAnimalShop = false;
+    /** Igaz, ha a növénybolt aktív. */
     public boolean inPlantShop = false;
+    /** Igaz, ha az útépítő bolt aktív. */
     public boolean inRoadShop = false;
 
+    /** Igaz, ha töltőállomás építése folyamatban van. */
     private boolean buildingChargingStation = false;
+    /** Igaz, ha kamera építése folyamatban van. */
     private boolean buildingCamera = false;
+    /** Igaz, ha drón építése folyamatban van. */
     private boolean buildingDrone = false;
+    /** Igaz, ha út építése folyamatban van. */
     private boolean buildingRoad = false;
+    /** Igaz, ha léghajó építése folyamatban van. */
     private boolean buildingAirship = false;
 
+    /** Igaz, ha fű építése folyamatban van. */
     private boolean buildingGrass = false;
+    /** Igaz, ha fa építése folyamatban van. */
     private boolean buildingTree = false;
+    /** Igaz, ha tó építése folyamatban van. */
     private boolean buildingLake = false;
 
+    /** Igaz, ha gazella vásárlása folyamatban van. */
     private boolean buyingGazelle = false;
+    /** Igaz, ha elefánt vásárlása folyamatban van. */
     private boolean buyingElephant = false;
+    /** Igaz, ha oroszlán vásárlása folyamatban van. */
     private boolean buyingLion = false;
+    /** Igaz, ha gepárd vásárlása folyamatban van. */
     private boolean buyingGepard = false;
 
+    /** Igaz, ha jeep vásárlása engedélyezett. */
     private boolean canBuyJeeps = false;
+    /** Igaz, ha jeep vásárlása folyamatban van. */
     private boolean buyingJeeps = false;
+    /** A játékos által vásárolt Jeep példány. */
     private Jeep jeep;
 
+    /** Igaz, ha személyzet felvétele folyamatban van. */
     private boolean hiringStaff = false;
+    /** Az időintenzitás szintje. */
     private TimeIntensity timeIntensity;
+    /** A játék példánya. */
     private Game game; // A Game példány tárolása
+    /** A játék térképét tároló GameMap példány. */
     public GameMap gameMap;
 
+    /** A játék nehézségi szintje. */
     public DifficultyLevel difficulty;
 
+    /**
+     * Beállítja a biztonsági bolt gombjainak eseménykezelőit.
+     */
     private void setSecurityButtonActions() {
         // Alapértelmezett gomb feliratokat és eseménykezelőket állítunk be
         buyButton_1.removeActionListener(buyButton_1.getActionListeners()[0]);
@@ -131,6 +162,9 @@ public class Playing extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Beállítja az állatbolt gombjainak eseménykezelőit.
+     */
     private void setAnimalButtonActions() {
         // Régi eseménykezelők eltávolítása, ha léteznek
         if (buyButton_1.getActionListeners().length > 0) {
@@ -200,6 +234,9 @@ public class Playing extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Beállítja a növénybolt gombjainak eseménykezelőit.
+     */
     private void setPlantButtonActions() {
         // Régi eseménykezelők eltávolítása, ha léteznek
         if (buyButton_1.getActionListeners().length > 0) {
@@ -264,35 +301,60 @@ public class Playing extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Beállítja a szafari nevét a felületen.
+     * @param name a szafari neve
+     */
     public void setSafariName(String name) {
         safariNameLabel.setText(name);
     }
 
+    /**
+     * Visszaadja a játékpanelt JPanel-ként.
+     * @return a játékpanel
+     */
     public JPanel getJPanel() {
         return gamePanel;
     }
 
-    // ...existing code...
+    /**
+     * Frissíti az idő megjelenítését a felületen.
+     * @param time az aktuális idő szövegesen
+     */
     public void updateTime(String time) {
         dateLabel.setText(time); // Az idő megjelenítése a dateLabel-en
     }
 
+    /**
+     * Visszaadja az aktuális időintenzitást.
+     * @return az időintenzitás
+     */
     public TimeIntensity getTimeIntensity() {
         return this.timeIntensity;
     }
 
+    /**
+     * Igaz, ha az útépítő bolt aktív.
+     * @return true, ha aktív
+     */
     public boolean isInRoadShop() {
         return inRoadShop;
     }
 
-// ...existing code...
     /**
-     * Creates new form Playing
+     * Beállítja, hogy az útépítő bolt aktív-e.
+     * @param inRoadShop az új érték
      */
     public void setInRoadShop(boolean inRoadShop) {
         this.inRoadShop = inRoadShop;
     }
 
+    /**
+     * Létrehoz egy új Playing példányt a megadott Game és DifficultyLevel objektummal.
+     * Ez a konstruktor public, így más osztályokból is példányosítható.
+     * @param game a játék példánya
+     * @param difficulty a nehézségi szint
+     */
     public Playing(Game game,DifficultyLevel difficulty) {
         this.balance = new Finance();
         this.game = game;
@@ -353,14 +415,17 @@ public class Playing extends javax.swing.JFrame {
         this.gameMap = ((GamePanel)gamePanel).getGameMap();
     }
 
+    /**
+     * Visszaadja a játékpanelt GamePanel-ként.
+     * @return a GamePanel példány
+     */
     public GamePanel getGamePanel() {
         return (GamePanel) gamePanel;
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * Inicializálja a grafikus komponenseket, gombokat, paneleket.
+     * Ezt a metódust a Form Editor generálja, ne módosítsd kézzel!
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1056,7 +1121,8 @@ public class Playing extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
     /**
-     * @param args the command line arguments
+     * A program belépési pontja, elindítja a játékot.
+     * @param args parancssori argumentumok
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -1086,123 +1152,238 @@ public class Playing extends javax.swing.JFrame {
         /* Create and display the form */
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // --- Változók deklarációja ---
+    /** Állatbolt gomb. */
     private view.ShopButtons buyAnimalsButton;
+    /** Elsődleges vásárlás gomb. */
     private view.ShopButtons buyButton_1;
+    /** Első vásárlás gomb címke. */
     private javax.swing.JLabel buyButton_1Label;
+    /** Másodlagos vásárlás gomb. */
     private view.ShopButtons buyButton_2;
+    /** Második vásárlás gomb címke. */
     private javax.swing.JLabel buyButton_2Label;
+    /** Harmadik vásárlás gomb. */
     private view.ShopButtons buyButton_3;
+    /** Harmadik vásárlás gomb címke. */
     private javax.swing.JLabel buyButton_3Label;
+    /** Negyedik vásárlás gomb. */
     private view.ShopButtons buyButton_4;
+    /** Negyedik vásárlás gomb címke. */
     private javax.swing.JLabel buyButton_4Label;
+    /** Növénybolt gomb. */
     private view.ShopButtons buyPlantsButton;
+    /** Útbolt gomb. */
     private view.ShopButtons buyRoadButton;
+    /** Biztonsági bolt gomb. */
     private view.ShopButtons buySecurityButton;
+    /** Ragadozó számláló címke. */
     private javax.swing.JLabel carniCount;
+    /** Dátum címke. */
     private javax.swing.JLabel dateLabel;
+    /** Játékpanel. */
     private javax.swing.JPanel gamePanel;
+    /** Növényevő számláló címke. */
     private javax.swing.JLabel herbiCount;
+    /** Személyzet felvétel gomb. */
     private view.RoundButton hireButton;
+    /** Jeep vásárlás gomb. */
     private javax.swing.JButton jButton1;
+    /** Fő panel. */
     private javax.swing.JPanel jPanel1;
+    /** Másodlagos panel. */
     private javax.swing.JPanel jPanel2;
+    /** Játékállapot progress bar. */
     private javax.swing.JProgressBar jProgressBar1;
+    /** Minitérkép panel. */
     private javax.swing.JPanel miniMap;
+    /** Pénz számláló címke. */
     private javax.swing.JLabel moneyCount;
+    /** Pénz címke. */
     private javax.swing.JLabel moneyLabel;
+    /** 1x sebesség gomb. */
     private view.RoundButton roundButton2;
+    /** 5x sebesség gomb. */
     private view.RoundButton roundButton3;
+    /** 10x sebesség gomb. */
     private view.RoundButton roundButton4;
+    /** Kilépés gomb. */
     private view.RoundButton roundButton5;
+    /** Látogatók ikon panel. */
     private view.RoundIconPanel roundIconPanel2;
+    /** Ragadozók ikon panel. */
     private view.RoundIconPanel roundIconPanel3;
+    /** Növényevők ikon panel. */
     private view.RoundIconPanel roundIconPanel4;
+    /** Pénz ikon panel. */
     private view.RoundIconPanel roundIconPanel5;
+    /** Szafari név címke. */
     private javax.swing.JLabel safariNameLabel;
+    /** Másodlagos bolt panel. */
     private javax.swing.JPanel secondaryShopPanel;
+    /** Személyzet gomb. */
     private view.RoundButton shopButton;
+    /** Út bolt címke. */
     private javax.swing.JLabel shopLabel1;
+    /** Biztonsági bolt címke. */
     private javax.swing.JLabel shopLabel2;
+    /** Állatbolt címke. */
     private javax.swing.JLabel shopLabel3;
+    /** Növénybolt címke. */
     private javax.swing.JLabel shopLabel4;
+    /** Bolt panel. */
     private javax.swing.JPanel shopPanel;
+    /** Látogatók számláló címke. */
     private javax.swing.JLabel visitorCount;
-    // End of variables declaration//GEN-END:variables
 
+    /**
+     * Igaz, ha út építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingRoad() {
         return buildingRoad;
     }
 
+    /**
+     * Igaz, ha kamera építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingCamera() {
         return buildingCamera;
     }
 
+    /**
+     * Visszaadja a pénzügyi egyenleget kezelő objektumot.
+     * @return a Finance példány
+     */
     public Finance getFinance() {
         return balance;
     }
 
+    /**
+     * Igaz, ha töltőállomás építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingChargingStation() {
         return buildingChargingStation;
     }
 
+    /**
+     * Igaz, ha drón építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingDrone() {
         return buildingDrone;
     }
 
+    /**
+     * Frissíti a pénz egyenleg megjelenítését.
+     */
     public void refreshBalance() {
         moneyLabel.setText(balance.getBalance() + "$");
     }
 
+    /**
+     * Igaz, ha léghajó építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingAirship() {
         return buildingAirship;
     }
 
+    /**
+     * Visszaadja a játék példányát.
+     * @return a Game példány
+     */
     public Game getGame() {
         return this.game;
     }
 
+    /**
+     * Igaz, ha fű építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingGrass() {
         return buildingGrass;
     }
 
+    /**
+     * Igaz, ha fa építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingTree() {
         return buildingTree;
     }
 
+    /**
+     * Igaz, ha tó építése folyamatban van.
+     * @return true, ha építés folyamatban van
+     */
     public boolean isBuildingLake() {
         return buildingLake;
     }
 
+    /**
+     * Igaz, ha gazella vásárlása folyamatban van.
+     * @return true, ha vásárlás folyamatban van
+     */
     public boolean isBuyingGazelle() {
         return buyingGazelle;
     }
 
+    /**
+     * Igaz, ha elefánt vásárlása folyamatban van.
+     * @return true, ha vásárlás folyamatban van
+     */
     public boolean isBuyingElephant() {
         return buyingElephant;
     }
 
+    /**
+     * Igaz, ha oroszlán vásárlása folyamatban van.
+     * @return true, ha vásárlás folyamatban van
+     */
     public boolean isBuyingLion() {
         return buyingLion;
     }
 
+    /**
+     * Igaz, ha gepárd vásárlása folyamatban van.
+     * @return true, ha vásárlás folyamatban van
+     */
     public boolean isBuyingGepard() {
         return buyingGepard;
     }
 
+    /**
+     * Igaz, ha személyzet felvétele folyamatban van.
+     * @return true, ha felvétel folyamatban van
+     */
     public boolean isHiringStaff() {
         return hiringStaff;
     }
 
+    /**
+     * Beállítja, hogy jeep vásárlása engedélyezett-e.
+     * @param canBuyJeeps az új érték
+     */
     public void setCanBuyJeeps(boolean canBuyJeeps) {
         this.canBuyJeeps = canBuyJeeps;
     }
 
+    /**
+     * Igaz, ha jeep vásárlása folyamatban van.
+     * @return true, ha vásárlás folyamatban van
+     */
     public boolean isBuyingJeeps() {
         return buyingJeeps;
     }
 
-
+    /**
+     * Frissíti a látogatók számlálóját.
+     * @param jeepCnt a jeep-ek száma
+     * @param cnt a látogatók száma
+     */
     public void changeVisitorCount(int jeepCnt,int cnt){
         visitorCount.setText(String.format("Jeep: %d/%d Visitor : %d/%d", jeepCnt,difficulty.getReqJeep(),cnt,difficulty.getReqVisitor()));
         if (jeepCnt >= difficulty.getReqJeep() && cnt >= difficulty.getReqVisitor()){
@@ -1211,6 +1392,11 @@ public class Playing extends javax.swing.JFrame {
             visitorCount.setForeground(Color.BLACK);
         }
     }
+
+    /**
+     * Igaz, ha bármilyen építés vagy vásárlás folyamatban van.
+     * @return true, ha folyamatban van
+     */
     public boolean isBuilding(){
         return buildingChargingStation ||
            buildingCamera ||
@@ -1228,6 +1414,10 @@ public class Playing extends javax.swing.JFrame {
            buyingJeeps;
     }
 
+    /**
+     * Frissíti a növényevők számlálóját.
+     * @param count a növényevők száma
+     */
     public void changeHerbivoreCount(int count) {
         herbiCount.setText(String.format("Herbivore %d/%d ",count, difficulty.getReqHerb()));
         if (count >= difficulty.getReqHerb()){
@@ -1236,6 +1426,11 @@ public class Playing extends javax.swing.JFrame {
             herbiCount.setForeground(Color.BLACK);
         }
     }
+
+    /**
+     * Frissíti a ragadozók számlálóját.
+     * @param count a ragadozók száma
+     */
     public void changeCarnivoreCount(int count) {
         carniCount.setText(String.format("Carnivore %d/%d ",count,difficulty.getReqCarn()));
         if (count >= difficulty.getReqCarn()){
@@ -1244,8 +1439,12 @@ public class Playing extends javax.swing.JFrame {
             carniCount.setForeground(Color.BLACK);
         }
     }
+
+    /**
+     * Frissíti a pénz számlálóját.
+     */
     public void changeMoneyCount() {
-        moneyCount.setText(String.format("%.2f/%d ",this.getFinance().getBalance(),difficulty.getReqMoney()));
+        moneyCount.setText(String.format("%.1f$/%d$ ",this.getFinance().getBalance(),difficulty.getReqMoney()));
         if (this.getFinance().getBalance() >= Double.parseDouble(difficulty.getReqMoney()+"")){
             moneyCount.setForeground(new Color(0, 51, 0));
         } else {
@@ -1253,9 +1452,9 @@ public class Playing extends javax.swing.JFrame {
         }
     }
 
-
-
-
+    /**
+     * Visszaállítja az összes logikai változót alaphelyzetbe.
+     */
     public void resetAllBools() {
         inSecurityShop = false;
         inAnimalShop = false;

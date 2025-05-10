@@ -5,13 +5,22 @@
 package model;
 
 /**
- *
- * @author nimro
+ * A Road osztály az utat reprezentálja a játékban.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető.
  */
 public class Road {
 
+    /**
+     * Az út ára.
+     * Ez a mező public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public static final int PRICE = 200;
 
+    /**
+     * Alapértelmezett konstruktor a Road osztályhoz.
+     * Ez a konstruktor public, így más osztályokból is példányosítható.
+     */
     public Road() {
 
     }

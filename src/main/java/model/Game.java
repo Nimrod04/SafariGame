@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * A Game osztály a játék fő logikáját és futását kezeli.
+ * Felelős a játék inicializálásáért, a fő játékhurok futtatásáért, a látogatók és Jeepek kezeléséért,
+ * valamint a játék állapotának frissítéséért és a grafikus felület vezérléséért.
+ */
 public class Game implements Runnable {
 
     private DifficultyLevel difficulty;
@@ -30,14 +35,54 @@ public class Game implements Runnable {
     private Queue<Tourist> visitorQueue;
     private long lastVisitorAddedTime; // Az utolsó látogató hozzáadásának ideje játékbeli időben
 
+    /**
+     * A csempe alapértelmezett mérete. 
+     * Mivel public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public final static int TILES_DEFAULT_SIZE = 16;
+
+    /**
+     * A játék skálázási tényezője.
+     * Mivel public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public final static float SCALE = 4.0f;
+
+    /**
+     * A pálya szélessége csempékben.
+     * Mivel public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public final static int TILES_IN_WIDTH = 20;
+
+    /**
+     * A pálya magassága csempékben.
+     * Mivel public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public final static int TILES_IN_HEIGHT = 12;
+
+    /**
+     * Egy csempe mérete pixelben.
+     * Mivel public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
+
+    /**
+     * A játék teljes szélessége pixelben.
+     * Mivel public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
+
+    /**
+     * A játék teljes magassága pixelben.
+     * Mivel public static final, így az osztályból közvetlenül elérhető, konstans érték.
+     */
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 
+    /**
+     * Létrehoz egy új Game példányt a megadott nehézségi szinttel és szafari névvel.
+     * Inicializálja a játék fő komponenseit, a játéksebességet, a grafikus felületet és a látogatók várólistáját.
+     * @param level a játék nehézségi szintje
+     * @param safariName a szafari neve
+     */
     public Game(DifficultyLevel level, String safariName) {
         this.difficulty = level;
         this.park = new SafariPark();
@@ -94,12 +139,19 @@ public class Game implements Runnable {
         startGameLoop();
     }
 
+    /**
+     * Elindítja a játék fő szálát és a játékhurkot.
+     */
     private void startGameLoop() {
         gameThread = new Thread(this);
         gameThread.start();
 
     }
 
+    /**
+     * Frissíti a játék állapotát: kezeli a látogatók érkezését, a Jeepek indítását, az állatok és Jeepek interakcióit,
+     * valamint a grafikus felület frissítését.
+     */
     public void update() {
         // gameSpeed.changeGameSpeed(playing.getTimeIntensity().getMulti());
         long currentGameTime = gameSpeed.getElapsedTimeInSeconds(); // Játékbeli idő másodpercben
@@ -188,14 +240,29 @@ public class Game implements Runnable {
 
     }
 
+    /**
+     * Visszaadja a látogatók várólistáját.
+     * Ez a metódus public, hogy más osztályok is elérhessék a látogatók sorát, például a játék logikája vagy a grafikus felület.
+     * @return a látogatók várólistája
+     */
     public Queue<Tourist> getVisitors() {
         return visitorQueue;
     }
 
+    /**
+     * Visszaadja a játék GameSpeed objektumát.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a játék aktuális sebességét/időzítését.
+     * @return a GameSpeed példány
+     */
     public GameSpeed getGameSpeed() {
         return this.gameSpeed;
     }
 
+    /**
+     * Elindítja a megadott Jeep-et, ha az nem null.
+     * Ez a metódus public, hogy a játék logikája vagy a grafikus felület is el tudja indítani a Jeep-et.
+     * @param jeep a Jeep példány
+     */
     public void startJeep(Jeep jeep) {
         if (jeep != null) {
             jeep.startMoving(); // Jeep elindítása
@@ -203,6 +270,10 @@ public class Game implements Runnable {
         }
     }
 
+    /**
+     * A játék fő szálának futtatása: kezeli a játékhurkot, az FPS és UPS számolását, valamint a vászon újrarajzolását.
+     * Ez a metódus public, mert a Runnable interfész miatt kívülről is meghívható, amikor a játék szálát elindítjuk.
+     */
     @Override
     public void run() {
         double timePerFrame = 1000000000.0 / FPS_SET; // Idő egy képkockára nanosec-ben
@@ -254,6 +325,12 @@ public class Game implements Runnable {
              */
         }
     }
+
+    /**
+     * Visszaadja a Playing objektumot, amely a játék grafikus felületét kezeli.
+     * Ez a metódus public, hogy más osztályok is elérhessék a Playing példányt, például a grafikus felület vagy a vezérlő logika.
+     * @return a Playing példány
+     */
     public Playing getPlaying() {
         return playing;
     }

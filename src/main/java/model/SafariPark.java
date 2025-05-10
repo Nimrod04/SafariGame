@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * A SafariPark osztály a szafari parkot reprezentálja a játékban.
+ * Kezeli a parkban található entitásokat, növényeket, vízforrásokat, Jeepeket, bejáratot, kijáratot és a térképet.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető.
+ */
 public class SafariPark {
 
     private List<Entity> entities;
@@ -14,14 +20,16 @@ public class SafariPark {
     private Exit exit;
     private Path[][] mapGrid;
 
-
-
     private static final int MAP_SIZE = 10;
     private static final double TREE_PROBABILITY = 0.1;
     private static final double WATER_PROBABILITY = 0.1;
     private static final double BUSH_PROBABILITY = 0.1;
     private static final double GRASS_PROBABILITY = 0.7;
 
+    /**
+     * Alapértelmezett konstruktor a SafariPark osztályhoz.
+     * Ez a konstruktor public, így más osztályokból is példányosítható.
+     */
     public SafariPark() {
         this.entities = new ArrayList<>();
         this.plants = new ArrayList<>();
@@ -32,6 +40,10 @@ public class SafariPark {
         this.exit = new Exit(new Coordinate(MAP_SIZE - 1, MAP_SIZE - 1));
     }
 
+    /**
+     * Legenerálja a park térképét, feltölti növényekkel, vízforrásokkal és beállítja a bejárat/kijárat pozícióját.
+     * Ez a metódus public lehet, hogy más osztályokból is meghívható legyen, például a játék inicializálásakor.
+     */
     public void generateMap() {
         Random random = new Random();
 
@@ -77,16 +89,28 @@ public class SafariPark {
         System.out.println("Térkép generálása kész.");
     }
 
-
-
+    /**
+     * Frissíti az állatokat a parkban.
+     * Ez a metódus public lehet, hogy más osztályokból is meghívható legyen, például a játék logikájából.
+     */
     public void updateAnimals() {
 
     }
 
+    /**
+     * Visszaadja a park térképét.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a térképet, például a grafikus felület vagy a játék logikája.
+     * @return a park térképe (Path mátrix)
+     */
     public Path[][] getMapGrid() {
         return mapGrid;
     }
 
+    /**
+     * Visszaadja a parkban található entitásokat.
+     * Ez a metódus public, hogy más osztályok is lekérhessék az entitások listáját.
+     * @return az entitások listája
+     */
     public List<Entity> getEntities() {
         return entities;
     }
