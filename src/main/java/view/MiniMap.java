@@ -7,13 +7,32 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A MiniMap osztály a játékban egy kicsinyített térképet (minitérképet) jelenít meg.
+ * Megjeleníti a pálya csempéit és az állatokat arányosan lekicsinyítve.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető.
+ */
 public class MiniMap extends JPanel {
+    /** A fő játékpanel példánya, amelyből a térképet és az állatokat lekérdezi. */
     private GamePanel gamePanel;
+
+    /**
+     * Létrehoz egy új MiniMap példányt a megadott GamePanel objektummal.
+     * Ez a konstruktor public, így más osztályokból is példányosítható.
+     * @param gm a fő játékpanel példánya
+     */
     public MiniMap(GamePanel gm) {
         this.gamePanel = gm;
         this.setPreferredSize(new Dimension(318, 255)); // Méret a Playing.java alapján
         //loadImages(); // Képek betöltése
     }
+
+    /**
+     * A panel kirajzolását végzi, megjeleníti a térképet és az állatokat.
+     * Ez a metódus protected, mert a Swing komponensek így használják a felüldefiniált paintComponent-et.
+     * @param g a grafikus kontextus
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -60,6 +79,15 @@ public class MiniMap extends JPanel {
         }
     }
 
+    /**
+     * Egy állat képének kirajzolását végzi a minitérképen.
+     * @param g a grafikus kontextus
+     * @param x az állat X koordinátája a térképen
+     * @param y az állat Y koordinátája a térképen
+     * @param imagePath az állat képének elérési útja
+     * @param scaleX a térkép X irányú méretaránya
+     * @param scaleY a térkép Y irányú méretaránya
+     */
     private void drawAnimal(Graphics g, int x, int y, String imagePath, double scaleX, double scaleY) {
         Image animalImage = new ImageIcon(getClass().getResource(imagePath)).getImage();
         if (animalImage != null) {
@@ -71,8 +99,11 @@ public class MiniMap extends JPanel {
             g.drawImage(animalImage, rectX, rectY, rectWidth, rectHeight, null);
         }
     }
-    
 
+    /**
+     * Frissíti a minitérképet, újrarajzolja a térképet és az állatokat.
+     * Ez a metódus public, hogy más osztályokból is meghívható legyen.
+     */
     public void refresh() {
         gamePanel.renderMap();
         repaint();

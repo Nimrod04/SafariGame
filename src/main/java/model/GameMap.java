@@ -13,6 +13,17 @@ import view.Playing;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * A GameMap osztály a játék térképét és annak elemeit kezeli.
+ * Felelős az állatok, utak, Jeepek, kamerák, töltőállomások, drónok, léghajók és rangerek kezeléséért,
+ * valamint a térkép generálásáért, állatok csoportosításáért, mozgásáért, utak ellenőrzéséért,
+ * útvonal keresésért, valamint a Jeepek és állatok frissítéséért.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető.
+ * <p>
+ * Az osztályon belül több adattag is public, hogy más osztályok közvetlenül elérhessék az állatok listáit (pl. elephants, gazelles, lions, cheetahs),
+ * például a játék logikája vagy a grafikus felület számára.
+ */
 public class GameMap {
     private GameSpeed gameSpeed;
 
@@ -22,9 +33,25 @@ public class GameMap {
     private Random random = new Random();
     private ArrayList<ArrayList<Integer>> data;
 
+    /**
+     * Az elefántok listája.
+     * Ez a mező public, hogy más osztályok is közvetlenül elérhessék az elefántokat, például a játék logikája vagy a grafikus felület.
+     */
     public ArrayList<Elephant> elephants;
+    /**
+     * A gazellák listája.
+     * Ez a mező public, hogy más osztályok is közvetlenül elérhessék a gazellákat, például a játék logikája vagy a grafikus felület.
+     */
     public ArrayList<Gazelle> gazelles;
+    /**
+     * Az oroszlánok listája.
+     * Ez a mező public, hogy más osztályok is közvetlenül elérhessék az oroszlánokat, például a játék logikája vagy a grafikus felület.
+     */
     public ArrayList<Lion> lions;
+    /**
+     * A gepárdok listája.
+     * Ez a mező public, hogy más osztályok is közvetlenül elérhessék a gepárdokat, például a játék logikája vagy a grafikus felület.
+     */
     public ArrayList<Cheetah> cheetahs;
 
     private ArrayList<Camera> cameras;
@@ -38,6 +65,15 @@ public class GameMap {
     private Queue<Jeep> jeepQueue; // Jeepek várólistája
     private Playing playing; // Hozzáférés a Playing osztályhoz
 
+    /**
+     * Létrehoz egy új GameMap példányt a megadott szélességgel, magassággal, játéksebességgel és Playing példánnyal.
+     * Inicializálja a térképet, állatokat, Jeepeket, kamerákat, töltőállomásokat, drónokat, léghajókat és rangereket.
+     * Ez a konstruktor public, hogy más osztályokból is példányosítható legyen.
+     * @param width a térkép szélessége
+     * @param height a térkép magassága
+     * @param gs a játék sebessége
+     * @param playing a Playing példány
+     */
     public GameMap(int width, int height, GameSpeed gs, Playing playing) {
         this.playing = playing;
         this.gameSpeed = gs;
@@ -64,6 +100,9 @@ public class GameMap {
         generateAnimals();
     }
 
+    /**
+     * Véletlenszerűen generálja a térképet, beállítja a csempék típusát, valamint a kapuk és utak helyét.
+     */
     private void generateRandomMap() {
         for (int x = 0; x < width; x++) {
             ArrayList<Integer> tmp = new ArrayList<>();
@@ -94,12 +133,21 @@ public class GameMap {
         System.out.println(data.toString());
     }
 
+    /**
+     * Beállítja egy adott csempe típusát.
+     * @param x a csempe x koordinátája
+     * @param y a csempe y koordinátája
+     * @param type a csempe típusa
+     */
     public void setTile(int x, int y, Tile.TileType type) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
             map[x][y].setType(type);
         }
     }
 
+    /**
+     * Véletlenszerűen generálja az állatokat a térképre.
+     */
     private void generateAnimals() {
         int num = (int) (Math.random() * 5) + 5;
         for (int i = 0; i <= num; i++) {
@@ -119,6 +167,9 @@ public class GameMap {
         }
     }
 
+    /**
+     * Frissíti az állatok állapotát, csoportosítja őket, és eltávolítja az elpusztult példányokat.
+     */
     public void updateAnimals() {
         groupAnimals(elephants);
         groupAnimals(gazelles);
@@ -130,6 +181,11 @@ public class GameMap {
         cheetahs = deleteCheetahs(cheetahs);
     }
 
+    /**
+     * Eltávolítja az elpusztult elefántokat a listából.
+     * @param animals az elefántok listája
+     * @return az élő elefántok listája
+     */
     public ArrayList<Elephant> deleteElephants(ArrayList<Elephant> animals) {
         ArrayList<Elephant> out = new ArrayList<>();
         for(Elephant animal : animals){
@@ -139,6 +195,12 @@ public class GameMap {
         }
         return out;
     }
+
+    /**
+     * Eltávolítja az elpusztult gazellákat a listából.
+     * @param animals a gazellák listája
+     * @return az élő gazellák listája
+     */
     public ArrayList<Gazelle> deleteGazelles(ArrayList<Gazelle> animals) {
         ArrayList<Gazelle> out = new ArrayList<>();
         for(Gazelle animal : animals){
@@ -149,6 +211,11 @@ public class GameMap {
         return out;
     }
 
+    /**
+     * Eltávolítja az elpusztult oroszlánokat a listából.
+     * @param animals az oroszlánok listája
+     * @return az élő oroszlánok listája
+     */
     public ArrayList<Lion> deleteLions(ArrayList<Lion> animals) {
         ArrayList<Lion> out = new ArrayList<>();
         for(Lion animal : animals){
@@ -158,6 +225,12 @@ public class GameMap {
         }
         return out;
     }
+
+    /**
+     * Eltávolítja az elpusztult gepárdokat a listából.
+     * @param animals a gepárdok listája
+     * @return az élő gepárdok listája
+     */
     public ArrayList<Cheetah> deleteCheetahs(ArrayList<Cheetah> animals) {
         ArrayList<Cheetah> out = new ArrayList<>();
         for(Cheetah animal : animals){
@@ -168,7 +241,10 @@ public class GameMap {
         return out;
     }
 
-
+    /**
+     * Csoportosítja az állatokat közelség alapján, és kezeli a csoportok egyesítését.
+     * @param animals az állatok listája
+     */
     private void groupAnimals(List<? extends Animal> animals) {
         for (Animal animal : animals) {
             if (true) {
@@ -209,114 +285,207 @@ public class GameMap {
         //System.out.println(animals.size());
     }
 
-public void moveAnimals(List<? extends Animal> animals)
-{
-    for (Animal animal : animals){
-        ArrayList<Animal> novenyevok = new ArrayList<>();
-        novenyevok.addAll(elephants);
-        novenyevok.addAll(gazelles);
-        //System.out.println("Növényevők száma: "+ novenyevok.size());
-        animal.update(gameSpeed, novenyevok);
+    /**
+     * Frissíti és mozgatja az állatokat, valamint kezeli az élelem és víz hozzáadását.
+     * @param animals az állatok listája
+     */
+    public void moveAnimals(List<? extends Animal> animals) {
+        for (Animal animal : animals){
+            ArrayList<Animal> novenyevok = new ArrayList<>();
+            novenyevok.addAll(elephants);
+            novenyevok.addAll(gazelles);
+            //System.out.println("Növényevők száma: "+ novenyevok.size());
+            animal.update(gameSpeed, novenyevok);
 
-        // Aktuális csempe koordináták
-        int actTileX = animal.actualCoordinate.getPosX() / TILE_SIZE;
-        int actTileY = animal.actualCoordinate.getPosY() / TILE_SIZE;
+            // Aktuális csempe koordináták
+            int actTileX = animal.actualCoordinate.getPosX() / TILE_SIZE;
+            int actTileY = animal.actualCoordinate.getPosY() / TILE_SIZE;
 
-        // Étel és víz hozzáadása
-        animal.addVisitedWater(getTile(actTileX, actTileY), actTileX, actTileY);
-        animal.addFoodIfEdible(getTile(actTileX, actTileY), actTileX, actTileY);
+            // Étel és víz hozzáadása
+            animal.addVisitedWater(getTile(actTileX, actTileY), actTileX, actTileY);
+            animal.addFoodIfEdible(getTile(actTileX, actTileY), actTileX, actTileY);
 
-        if (animal.waterLevel == 0 || animal.foodLevel == 0) {
-            // Debug üzenet
-            //System.out.println(animal.waterLevel + " " + animal.foodLevel);
+            if (animal.waterLevel == 0 || animal.foodLevel == 0) {
+                // Debug üzenet
+                //System.out.println(animal.waterLevel + " " + animal.foodLevel);
+            }
         }
     }
-}
 
+    /**
+     * Visszaadja az adott koordinátán lévő csempét.
+     * @param x x koordináta
+     * @param y y koordináta
+     * @return a csempe
+     */
     public Tile getTile(int x, int y) {
         return map[x][y];
     }
 
+    /**
+     * Visszaadja a térkép szélességét.
+     * @return a szélesség
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Visszaadja a térkép magasságát.
+     * @return a magasság
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Hozzáad egy kamerát a térképhez.
+     * @param camera a kamera
+     */
     public void addCamera(Camera camera) {
         cameras.add(camera);
     }
 
+    /**
+     * Visszaadja a kamerák listáját.
+     * @return a kamerák listája
+     */
     public ArrayList<Camera> getCameras() {
         return cameras;
     }
 
+    /**
+     * Hozzáad egy töltőállomást a térképhez.
+     * @param chst a töltőállomás
+     */
     public void addChargingStation(ChargingStation chst) {
         chargingStations.add(chst);
     }
 
+    /**
+     * Visszaadja a töltőállomások listáját.
+     * @return a töltőállomások listája
+     */
     public ArrayList<ChargingStation> getChargingStations() {
         return chargingStations;
     }
 
+    /**
+     * Visszaadja a drónok listáját.
+     * @return a drónok listája
+     */
     public ArrayList<Drone> getDrones() {
         return this.drones;
     }
 
+    /**
+     * Hozzáad egy drónt a térképhez.
+     * @param drone a drón
+     */
     public void addDrone(Drone drone) {
         this.drones.add(drone);
     }
 
+    /**
+     * Visszaadja a léghajók listáját.
+     * @return a léghajók listája
+     */
     public List<Airship> getAirships() {
         return airships;
     }
 
+    /**
+     * Hozzáad egy léghajót a térképhez.
+     * @param airship a léghajó
+     */
     public void addAirship(Airship airship) {
         airships.add(airship);
     }
 
+    /**
+     * Eltávolít egy léghajót a térképről.
+     * @param airship a léghajó
+     */
     public void removeAirship(Airship airship) {
         airships.remove(airship);
     }
 
+    /**
+     * Hozzáad egy gazellát a térképhez.
+     * @param g a gazella
+     */
     public void addGazelle(Gazelle g) {
         gazelles.add(g);
     }
 
+    /**
+     * Hozzáad egy elefántot a térképhez.
+     * @param elephant az elefánt
+     */
     public void addElephant(Elephant elephant) {
         elephants.add(elephant);
     }
 
+    /**
+     * Hozzáad egy oroszlánt a térképhez.
+     * @param lion az oroszlán
+     */
     public void addLion(Lion lion) {
         lions.add(lion);
     }
 
+    /**
+     * Hozzáad egy gepárdot a térképhez.
+     * @param cheetah a gepárd
+     */
     public void addCheetah(Cheetah cheetah) {
         cheetahs.add(cheetah);
     }
 
+    /**
+     * Hozzáad egy rangert a térképhez.
+     * @param ranger a ranger
+     */
     public void addRanger(Ranger ranger) {
         rangers.add(ranger);
     }
 
+    /**
+     * Visszaadja a rangerek listáját.
+     * @return a rangerek listája
+     */
     public ArrayList<Ranger> getRangers() {
         return rangers;
     }
 
+    /**
+     * Visszaadja a térkép csempéit.
+     * @return a csempék kétdimenziós tömbje
+     */
     public Tile[][] getMap() {
         return map;
     }
 
+    /**
+     * Visszaadja az utak koordinátáit.
+     * @return az utak koordinátáinak listája
+     */
     public ArrayList<Coordinate> getRoads() {
         return this.roads;
     }
 
+    /**
+     * Hozzáad egy utat a térképhez.
+     * @param c az út koordinátája
+     */
     public void addRoads(Coordinate c) {
         roads.add(c);
     }
 
+    /**
+     * Ellenőrzi, hogy van-e út a két kapu között a térképen.
+     * @return true, ha van út, különben false
+     */
     public boolean isPathBetweenGates() {
         Coordinate startGate = new Coordinate(0, 10); // Fix kezdő GATE pozíció
         Coordinate endGate = new Coordinate(39, 10); // Fix végső GATE pozíció
@@ -360,6 +529,10 @@ public void moveAnimals(List<? extends Animal> animals)
         return false; // Ha nem találtunk utat, akkor nincs összeköttetés
     }
 
+    /**
+     * Visszaadja a két kapu közötti útvonalat, ha létezik.
+     * @return a kapuk közötti útvonal koordinátáinak listája
+     */
     public List<Coordinate> getPathBetweenGates() {
         Coordinate startGate = new Coordinate(0, 10); // Fix kezdő GATE pozíció
         Coordinate endGate = new Coordinate(39, 10); // Fix végső GATE pozíció
@@ -402,6 +575,10 @@ public void moveAnimals(List<? extends Animal> animals)
         return path; // Ha nincs út, üres lista
     }
 
+    /**
+     * Hozzáad egy Jeep-et a térképhez és a várólistához, ha érvényes útvonala van.
+     * @param jeep a Jeep példány
+     */
     public void addJeep(Jeep jeep) {
         if (jeep == null) {
             System.out.println("A Jeep nem lehet null!");
@@ -421,14 +598,28 @@ public void moveAnimals(List<? extends Animal> animals)
         System.out.println("Jeep hozzáadva: " + jeep.getPosition());
     }
 
+    /**
+     * Visszaadja a Jeepek listáját.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a Jeepek listáját, például a játék logikája vagy a grafikus felület.
+     * @return a Jeepek listája
+     */
     public List<Jeep> getJeeps() {
         return jeeps;
     }
 
+    /**
+     * Visszaadja a Jeepek várólistáját.
+     * Ez a metódus public, hogy más osztályok is lekérhessék a Jeepek várólistáját, például a játék logikája vagy a grafikus felület.
+     * @return a Jeepek várólistája
+     */
     public Queue<Jeep> getJeepQueue() {
         return jeepQueue;
     }
 
+    /**
+     * Frissíti a Jeepek állapotát, mozgatja őket, kezeli az állatok érzékelését és a kör végén visszaállítja őket.
+     * Ez a metódus public, hogy más osztályokból is meghívható legyen, például a játék logikájából.
+     */
     public void updateJeeps() {
         List<Jeep> finishedJeeps = new ArrayList<>(); // Azok a Jeepek, amelyek elérték az útvonal végét
 
@@ -454,7 +645,7 @@ public void moveAnimals(List<? extends Animal> animals)
             int adjustedSatisfaction = (int) (finishedJeep.tourLength + (int) (finishedJeep.satisfactionPoint / Math.max(1, finishedJeep.updateCount))); // Pénz
             System.out.println(Math.max(1, finishedJeep.updateCount));                                                                                                           // számítása
             System.out.println("Bevétel: " + adjustedSatisfaction); // Jeep jövedelme
-            playing.getFinance().increase(adjustedSatisfaction); // Jövedelem növelése
+            playing.getFinance().increase(adjustedSatisfaction*4); // Jövedelem növelése *4
             playing.refreshBalance();
             finishedJeep.printSeenAnimals(); // Látott állatok kiírása
             finishedJeep.clearPassengers(); // Utasok eltávolítása
@@ -467,6 +658,11 @@ public void moveAnimals(List<? extends Animal> animals)
         }
     }
 
+    /**
+     * Visszaadja az összes állatot a térképen.
+     * Ez a metódus public, hogy más osztályok is lekérhessék az összes állat listáját, például a játék logikája vagy a grafikus felület.
+     * @return az összes állat listája
+     */
     public List<Animal> getAllAnimals() {
         List<Animal> allAnimals = new ArrayList<>();
         allAnimals.addAll(elephants);
@@ -476,6 +672,11 @@ public void moveAnimals(List<? extends Animal> animals)
         return allAnimals;
     }
 
+    /**
+     * Eltávolít egy állatot a térképről a típusának megfelelő listából.
+     * Ez a metódus public, hogy más osztályokból is meghívható legyen, például a játék logikájából.
+     * @param animal az eltávolítandó állat
+     */
     public void removeAnimal(Animal animal) {
         if (animal instanceof Gazelle) {
             gazelles.remove(animal);

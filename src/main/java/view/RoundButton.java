@@ -19,40 +19,72 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
 /**
+ * A RoundButton osztály egy kör alakú gombot reprezentál, amely képet és egyedi szegélyt jelenít meg.
+ * Leszármazottja a JButton osztálynak, így grafikus felületen használható komponensként.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető.
  *
  * @author nimro
  */
 public class RoundButton extends JButton{
+    /** A gombon megjelenítendő kép. */
     private Image image; 
+
+    /** Az ikon elérési útja, amelyet a gomb megjelenít. */
     private String iconPath = ""; 
+
+    /** A gomb szegélyének vastagsága. */
     private int borderThickness = 1; // Default border thickness
 
+    /**
+     * Alapértelmezett konstruktor a RoundButton osztályhoz.
+     * Beállítja az alapértelmezett méretet, átlátszóvá teszi a tartalmi területet és eltávolítja az alapértelmezett szegélyt.
+     */
     public RoundButton() {
         setPreferredSize(new Dimension(100, 100)); // Default size
         setContentAreaFilled(false); // Make the content area transparent
         setBorderPainted(false); // Remove default border
     }
 
-    // Getter and Setter for NetBeans GUI Builder
+    /**
+     * Visszaadja az ikon elérési útját.
+     * @return az ikon elérési útja
+     */
     public String getIconPath() {
         return iconPath;
     }
 
+    /**
+     * Beállítja az ikon elérési útját, betölti a képet és újrarajzolja a gombot.
+     * @param iconPath az ikon elérési útja
+     */
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
         loadIcon(); 
         repaint();
     }
 
+    /**
+     * Visszaadja a gomb szegélyének vastagságát.
+     * @return a szegély vastagsága
+     */
     public int getBorderThickness() {
         return borderThickness;
     }
 
+    /**
+     * Beállítja a gomb szegélyének vastagságát és újrarajzolja a gombot.
+     * @param borderThickness az új szegélyvastagság
+     */
     public void setBorderThickness(int borderThickness) {
         this.borderThickness = borderThickness;
         repaint();
     }
 
+    /**
+     * Betölti az ikon képet a megadott elérési út alapján.
+     * Ha az elérési út üres vagy hibás, nem történik semmi.
+     */
     private void loadIcon() {
         if (iconPath == null || iconPath.isEmpty()) return;
         try {
@@ -63,6 +95,10 @@ public class RoundButton extends JButton{
         }
     }
 
+    /**
+     * A gomb komponensének kirajzolását végzi, beleértve a képet és a kör alakú szegélyt.
+     * @param g a grafikus kontextus, amelyre rajzolni kell
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -97,6 +133,11 @@ public class RoundButton extends JButton{
         g2.drawOval(borderThickness / 2, borderThickness / 2, panelWidth - borderThickness, panelHeight - borderThickness);
     }
 
+    /**
+     * Meghatározza, hogy a megadott pont a kör alakú gomb területén belül van-e.
+     * @param p a vizsgálandó pont
+     * @return true, ha a pont a körön belül van, különben false
+     */
     @Override
     public boolean contains(Point p) {
         // Override this to make sure the button behaves like a circular button

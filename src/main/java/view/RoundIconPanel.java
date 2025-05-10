@@ -1,7 +1,5 @@
 package view;
 
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -9,26 +7,50 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
+/**
+ * A RoundIconPanel osztály egy kör alakú képet megjelenítő panel.
+ * Leszármazottja a JPanel osztálynak, így grafikus felületen használható komponensként.
+ * <p>
+ * Az osztály public, így más csomagokból és osztályokból is példányosítható és elérhető.
+ */
 public class RoundIconPanel extends JPanel {
 
+    /** A panelen megjelenítendő kép. */
     private Image image;
+
+    /** Az ikon elérési útja, amelyet a panel megjelenít. */
     private String iconPath = "";
 
+    /**
+     * Alapértelmezett konstruktor a RoundIconPanel osztályhoz.
+     * Beállítja az alapértelmezett méretet.
+     */
     public RoundIconPanel() {
         setPreferredSize(new Dimension(100, 100)); // Default size
     }
 
-    // Getter and Setter for NetBeans GUI Builder
+    /**
+     * Visszaadja az ikon elérési útját.
+     * @return az ikon elérési útja
+     */
     public String getIconPath() {
         return iconPath;
     }
 
+    /**
+     * Beállítja az ikon elérési útját, betölti a képet és újrarajzolja a panelt.
+     * @param iconPath az ikon elérési útja
+     */
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
         loadIcon();
         repaint();
     }
 
+    /**
+     * Betölti az ikon képet a megadott elérési út alapján.
+     * Ha az elérési út üres vagy hibás, nem történik semmi.
+     */
     private void loadIcon() {
         if (iconPath == null || iconPath.isEmpty()) {
             return;
@@ -41,6 +63,10 @@ public class RoundIconPanel extends JPanel {
         }
     }
 
+    /**
+     * A panel kirajzolását végzi, kör alakban jeleníti meg a képet, fekete szegéllyel.
+     * @param g a grafikus kontextus, amelyre rajzolni kell
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
