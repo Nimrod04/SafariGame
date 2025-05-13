@@ -235,10 +235,58 @@ public class Game implements Runnable {
         // playing.gameMap.updateAnimals();
         // playing.gameMap.updateJeeps(); // Jeepek frissítése
         playing.updateTime(gameSpeed.getFormattedTime()); // Idő frissítése a Playing osztályban
+        checkGameEnd();// Játék vége ellenőrzése
         // gamePanel.repaint();
     
 
     }
+
+    /**
+     Ellenőrzi, hogy a játék véget ért-e.
+     * Ha nincsenek állatok a pályán, akkor a játék véget ér.
+     * Ha a játékos teljesítette a győzelmi feltételeket, akkor a játék véget ér.
+     * Ez a metódus public, hogy más osztályok is elérhessék, például a grafikus felület vagy a vezérlő logika.
+     * @return true, ha a játék véget ért, false egyébként
+     */
+
+    private void checkGameEnd() {
+        // Ellenőrizzük, hogy vannak-e állatok a pályán
+        int herbivores = playing.gameMap.gazelles.size() + playing.gameMap.elephants.size();
+        int carnivores = playing.gameMap.lions.size() + playing.gameMap.cheetahs.size();
+        int visitors = visitorQueue.size();
+        double money = playing.getFinance().getBalance();
+        int jeeps = playing.gameMap.getJeeps().size();
+
+        if (herbivores == 0 && carnivores == 0) {
+            JOptionPane.showMessageDialog(null, "Vesztettél! Nincsenek állatok a pályán.");
+            System.exit(0); // Kilépés a játékból
+        }
+
+        // Győzelmi feltételek ellenőrzése nehézségi szint alapján
+        switch (difficulty) {
+            case EASY -> {
+                if (carnivores >= 5 && herbivores >= 5 && visitors >= 25 && money >= 50000 && jeeps >= 1) {
+                    JOptionPane.showMessageDialog(null, "Gratulálunk! Megnyerted a játékot könnyű fokozaton!");
+                    System.exit(0); // Kilépés a játékból
+                }
+            }
+            case MEDIUM -> {
+                if (carnivores >= 10 && herbivores >= 10 && visitors >= 100 && money >= 150000 && jeeps >= 2) {
+                    JOptionPane.showMessageDialog(null, "Gratulálunk! Megnyerted a játékot közepes fokozaton!");
+                    System.exit(0); // Kilépés a játékból
+                }
+            }
+            case HARD -> {
+                if (carnivores >= 25 && herbivores >= 25 && visitors >= 500 && money >= 300000 && jeeps >= 3) {
+                    JOptionPane.showMessageDialog(null, "Gratulálunk! Megnyerted a játékot nehéz fokozaton!");
+                    System.exit(0); // Kilépés a játékból
+                }
+            }
+        }
+    }
+
+
+
 
     /**
      * Visszaadja a látogatók várólistáját.
