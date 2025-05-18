@@ -15,6 +15,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
@@ -86,13 +87,28 @@ public class RoundButton extends JButton{
      * Ha az elérési út üres vagy hibás, nem történik semmi.
      */
     private void loadIcon() {
-        if (iconPath == null || iconPath.isEmpty()) return;
-        try {
-            BufferedImage original = ImageIO.read(new File(iconPath));
-            image = original; // Store the full image
-        } catch (Exception e) {
-            e.printStackTrace();
+if (iconPath == null || iconPath.isEmpty()) return;
+    
+    try {
+        // 1. Próbáld meg resource-ként betölteni (.jar fájlból)
+        InputStream inputStream = getClass().getResourceAsStream("/" + iconPath);
+        if (inputStream != null) {
+            BufferedImage original = ImageIO.read(inputStream);
+            image = original;
+            return;
         }
+        
+        // 2. Ha nem található resource-ként, próbáld meg fájlrendszerből (IDE-ből)
+        File file = new File(iconPath);
+        if (file.exists()) {
+            BufferedImage original = ImageIO.read(file);
+            image = original;
+        } else {
+            System.err.println("Nem található a kép: " + iconPath);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
     }
 
     /**
