@@ -60,10 +60,10 @@ A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy 
 
 
 # Futtatás
-Futtatás: java -jar Safari_Game-1.0-SNAPSHOT.jar
-Java 21 szükséges hozzá.
-A .jar fájlt lehet .exe-vé csomagolni, de nem szükséges, és sokszor nem is szeretik, mert:
--platformfüggő,
+<p>Futtatás: java -jar Safari_Game-1.0-SNAPSHOT.jar
+<p>Java 21 szükséges hozzá.
+<p>A .jar fájlt lehet .exe-vé csomagolni, de nem szükséges, és sokszor nem is szeretik, mert:
+<br>-platformfüggő <br>
 -nem olyan megbízható (antivírus néha blokkolja).
 
 # Credits
