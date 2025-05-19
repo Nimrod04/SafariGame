@@ -28,7 +28,7 @@ A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy 
 - **Minimap [0.5 komplexitás]** A játékpálya legyen nagyobb a megjelenítettnél, a navigáláshoz azt X és Y dimenzióban lehessen görgetni. A könnyebb tájékozódáshoz a játékhoz tartozzon navigálható minimap. 
 - **Vadőrök [0.5 komplexitás]** Legyenek vadőrök, amelyeknek megadható, hogy mely ragadozót kell kilőniük. A kilőtt állat után pénzt kapunk, viszont	 a vadőröknek minden hónap elején előre kell fizetést adnunk.
 - **Fejlett megfigyelő rendszer [1 komplexitás]**:Az orvvadászok elleni védekezéshez vásárolhatunk fixen telepített kamerákat, léghajót vagy drónt, amelyek napszaktól függetlenül felfedik a környezetüket egy bizonyos sugarú körben. A kamerák nem mozgathatók, de a léghajónak és a drónnak ki lehet jelölni járőrözési útvonalat. A léghajó egész nap képes fent maradni a levegőben, a drónoknak viszont óránként le kell szállniuk tölteni magukat. A töltőpontokat külön kell megvennünk és telepítenünk, ami előfeltétele a drónok vásárlásának.  
-- **Irányítható vadőrök [0.5 komplexitás]**: A vadőrök legyenek irányíthatók úgy, kijelöljük számukra a lelőni kívánt orvvadászokat (ha felfedésre kerültek). Minden orvvadászért fejpénzt kapunk jutalmul. Az orvvadászok észrevehetik az őket üldöző vadőröket, és szintén lelőhetik őket. 
+- **Térképgenerálás [0.5 komplexitás]**:A kezdeti térképet ne véletlenszerűen, hanem valamilyen térképgeneráló algoritmus segítségével állítsa elő az alkalmazás, logikai szabályok mentén. Választható procedurális algoritmus (lehetséges példák: Wave Function Collapse algoritmus, Perlin Noise algoritmus, Simplex Noise algoritmus), vagy akár MI alapú megközelítés is. 
 
 
 
