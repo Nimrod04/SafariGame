@@ -1,60 +1,32 @@
 
-<img src="Images/banner.png#gh-light-mode-only" width="1080" alt="Logo" >
-<img src="Images/banner.png#gh-dark-mode-only" width="1080" alt="Logo">
 
- <h1 >NThing UI</h1>
+ <h1 >Safari game</h1>
 
 <div >
-  A rainmeter based project featuring NothingOS inspired widgets, taskbar, menu's and more for your Windows desktops. Works on WIndows 7 and above. 
+  ELTE Szoftvertechnolódia tárgy beadandó feladata
 </div>
 <h3 >
-  <b><a href="https://telegra.ph/NThing-UI-pro-pricing-05-04">Get PRO Version directly</a></b> ・
-<a href="https://buymeacoffee.com/sahilseth2S/e/405069">Get PRO Version on BMC</a> ・
-<a href="https://maybesahil.gumroad.com/l/NThing-UI-pro">Get PRO Version on Gumroad</a>
-<br> </br>
-<p > <a href="https://github.com/Runixe786/NThing-UI/releases/tag/v1.0-publicbeta">Download Basic Version</a>
+
+
+# Mi is ez a játék?
+
+A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy afrikai szafari működtetése parkigazgatói feladatok ellátásával. A játékot legalább 3 különböző sebességfokozattal játszhatjuk  
+(óra / nap / hét), melyek között bármikor válthatunk a program futása közben. A játék 3 nehézségi fokozatot kell kínáljon legalább. 
  
 
-<br> </br>
+- **Növények,vizes területek:** A pálya területén elszórtan nőnek bokrok és fák, valamint füves területek. A játékos maga is vásárolhat növényeket. Kisebb vízlelő helyek kezdetben is találhatók, de építeni is lehet tavakat. Legalább 3 féle növény legyen telepíthető. 
+- **Állatok:** A szafariban szabadon élnek ragadozó és növényevő állatok. A növényevő állatok fákat, bokrokat, füvet ehetnek, míg a ragadozók növényevő állatokat. Mindkét csoportnak szüksége van vízre is az életben maradásához. Az állatok korlátozott ideig élnek, az idő előrehaladtával pedig öregszenek és többet is esznek.
+- **Dzsippek**: A szafarit turisták látogatják, akik a kalandjukhoz dzsippet bérelnek. Egy dzsipp legfeljebb 4 utast képes elvinni. A dzsippeket a játékosnak kell megvásárolnia.
+- **Utak**: A szafarinak van egy bejárata és egy kijárata. A járművek számára építeni kell egy vagy több járható utat, ami összeköti a bejáratot és a kijáratot. A járművek egy bejárattól kijáratig vezető véletlen módon választott úton visznek turistákat, visszafele pedig utasok nélkül térnek vissza a bejárathoz.  
+- **Tőke**: A játékosnak adott a kezdő tőkéje, ebből vásárolhat növényeket, állatokat, dzsippeket, utakat és egyéb eszközöket. A szafari a bevételét állatok eladásából és turistákból fedezi (dzsipp bérlés). A turisták száma függ a belépődíj mértékétől, valamint attól, hogy amit látnak, mennyire tetszik számukra - vagyis szeretnének minél több és többfélébb állatot látni útjuk során.  
+- **A játék vége**: A játékot akkor nyerjük meg, hogy ha elérjük, hogy a nehézségi szinttől függően 3, 6 vagy 12 egymást követő hónapban a látogatók, a növényevő, a ragadozó állatok száma, és a tőkénk is egy küszöbérték felett marad. A küszöbérték különböző a különböző kategóriáknál, pl. legalább 80 látogató, legalább 20 növényevő állat, stb. A játékot azonnal elveszítjük (az igazgatót kirúgják), ha csődbe megyünk, vagy kipusztul az összes állat. 
 
-<p >
-  <a href="https://github.com/Runixe786/NThing-UI/stargazers"><img src="https://img.shields.io/github/stars/Runixe786/NThing-UI?colorA=1b1b1b&colorB=e2201f&style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij4KPHBhdGggZD0iTTIzNS4yNCw4NC4zOGwtMjguMDYsMjMuNjgsOC41NiwzNS4zOWExMy4zNCwxMy4zNCwwLDAsMS01LjA5LDEzLjkxLDEzLjU0LDEzLjU0LDAsMCwxLTE1LC42OUwxNjQsMTM5bC0zMS42NSwxOS4wNmExMy41MSwxMy41MSwwLDAsMS0xNS0uNjksMTMuMzIsMTMuMzIsMCwwLDEtNS4xLTEzLjkxbDguNTYtMzUuMzlMOTIuNzYsODQuMzhhMTMuMzksMTMuMzksMCwwLDEsNy42Ni0yMy41OGwzNi45NC0yLjkyLDE0LjIxLTMzLjY2YTEzLjUxLDEzLjUxLDAsMCwxLDI0Ljg2LDBsMTQuMjEsMzMuNjYsMzYuOTQsMi45MmExMy4zOSwxMy4zOSwwLDAsMSw3LjY2LDIzLjU4Wk04OC4xMSwxMTEuODlhOCw4LDAsMCwwLTExLjMyLDBMMTguMzQsMTcwLjM0YTgsOCwwLDAsMCwxMS4zMiwxMS4zMmw1OC40NS01OC40NUE4LDgsMCwwLDAsODguMTEsMTExLjg5Wm0tLjUsNjEuMTlMMzQuMzQsMjI2LjM0YTgsOCwwLDAsMCwxMS4zMiwxMS4zMmw1My4yNi01My4yN2E4LDgsMCwwLDAtMTEuMzEtMTEuMzFabTczLTEtNTQuMjksNTQuMjhhOCw4LDAsMCwwLDExLjMyLDExLjMybDU0LjI4LTU0LjI4YTgsOCwwLDAsMC0xMS4zMS0xMS4zMloiIHN0eWxlPSJmaWxsOiAjQ0FEM0Y1OyIvPgo8L3N2Zz4="></a>
-  <a href="https://github.com/Runixe786/NThing-UI/releases/latest"><img src="https://img.shields.io/github/v/release/Runixe786/NThing-UI?colorA=1b1b1b&colorB=e2201f&style=for-the-badge&logo=github&logoColor=cad3f5"></a>
-  <a href="https://github.com/Runixe786/NThing-UI/issues"><img src="https://img.shields.io/github/issues/Runixe786/NThing-UI?colorA=1b1b1b&colorB=e2201f&style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij4KPHBhdGggZD0iTTIxNiwzMlYxOTJhOCw4LDAsMCwxLTgsOEg3MmExNiwxNiwwLDAsMC0xNiwxNkgxOTJhOCw4LDAsMCwxLDAsMTZINDhhOCw4LDAsMCwxLTgtOFY1NkEzMiwzMiwwLDAsMSw3MiwyNEgyMDhBOCw4LDAsMCwxLDIxNiwzMloiIHN0eWxlPSJmaWxsOiAjQ0FEM0Y1OyIvPgo8L3N2Zz4="></a>
- <img alt="total-downloads" src="https://img.shields.io/github/downloads/Runixe786/NThing-UI/total?style=for-the-badge&color=e2201f&labelColor=1b1b1b&logo=total&logoColor=ffffff">
-
-</p>
-
-<p >
-  <a href="https://t.me/RunixeProjects">
-    <img src="https://img.shields.io/endpoint?&style=for-the-badge&colorA=303038&colorB=d4d3d8&logo=telegram&logoColor=cad3f5&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2FRunixeProjects"
-  alt="Telegram">
-<a href="https://t.me/DroidDiscussion">
-    <img src="https://img.shields.io/endpoint?&style=for-the-badge&colorA=303038&colorB=d4d3d8&logo=telegram&logoColor=cad3f5&url=https%3A%2F%2Ftg.sumanjay.workers.dev%2FDroidDiscussion"
-        alt="Telegram"> </a>
-  </p>
-    </a>
-</p>
-
-# Features of NThing UI
-
-- **Clock:** shows time of your region.
-- **Date:** shows current date.
-- **Weather**: shows weather of your location.
-- **Music**: Displays current music playing along with album art, song and artist name.
-- **Battery**: Displays current battery level of your pc, along with some more battery related info.
-- **Events**: Shows upcoming holiday events along with their dates and time.
-- **Monitor**: shows status of RAM,CPU, HDD and SWAP memory. 
-- **Photos**: slideshow of all random photos from your choosen photo library/folder.
-- **Quotes & Facts**: shows random quotes & facts to motivate you & brainstorm your knowledge.
-- **Taskbar**: A custom NothingOS inspired taskbar to fit the overall aesthetics.
-- **Start Menu**: a custom NothingOS start menu to replace boring default one.
-- **Power Menu**: a custom NothingOS power menu to ease out your way to shut down computer.
-- **Tools Menu**: a custom NothingOS tools menu with useful quick tiles/settings replacing your windows+A key.
-- **Wallpapers:** Exclusive NothingOS inspired wallpapers. 
-
-- **DYNAMIC THEME** A custom dynamic theme which auto adapts to your wallpaper color, currently pro exclusive. 
  
+# Plusz komplexitások a megvalósítás alatt
+
+
+
+
 
 # Comparison of features of PRO and basic version (v1.0)
 
