@@ -104,17 +104,22 @@ public class GameMap {
      * Véletlenszerűen generálja a térképet, beállítja a csempék típusát, valamint a kapuk és utak helyét.
      */
     private void generateRandomMap() {
+        double scale = 0.1; // minél kisebb, annál nagyobb "foltok"
         for (int x = 0; x < width; x++) {
             ArrayList<Integer> tmp = new ArrayList<>();
             for (int y = 0; y < height; y++) {
-                double chance = random.nextDouble();
-                if (chance < 0.02) {
+                double noise = SimplexNoise.noise(x * scale, y * scale);
+
+                // A noise -1..1 tartományban van, hozzuk 0..1 közé
+                double value = (noise + 1) / 2.0;
+
+                if (value < 0.18) {
                     tmp.add(3);
                     map[x][y] = new Tile(Tile.TileType.WATER);
-                } else if (chance < 0.04) {
+                } else if (value < 0.28) {
                     tmp.add(2);
                     map[x][y] = new Tile(Tile.TileType.TREE);
-                } else if (chance < 0.07) {
+                } else if (value < 0.38) {
                     tmp.add(1);
                     map[x][y] = new Tile(Tile.TileType.GRASS);
                 } else {
@@ -125,10 +130,11 @@ public class GameMap {
             data.add(tmp);
         }
         map[0][10] = new Tile(Tile.TileType.GATE);
-        map[39][10] = new Tile(Tile.TileType.GATE);
+        map[0][9] = new Tile(Tile.TileType.SAND);
+        map[width-1][10] = new Tile(Tile.TileType.GATE);
 
         roads.add(new Coordinate(0, 10));
-        roads.add(new Coordinate(39, 10));
+        roads.add(new Coordinate(width-1, 10));
 
         System.out.println(data.toString());
     }
