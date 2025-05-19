@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.*;
+import java.util.Random;
 
 /**
  * A Ranger osztály a játékban egy parkőrt reprezentál.
@@ -13,6 +14,13 @@ public class Ranger {
     private Rectangle hitbox; // Hitbox stored as a Rectangle
     private static final int HITBOX_RADIUS = 4; // 4x4 hitbox (radius of 2)
     private static final int HITBOX_SIZE = (HITBOX_RADIUS * 2 + 1); // Total size of the hitbox
+    private double angle = 0; // aktuális szög radiánban
+    private int centerX, centerY, radius;
+
+    private Coordinate target; // aktuális célpont
+    private static final int MAP_WIDTH = 80;  // Állítsd be a pálya szélességét
+    private static final int MAP_HEIGHT = 48; // Állítsd be a pálya magasságát
+    private static final Random rand = new Random();
 
     /**
      * A parkőr ára.
@@ -28,6 +36,48 @@ public class Ranger {
     public Ranger(Coordinate position) {
         this.position = position;
         this.hitbox = calculateHitbox(); // Initialize the hitbox
+    }
+
+    /**
+     * Létrehoz egy új Ranger példányt a megadott kezdőpozícióval és sugárral.
+     * @param start a parkőr kezdőpozíciója
+     * @param radius a kör sugara
+     */
+    public Ranger(Coordinate start, int radius) {
+        this.position = start;
+        this.centerX = start.getPosX();
+        this.centerY = start.getPosY();
+        this.radius = radius;
+    }
+
+    /**
+     * Frissíti a parkőr pozícióját: mindig mozog a célpont felé, ha elérte, új célpontot választ.
+     */
+    public void update() {
+        if (target == null || position.equals(target)) {
+            target = generateRandomTarget();
+        }
+        moveOneStepTowards(target);
+    }
+
+    /**
+     * Egy lépést tesz a célpont felé.
+     */
+    private void moveOneStepTowards(Coordinate target) {
+        int dx = Integer.compare(target.getPosX(), position.getPosX());
+        int dy = Integer.compare(target.getPosY(), position.getPosY());
+        int nextX = position.getPosX() + dx;
+        int nextY = position.getPosY() + dy;
+        setPosition(new Coordinate(nextX, nextY));
+    }
+
+    /**
+     * Véletlen célpont generálása a pályán.
+     */
+    private Coordinate generateRandomTarget() {
+        int x = rand.nextInt(MAP_WIDTH);
+        int y = rand.nextInt(MAP_HEIGHT);
+        return new Coordinate(x, y);
     }
 
     /**
