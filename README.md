@@ -45,29 +45,12 @@ A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy 
   <img src='screenshots/leghajo.jpg' width='700'>	
   <img src='screenshots/vador.jpg' width='700'>
 </p>
-
-# Important Notes
-
-
-
-# Készült
-
-
-
-
-
-# Telepítés
-
-
 # Futtatás
 <p>Futtatás: java -jar Safari_Game-1.0-SNAPSHOT.jar
 <p>Java 21 szükséges hozzá.
 <p>A .jar fájlt lehet .exe-vé csomagolni, de nem szükséges, és sokszor nem is szeretik, mert:
 <br>-platformfüggő <br>
 -nem olyan megbízható (antivírus néha blokkolja).
-
-# Credits
-
 
 # Feedback 
 Mivel a projekt még mindig béta állapotban van, esetleges problémák esetén, kérjük jelezzenek nekünk!
