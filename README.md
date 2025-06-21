@@ -54,9 +54,9 @@ A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy 
 -nem olyan megbízható (antivírus néha blokkolja).
 
 # Szerző
-Név: Szekeres Nimród
-ELTE, Programozási technológiák beadandó
-Dátum: 2024.12.15.
+<p>Név: Szekeres Nimród
+<p>ELTE, Programozási technológiák beadandó
+<p>Dátum: 2025.05.19.
 Ez a projekt tanulmányi célokat szolgál.
 
 # Feedback 
