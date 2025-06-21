@@ -57,7 +57,7 @@ A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy 
 <p>Név: Szekeres Nimród
 <p>ELTE, Programozási technológiák beadandó
 <p>Dátum: 2025.05.19.
-Ez a projekt tanulmányi célokat szolgál.
+<p>Ez a projekt tanulmányi célokat szolgál.
 
 # Feedback 
 Mivel a projekt még mindig béta állapotban van, esetleges problémák esetén, kérjük jelezzenek nekünk!
