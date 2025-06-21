@@ -45,6 +45,7 @@ A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy 
   <img src='screenshots/leghajo.jpg' width='700'>	
   <img src='screenshots/vador.jpg' width='700'>
 </p>
+
 # Futtatás
 <p>Futtatás: java -jar Safari_Game-1.0-SNAPSHOT.jar
 <p>Java 21 szükséges hozzá.
