@@ -52,6 +52,12 @@ A játék egy 2 dimenziós felülnézetes pályán játszódik, ahol a cél egy 
 <br>-platformfüggő <br>
 -nem olyan megbízható (antivírus néha blokkolja).
 
+#Szerző
+Név: Szekeres Nimród
+ELTE, Programozási technológiák beadandó
+Dátum: 2024.12.15.
+Ez a projekt tanulmányi célokat szolgál.
+
 # Feedback 
 Mivel a projekt még mindig béta állapotban van, esetleges problémák esetén, kérjük jelezzenek nekünk!
 
